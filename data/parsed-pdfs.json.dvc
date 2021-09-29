@@ -1,0 +1,5 @@
+outs:
+- md5: f57356c5feba6526f5a0e12cd2c5becf
+  size: 1513810345
+  path: parsed-pdfs.json
+  isexec: true

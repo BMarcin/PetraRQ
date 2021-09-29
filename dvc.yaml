@@ -1,0 +1,16 @@
+stages:
+  split_dataset:
+    cmd: python ./src/split_dataset.py
+    deps:
+    - ./data/in-header.tsv
+    - ./data/out-header.tsv
+    - ./data/parsed-pdfs.json
+    - ./src/DatasetSplitter/DatasetSplitter.py
+    - ./src/split_dataset.py
+    outs:
+    - ./data/dev/expected.tsv
+    - ./data/dev/in.tsv
+    - ./data/test/expected.tsv
+    - ./data/test/in.tsv
+    - ./data/train/expected.tsv
+    - ./data/train/in.tsv
