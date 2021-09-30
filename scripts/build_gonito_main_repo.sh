@@ -1,9 +1,9 @@
 #!/bin/bash
 #/home/runner/work/PetraRQ/PetraRQ
-sudo mkdir -p /home/runner/work/main_repo
+sudo mkdir -p /home/runner/work/PetraRQ/main_repo/
 echo "Created main repo"
 
-cd /home/runner/work/main_repo
+cd /home/runner/work/PetraRQ/main_repo/
 git clone ssh://gitolite@gonito.net/eur-lex-documents
 
 cp /home/runner/work/PetraRQ/PetraRQ/README.md .

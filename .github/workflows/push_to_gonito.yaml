@@ -32,6 +32,8 @@ jobs:
 
       - name: Add SSH key
         run: chmod +x ./scripts/add_ssh_key.sh && ./scripts/add_ssh_key.sh
+        env:
+          GONITO_PRIVATE_SSH: ${{secrets.GONITO_PRIVATE_SSH}}
 
       - name: Main repo on gonito.net
         run: chmod +x ./scripts/build_gonito_main_repo.sh && ./scripts/build_gonito_main_repo.sh
