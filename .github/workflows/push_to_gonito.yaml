@@ -1,0 +1,21 @@
+name: Push to gonito.net
+
+on:
+  push:
+    branches:
+      - 'main'
+
+jobs:
+  PushToMainRepo:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v2
+
+      - name: Download & install DVC
+        run: wget https://dvc.org/download/linux-deb/dvc-2.7.4 && dpkg -i dvc-2.7.4
+
+      - name: Makefile
+        run: make
+

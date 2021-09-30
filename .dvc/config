@@ -1,0 +1,4 @@
+[core]
+    remote = bmarcinai
+['remote "bmarcinai"']
+    url = gdrive://1MGQBs3k4EgBNI3mDi0qp9ONW6A3F5kEO
