@@ -4,8 +4,9 @@ mkdir -p /home/runner/work/PetraRQ/main_repo/
 echo "Created main repo"
 
 cd /home/runner/work/PetraRQ/main_repo/
-git clone ssh://gitolite@gonito.net/eur-lex-documents
-git init
+git clone ssh://gitolite@gonito.net/eur-lex-documents-dont-peek
+#git init
+cd eur-lex-documents-dont-peek
 
 cp /home/runner/work/PetraRQ/PetraRQ/README.md .
 cp /home/runner/work/PetraRQ/PetraRQ/config.txt .
