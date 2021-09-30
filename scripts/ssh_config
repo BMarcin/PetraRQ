@@ -1,0 +1,4 @@
+Host gonito gonito.net
+    HostName gonito.net
+    IdentityFile ~/.ssh/gonito
+    User gitolite

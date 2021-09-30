@@ -30,3 +30,8 @@ jobs:
       - name: Makefile
         run: make
 
+      - name: Main repo on gonito.net
+        run: chmod +x ./scripts/build_gonito_main_repo.sh && ./scripts/build_gonito_main_repo.sh
+
+      - name: Add SSH key
+        run: chmod +x ./scripts/add_ssh_key.sh && ./scripts/add_ssh_key.sh
