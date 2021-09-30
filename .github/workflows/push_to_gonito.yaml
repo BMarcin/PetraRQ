@@ -17,7 +17,7 @@ jobs:
         run: mkdir ./.dvc/tmp
 
       - name: Clone google credentials file
-        run: echo $BMARCINAI_GOOGLE_CREDENTIALS > ./.dvc/tmp/gdive-user-credentials.json
+        run: echo $BMARCINAI_GOOGLE_CREDENTIALS > ./.dvc/tmp/gdrive-user-credentials.json
         env:
           BMARCINAI_GOOGLE_CREDENTIALS: ${{secrets.BMARCINAI_GOOGLE_CREDENTIALS}}
 
