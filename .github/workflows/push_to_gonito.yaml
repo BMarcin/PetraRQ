@@ -13,6 +13,9 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@v2
 
+      - name: Clone google credentials file
+        run: echo $BMARCINAI_GOOGLE_CREDENTIALS > ./.dvc/tmp/gdive-user-credentials.json
+
       - name: Download & install DVC
         run: wget https://dvc.org/download/linux-deb/dvc-2.7.4 && sudo dpkg -i dvc-2.7.4
 
