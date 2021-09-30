@@ -6,7 +6,7 @@ on:
       - 'main'
 
 jobs:
-  PushToMainRepo:
+  PushToGonito:
     runs-on: ubuntu-latest
 
     steps:
@@ -37,3 +37,10 @@ jobs:
 
       - name: Main repo on gonito.net
         run: chmod +x ./scripts/build_gonito_main_repo.sh && ./scripts/build_gonito_main_repo.sh
+        env:
+          COMMIT_MESSAGE: ${{ github.event.head_commit.message }}
+
+      - name: Dontpeek repo on gonito.net
+        run: chmod +x ./scripts/build_gonito_dontpeek_repo.sh && ./scripts/build_gonito_dontpeek_repo.sh
+        env:
+          COMMIT_MESSAGE: ${{ github.event.head_commit.message }}

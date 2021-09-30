@@ -1,11 +1,11 @@
 #!/bin/bash
 
-mkdir -p /home/runner/work/PetraRQ/main_repo/
-echo "Created main repo"
+mkdir -p /home/runner/work/PetraRQ/dontpeek_repo/
+echo "Created dontpeek repo"
 
-cd /home/runner/work/PetraRQ/main_repo/
-git clone ssh://gitolite@gonito.net/eur-lex-documents
-cd eur-lex-documents
+cd /home/runner/work/PetraRQ/dontpeek_repo/
+git clone ssh://gitolite@gonito.net/eur-lex-documents-dont-peek
+cd eur-lex-documents-dont-peek
 #git init
 
 cp /home/runner/work/PetraRQ/PetraRQ/README.md .
@@ -18,9 +18,8 @@ mkdir -p ./test-A
 cp /home/runner/work/PetraRQ/PetraRQ/data/dev/* ./dev-0/
 cp /home/runner/work/PetraRQ/PetraRQ/data/test/* ./test-A/
 cp /home/runner/work/PetraRQ/PetraRQ/data/train/* ./train/
-rm ./test-A/expected.tsv
 
 #git add .
 git commit -am $COMMIT_MESSAGE
-#git remote add origin ssh://gitolite@gonito.net/eur-lex-documents
+#git remote add origin ssh://gitolite@gonito.net/eur-lex-documents-dont-peek
 git push origin master
