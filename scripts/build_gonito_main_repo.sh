@@ -1,6 +1,6 @@
 #!/bin/bash
 #/home/runner/work/PetraRQ/PetraRQ
-sudo mkdir -p /home/runner/work/PetraRQ/main_repo/
+mkdir -p /home/runner/work/PetraRQ/main_repo/
 echo "Created main repo"
 
 cd /home/runner/work/PetraRQ/main_repo/
