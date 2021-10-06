@@ -8,6 +8,7 @@ on:
 jobs:
   ReproProject:
     runs-on: self-hosted
+    container: python:3.9
 
     steps:
       - name: Checkout code
