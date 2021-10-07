@@ -31,8 +31,15 @@ jobs:
       - name: Makefile
         run: make
 
+      - name: DVC commit
+        run: dvc commit
+
+      - name: DVC push
+        run: dvc push
+
       - name: Autocommit
         uses: stefanzweifel/git-auto-commit-action@v4
         with:
-          commit_message: 'DVC repro done'
+          commit_message: 'DVC repro done [ci skip]'
           file_pattern: dvc.lock
+          push_options: '--force'
