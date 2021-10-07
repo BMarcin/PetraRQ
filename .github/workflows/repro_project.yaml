@@ -40,5 +40,6 @@ jobs:
       - name: Autocommit
         uses: stefanzweifel/git-auto-commit-action@v4
         with:
+          repository: .
           commit_message: 'DVC repro done [ci skip]'
-          file_pattern: dvc.lock
+          file_pattern: *.lock
