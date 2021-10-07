@@ -42,4 +42,3 @@ jobs:
         with:
           commit_message: 'DVC repro done [ci skip]'
           file_pattern: dvc.lock
-          push_options: '--force'
