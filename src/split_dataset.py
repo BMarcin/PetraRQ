@@ -24,8 +24,8 @@ if __name__ == '__main__':
                         format='%(asctime)s - %(message)s',
                         datefmt='%Y-%m-%d %H:%M:%S')
 
-    dev_ds_size = 0.1
-    test_ds_size = 0.2
+    dev_ds_size = 0.15
+    test_ds_size = 0.15
     train_ds_size = 0.7
 
     parts = 3
