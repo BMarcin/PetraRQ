@@ -42,4 +42,4 @@ jobs:
         with:
           repository: .
           commit_message: 'DVC repro done [ci skip]'
-          file_pattern: *.lock
+          file_pattern: '*.lock'
