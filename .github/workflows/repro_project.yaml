@@ -30,3 +30,9 @@ jobs:
 
       - name: Makefile
         run: make
+
+      - name: Autocommit
+        uses: stefanzweifel/git-auto-commit-action@v4
+        with:
+          commit_message: 'DVC repro done'
+          file_pattern: dvc.lock
