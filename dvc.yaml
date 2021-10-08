@@ -7,6 +7,10 @@ stages:
     - ./data/parsed-pdfs.json
     - ./src/DatasetSplitter/DatasetSplitter.py
     - ./src/split_dataset.py
+    params:
+    - datasetsplit.dev
+    - datasetsplit.test
+    - datasetsplit.train
     outs:
     - ./data/dev/expected.tsv
     - ./data/dev/in.tsv

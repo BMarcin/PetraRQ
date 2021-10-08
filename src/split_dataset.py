@@ -2,6 +2,7 @@ import csv
 import json
 import logging
 from pathlib import Path
+import yaml
 
 from tqdm.auto import tqdm
 
@@ -24,9 +25,11 @@ if __name__ == '__main__':
                         format='%(asctime)s - %(message)s',
                         datefmt='%Y-%m-%d %H:%M:%S')
 
-    dev_ds_size = 0.1
-    test_ds_size = 0.2
-    train_ds_size = 0.7
+    config = yaml.safe_load(open("./params.yaml"))['datasetsplit']
+
+    dev_ds_size = config['dev']
+    test_ds_size = config['test']
+    train_ds_size = config['train']
 
     parts = 3
 
