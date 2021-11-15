@@ -16,9 +16,9 @@ def save_ds_part(items: list, in_filename: Path, expected_filename: Path, label_
             csv_expected_writer = csv.writer(expected_file, delimiter='\t', quoting=csv.QUOTE_MINIMAL)
 
             for item in tqdm(items, desc='Saving {} and {}'.format(str(in_filename), str(expected_filename))):
-                csv_in_writer.writerow([item['date'], item['content']])
+                csv_in_writer.writerow([item['content'].replace("\n", " ")])
                 buckets = [label_replacement_list[lab.lower().strip()] for lab in item['buckets']]
-                csv_expected_writer.writerow([','.join(buckets)])
+                csv_expected_writer.writerow([' '.join(buckets)])
 
 
 if __name__ == '__main__':
@@ -54,5 +54,9 @@ if __name__ == '__main__':
         save_ds_part(splitted_items['dev'], Path('./data/dev/in.tsv'), Path('./data/dev/expected.tsv'), labels)
         save_ds_part(splitted_items['test'], Path('./data/test/in.tsv'), Path('./data/test/expected.tsv'), labels)
         save_ds_part(splitted_items['train'], Path('./data/train/in.tsv'), Path('./data/train/expected.tsv'), labels)
+
+        assert len(open("./data/dev/in.tsv").readlines()) == len(open("./data/dev/expected.tsv").readlines()), 'DEV dataset lines count missmatch'
+        assert len(open("./data/test/in.tsv").readlines()) == len(open("./data/test/expected.tsv").readlines()), 'TEST dataset lines count missmatch'
+        assert len(open("./data/train/in.tsv").readlines()) == len(open("./data/train/expected.tsv").readlines()), 'TRAIN dataset lines count missmatch'
     else:
         logging.error("File {} does not exists".format(str(ds_path)))
