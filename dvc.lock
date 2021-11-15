@@ -16,28 +16,33 @@ stages:
       md5: 4fbd8efb8d2c18b9e9dc86939c0d8240
       size: 2184
     - path: ./src/split_dataset.py
-      md5: 1dcbf0fdb2f382155071e90a6053a77f
-      size: 1938
+      md5: c15fb6fd6bfcb9605a9b6c79924693b0
+      size: 2311
+    params:
+      params.yaml:
+        datasetsplit.dev: 0.1
+        datasetsplit.test: 0.2
+        datasetsplit.train: 0.7
     outs:
     - path: ./data/dev/expected.tsv
-      md5: 2f6027cb4b43115f85142b7c73159fae
-      size: 139742
+      md5: 9caa3096d063532d9aa5dc1663c1fe3e
+      size: 61617
       isexec: true
     - path: ./data/dev/in.tsv
       md5: 5c9acd0a187aa1bf5ef5fcd490dd4b43
       size: 159785191
       isexec: true
     - path: ./data/test/expected.tsv
-      md5: 3767dea5d7ec04bde2e29db7ce679065
-      size: 273430
+      md5: c36cb0cfcbc7f29af3fcee5443563382
+      size: 132509
       isexec: true
     - path: ./data/test/in.tsv
       md5: 8f0d895d8e4e8fd1e377bb32d6a9040e
       size: 293087469
       isexec: true
     - path: ./data/train/expected.tsv
-      md5: 349754dd45e214869a5e9ca70a3281b9
-      size: 936226
+      md5: de55e217ee07b69fd7e59afcc4202d02
+      size: 460079
       isexec: true
     - path: ./data/train/in.tsv
       md5: 0006a436a379b7723be9c14125d9b9a6

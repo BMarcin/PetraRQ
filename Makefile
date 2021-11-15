@@ -4,8 +4,8 @@ all: ./data/in-header.tsv ./data/out-header.tsv
 	dvc repro --pull
 
 ./data/in-header.tsv ./data/out-header.tsv: ./data/parsed-pdfs.json
-	echo "date    content" > ./data/in-header.tsv
-	echo "labels" > ./data/out-header.tsv
+	echo "InText" > ./data/in-header.tsv
+	echo "Labels" > ./data/out-header.tsv
 
 ./data/parsed-pdfs.json:
 	dvc pull ./data/parsed-pdfs.json

@@ -18,9 +18,19 @@ mkdir -p ./test-A
 cp /home/runner/work/PetraRQ/PetraRQ/data/dev/* ./dev-0/
 cp /home/runner/work/PetraRQ/PetraRQ/data/test/* ./test-A/
 cp /home/runner/work/PetraRQ/PetraRQ/data/train/* ./train/
+mv /home/runner/work/PetraRQ/PetraRQ/data/in-header.tsv ./
+mv /home/runner/work/PetraRQ/PetraRQ/data/out-header.tsv ./
 rm ./test-A/expected.tsv
 
-#git add .
+gzip ./train/in.tsv
+gzip ./train/expected.tsv
+gzip ./test-A/in.tsv
+gzip ./dev/in.tsv
+gzip ./dev/expected.tsv
+
+geval --validate --expected-directory .
+
+git add .
 git commit -am $COMMIT_MESSAGE
 #git remote add origin ssh://gitolite@gonito.net/eur-lex-documents
 git push origin master
