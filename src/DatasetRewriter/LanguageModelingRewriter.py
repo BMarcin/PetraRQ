@@ -51,15 +51,16 @@ def rewrite_datasets_to_txt(
     logging.info('Processing train texts')
     train_output_texts = processing_function(train_input_texts, bp, threads)
 
-    with open("../data/dev/lm.txt", "w", encoding="utf8") as f:
+    #todo fix this to use abs path
+    with open("./data/dev/lm.txt", "w", encoding="utf8") as f:
         for item in tqdm(dev_output_texts, desc="Saving dev ds"):
             f.write(item + '\n')
 
-    with open("../data/test/lm.txt", "w", encoding="utf8") as f:
+    with open("./data/test/lm.txt", "w", encoding="utf8") as f:
         for item in tqdm(test_output_texts, desc="Saving test ds"):
             f.write(item + '\n')
 
-    with open("../data/train/lm.txt", "w", encoding="utf8") as f:
+    with open("./data/train/lm.txt", "w", encoding="utf8") as f:
         for item in tqdm(train_output_texts, desc="Saving train ds"):
             f.write(item + '\n')
 
