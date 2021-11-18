@@ -17,3 +17,6 @@ clean:
 	rm -f ./data/train/*.tsv
 	rm -f ./data/in-header.tsv
 	rm -f ./data/out-header.tsv
+	rm -f ./data/dev/lm.txt
+	rm -f ./data/test/lm.txt
+	rm -f ./data/train/lm.txt

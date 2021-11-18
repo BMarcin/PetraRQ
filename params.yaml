@@ -3,3 +3,6 @@ datasetsplit:
   test: 0.2
   dev: 0.1
   parts: 3
+
+datasetrewrite:
+  threads: 24

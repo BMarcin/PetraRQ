@@ -3,6 +3,7 @@ import json
 import logging
 from pathlib import Path
 import yaml
+import pandas as pd
 
 from tqdm.auto import tqdm
 
@@ -16,9 +17,10 @@ def save_ds_part(items: list, in_filename: Path, expected_filename: Path, label_
             csv_expected_writer = csv.writer(expected_file, delimiter='\t', quoting=csv.QUOTE_MINIMAL)
 
             for item in tqdm(items, desc='Saving {} and {}'.format(str(in_filename), str(expected_filename))):
-                csv_in_writer.writerow([item['content'].replace("\n", " ")])
-                buckets = [label_replacement_list[lab.lower().strip()] for lab in item['buckets']]
-                csv_expected_writer.writerow([' '.join(buckets)])
+                if len(item['content'].replace("\n", " ").replace(" ", "")) >= 3:
+                    csv_in_writer.writerow([item['content'].replace("\n", " ")])
+                    buckets = [label_replacement_list[lab.lower().strip()] for lab in item['buckets']]
+                    csv_expected_writer.writerow([' '.join(buckets)])
 
 
 if __name__ == '__main__':
@@ -55,8 +57,17 @@ if __name__ == '__main__':
         save_ds_part(splitted_items['test'], Path('./data/test/in.tsv'), Path('./data/test/expected.tsv'), labels)
         save_ds_part(splitted_items['train'], Path('./data/train/in.tsv'), Path('./data/train/expected.tsv'), labels)
 
-        assert len(open("./data/dev/in.tsv").readlines()) == len(open("./data/dev/expected.tsv").readlines()), 'DEV dataset lines count missmatch'
-        assert len(open("./data/test/in.tsv").readlines()) == len(open("./data/test/expected.tsv").readlines()), 'TEST dataset lines count missmatch'
-        assert len(open("./data/train/in.tsv").readlines()) == len(open("./data/train/expected.tsv").readlines()), 'TRAIN dataset lines count missmatch'
+        data_dev = pd.read_csv("./data/dev/in.tsv", delimiter='\t', header=None, encoding="utf8", quoting=0, quotechar="'")
+        labels_dev = pd.read_csv("./data/dev/expected.tsv", delimiter='\t', header=None, encoding="utf8", quoting=0, quotechar="'")
+
+        data_test = pd.read_csv("./data/test/in.tsv", delimiter='\t', header=None, encoding="utf8", quoting=0, quotechar="'")
+        labels_test = pd.read_csv("./data/test/expected.tsv", delimiter='\t', header=None, encoding="utf8", quoting=0, quotechar="'")
+
+        data_train = pd.read_csv("./data/train/in.tsv", delimiter='\t', header=None, encoding="utf8", quoting=0, quotechar="'")
+        labels_train = pd.read_csv("./data/train/expected.tsv", delimiter='\t', header=None, encoding="utf8", quoting=0, quotechar="'")
+
+        assert len(data_dev) == len(labels_dev), 'DEV dataset lines count missmatch, got {} and {}'.format(len(data_dev), len(labels_dev))
+        assert len(data_test) == len(labels_test), 'TEST dataset lines count missmatch, got {} and {}'.format(len(data_test), len(labels_test))
+        assert len(data_train) == len(labels_train), 'TRAIN dataset lines count missmatch, got {} and {}'.format(len(data_train), len(labels_train))
     else:
         logging.error("File {} does not exists".format(str(ds_path)))
