@@ -27,24 +27,18 @@ stages:
     - path: ./data/dev/expected.tsv
       md5: 5391538123caa438255b9bc85320a1ba
       size: 61303
-      isexec: true
     - path: ./data/dev/in.tsv
       md5: 0b412ccb9d699a7c3c7cafcccb49b2d1
       size: 159742659
-      isexec: true
     - path: ./data/test/expected.tsv
       md5: 5aa2eb7467c1ff713ab14f7d1ef5646c
       size: 131694
-      isexec: true
     - path: ./data/test/in.tsv
       md5: 122cbc0ca7f3348b57681e444943a338
       size: 293002155
-      isexec: true
     - path: ./data/train/expected.tsv
       md5: 091810eb6381bcdecd098ac8e1d7e27b
       size: 457301
-      isexec: true
     - path: ./data/train/in.tsv
       md5: 85fc4cb5761062504e5412ebb7b02803
       size: 1016531152
-      isexec: true
