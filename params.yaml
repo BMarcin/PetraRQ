@@ -5,4 +5,4 @@ datasetsplit:
   parts: 3
 
 datasetrewrite:
-  threads: 12
+  threads: 24
