@@ -42,3 +42,31 @@ stages:
     - path: ./data/train/in.tsv
       md5: 85fc4cb5761062504e5412ebb7b02803
       size: 1016531152
+  rewrite_dataset_to_lm_texts:
+    cmd: python ./src/rewrite_dataset.py
+    deps:
+    - path: ./data/dev/in.tsv
+      md5: 0b412ccb9d699a7c3c7cafcccb49b2d1
+      size: 159742659
+    - path: ./data/test/in.tsv
+      md5: 122cbc0ca7f3348b57681e444943a338
+      size: 293002155
+    - path: ./data/train/in.tsv
+      md5: 85fc4cb5761062504e5412ebb7b02803
+      size: 1016531152
+    - path: ./src/DatasetRewriter/LanguageModelingRewriter.py
+      md5: 5d13bfdc57a9585405851c795d7caf93
+      size: 1956
+    - path: ./src/rewrite_dataset.py
+      md5: c9e7e62c9755dc97a0b874044226562a
+      size: 1081
+    outs:
+    - path: ./data/dev/lm.txt
+      md5: 5c8d925e2e8441d3d0a3e906553c76c1
+      size: 162942254
+    - path: ./data/test/lm.txt
+      md5: 252febebedec3fa04869a7e685d65324
+      size: 298319163
+    - path: ./data/train/lm.txt
+      md5: dcb961c85dc491aa295479169665554b
+      size: 1027574174
