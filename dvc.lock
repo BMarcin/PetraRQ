@@ -70,3 +70,13 @@ stages:
     - path: ./data/train/lm.txt
       md5: dcb961c85dc491aa295479169665554b
       size: 1027574174
+  evaluate:
+    cmd: python test.py
+    deps:
+    - path: todo.txt
+      md5: c804a63f0a910503967f625d6c7c22e0
+      size: 1217
+    outs:
+    - path: scores.json
+      md5: 99914b932bd37a50b983c5e7c90ae93b
+      size: 2
