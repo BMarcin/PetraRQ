@@ -14,6 +14,8 @@ if [ ! -d "train" ]; then
   git init
 fi
 
+git switch -c "$BRANCH_NAME"
+
 cp /home/runner/work/PetraRQ/PetraRQ/README.md .
 cp /home/runner/work/PetraRQ/PetraRQ/config.txt .
 cp /home/runner/work/PetraRQ/PetraRQ/.gitignore .
