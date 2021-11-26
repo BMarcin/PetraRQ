@@ -8,7 +8,7 @@ sudo chmod +x /usr/local/bin/geval
 
 cd /home/runner/work/PetraRQ/main_repo/
 git clone ssh://gitolite@gonito.net/eur-lex-documents-dont-peek
-cd eur-lex-documents
+cd eur-lex-documents-dont-peek
 
 if [ ! -d "train" ]; then
   git init
