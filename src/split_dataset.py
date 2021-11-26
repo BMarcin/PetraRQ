@@ -18,7 +18,7 @@ def save_ds_part(items: list, in_filename: Path, expected_filename: Path, label_
 
             for item in tqdm(items, desc='Saving {} and {}'.format(str(in_filename), str(expected_filename))):
                 if len(item['content'].replace("\n", " ").replace(" ", "")) >= 3:
-                    csv_in_writer.writerow([item['content'].replace("\n", " ")])
+                    csv_in_writer.writerow([item['content'].replace("\n", " "), item['date']])
                     buckets = [label_replacement_list[lab.lower().strip()] for lab in item['buckets']]
                     csv_expected_writer.writerow([' '.join(buckets)])
 
