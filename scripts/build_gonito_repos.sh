@@ -43,18 +43,18 @@ mv ./test-A/expected.tsv.gz ../expected.tsv.gz
 tree
 
 git add .
-git commit -am $COMMIT_MESSAGE
-#git push origin "$BRANCH_NAME"
+git commit -m "$COMMIT_MESSAGE"
+git push -f origin "$BRANCH_NAME"
 
 mv ../expected.tsv.gz ./test-A/expected.tsv.gz
 
 tree
 
 git add ./test-A/expected.tsv.gz
-git commit -am $COMMIT_MESSAGE
+git commit -m "$COMMIT_MESSAGE"
 git remote rm origin
 git remote add origin ssh://gitolite@gonito.net/eur-lex-documents-dont-peek
-#git push origin "$BRANCH_NAME"
+git push -f origin "$BRANCH_NAME"
 
 
 #git commit -am $COMMIT_MESSAGE
