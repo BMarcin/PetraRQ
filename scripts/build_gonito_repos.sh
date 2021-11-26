@@ -6,16 +6,10 @@ echo "Created main repo"
 cd /home/runner/work/PetraRQ/main_repo/
 git clone ssh://gitolite@gonito.net/eur-lex-documents
 cd eur-lex-documents
-
-if [ ! -d "train" ]; then
-  git init
-fi
-
-git switch -c "$BRANCH_NAME"
+#git init
 
 cp /home/runner/work/PetraRQ/PetraRQ/README.md .
 cp /home/runner/work/PetraRQ/PetraRQ/config.txt .
-cp /home/runner/work/PetraRQ/PetraRQ/.gitignore .
 
 mkdir -p ./train
 mkdir -p ./dev-0
@@ -39,4 +33,4 @@ geval --validate --expected-directory .
 git add .
 git commit -am $COMMIT_MESSAGE
 #git remote add origin ssh://gitolite@gonito.net/eur-lex-documents
-git push origin "$BRANCH_NAME"
+git push origin master

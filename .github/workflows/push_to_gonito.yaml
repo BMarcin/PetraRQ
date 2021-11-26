@@ -3,7 +3,7 @@ name: Push to gonito.net
 on:
   push:
     branches:
-      - 'main'
+      - 'gonito/**'
 
 jobs:
   PushToGonito:
@@ -35,12 +35,14 @@ jobs:
         env:
           GONITO_PRIVATE_SSH: ${{secrets.GONITO_PRIVATE_SSH}}
 
-      - name: Main repo on gonito.net
-        run: chmod +x ./scripts/build_gonito_main_repo.sh && ./scripts/build_gonito_main_repo.sh
+      - name: Gonito repos
+        run: chmod +x ./scripts/build_gonito_repos.sh && ./scripts/build_gonito_repos.sh
         env:
           COMMIT_MESSAGE: ${{ github.event.head_commit.message }}
+          BRANCH_NAME: ${{ github.event.ref }}
 
-      - name: Dontpeek repo on gonito.net
-        run: chmod +x ./scripts/build_gonito_dontpeek_repo.sh && ./scripts/build_gonito_dontpeek_repo.sh
-        env:
-          COMMIT_MESSAGE: ${{ github.event.head_commit.message }}
+#      - name: Dontpeek repo on gonito.net
+#        run: chmod +x ./scripts/build_gonito_dontpeek_repo.sh && ./scripts/build_gonito_dontpeek_repo.sh
+#        env:
+#          COMMIT_MESSAGE: ${{ github.event.head_commit.message }}
+#          BRANCH_NAME: ${{ github.event.ref }}
