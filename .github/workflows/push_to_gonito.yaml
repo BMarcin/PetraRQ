@@ -35,11 +35,14 @@ jobs:
         env:
           GONITO_PRIVATE_SSH: ${{secrets.GONITO_PRIVATE_SSH}}
 
+      - name: Set Branch Environment
+        run: echo "BRANCH_NAME=${GITHUB_REF##*/}" >> $GITHUB_ENV
+
       - name: Gonito repos
         run: chmod +x ./scripts/build_gonito_repos.sh && ./scripts/build_gonito_repos.sh
         env:
           COMMIT_MESSAGE: ${{ github.event.head_commit.message }}
-          BRANCH_NAME: ${{ github.event.ref }}
+          BRANCH_NAME: ${{ env.BRANCH_NAME }}
 
 #      - name: Dontpeek repo on gonito.net
 #        run: chmod +x ./scripts/build_gonito_dontpeek_repo.sh && ./scripts/build_gonito_dontpeek_repo.sh
