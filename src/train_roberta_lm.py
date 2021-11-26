@@ -20,7 +20,7 @@ def encode(examples):
         examples["text"],
         padding="max_length",
         truncation=True,
-        max_length=512
+        max_length=config['max_seq_length']
     )
 
 
@@ -32,7 +32,7 @@ if __name__ == '__main__':
     # load config
     logging.info("Loading config...")
     config = yaml.safe_load(open("./params.yaml"))['language_modeling_train']
-    os.environ["CUDA_VISIBLE_DEVICES"] = ",".join(config['cuda_visible_devices'])
+    os.environ["CUDA_VISIBLE_DEVICES"] = ",".join([str(item) for item in config['cuda_visible_devices']])
 
     # log to wandb
     logging.info("Logging to wandb...")
@@ -50,12 +50,12 @@ if __name__ == '__main__':
     ]
 
     # setup datasets paths
-    dev_ds = "../data/dev/lm.txt"
-    test_ds = "../data/test/lm.txt"
-    train_ds = "../data/train/lm.txt"
+    dev_ds = "./data/dev/lm.txt"
+    test_ds = "./data/test/lm.txt"
+    train_ds = "./data/train/lm.txt"
 
     # set models path
-    models_path = "../models/roberta_lm"
+    models_path = "./models/roberta_lm"
     os.makedirs(models_path, exist_ok=True)
 
     # train tokenizer
@@ -105,9 +105,9 @@ if __name__ == '__main__':
     )
 
     # build model
-    config = RobertaConfig(
+    model_config = RobertaConfig(
         vocab_size=vocab_size,
-        max_position_embeddings=config['max_seq_length'],
+        max_position_embeddings=config['max_seq_length'] + 2,
         num_attention_heads=config['num_attention_heads'],
         num_hidden_layers=config['num_hidden_layers'],
         type_vocab_size=1,
@@ -115,7 +115,7 @@ if __name__ == '__main__':
         hidden_size=config['hidden_size'],
         hidden_dropout_prob=config['hidden_dropout_prob']
     )
-    model = RobertaForMaskedLM(config=config)
+    model = RobertaForMaskedLM(config=model_config)
 
     logging.info("Model parameters: {}".format(model.num_parameters()))
 

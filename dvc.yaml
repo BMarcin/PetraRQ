@@ -57,6 +57,7 @@ stages:
     - ./models/roberta_lm/config.json
     - ./models/roberta_lm/special_tokens_map.json
     - ./models/roberta_lm/tokenizer_config.json
-  metrics:
-    - scores.json:
-        cache: false
+    metrics:
+      - scores.json:
+          cache: false
+
