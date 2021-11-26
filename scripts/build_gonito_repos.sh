@@ -16,6 +16,7 @@ fi
 
 cp /home/runner/work/PetraRQ/PetraRQ/README.md .
 cp /home/runner/work/PetraRQ/PetraRQ/config.txt .
+cp /home/runner/work/PetraRQ/PetraRQ/.gitignore .
 
 mkdir -p ./train
 mkdir -p ./dev-0
@@ -31,15 +32,20 @@ rm ./test-A/expected.tsv
 gzip ./train/in.tsv
 gzip ./train/expected.tsv
 gzip ./test-A/in.tsv
-gzip ./dev/in.tsv
-gzip ./dev/expected.tsv
+gzip ./dev-0/in.tsv
+gzip ./dev-0/expected.tsv
 
 geval --validate --expected-directory .
+if [ ! $? -eq 0 ]; then
+  echo "Validation failed"
+  exit 1
+fi
 
+git add .
 git status
 tree
 
-#git add .
-#it commit -am $COMMIT_MESSAGE
+
+#git commit -am $COMMIT_MESSAGE
 ##git remote add origin ssh://gitolite@gonito.net/eur-lex-documents
 #git push origin "$BRANCH_NAME"
