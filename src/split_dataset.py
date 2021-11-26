@@ -13,8 +13,8 @@ from DatasetSplitter import dataset_splitter_by_time
 def save_ds_part(items: list, in_filename: Path, expected_filename: Path, label_replacement_list: dict):
     with open(in_filename, "w", encoding="utf8") as in_file:
         with open(expected_filename, "w", encoding="utf8") as expected_file:
-            csv_in_writer = csv.writer(in_file, delimiter='\t', quoting=csv.QUOTE_MINIMAL)
-            csv_expected_writer = csv.writer(expected_file, delimiter='\t', quoting=csv.QUOTE_MINIMAL)
+            csv_in_writer = csv.writer(in_file, delimiter='\t', quoting=csv.QUOTE_MINIMAL, lineterminator="\n")
+            csv_expected_writer = csv.writer(expected_file, delimiter='\t', quoting=csv.QUOTE_MINIMAL, lineterminator="\n")
 
             for item in tqdm(items, desc='Saving {} and {}'.format(str(in_filename), str(expected_filename))):
                 if len(item['content'].replace("\n", " ").replace(" ", "")) >= 3:
