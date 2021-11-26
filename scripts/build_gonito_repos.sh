@@ -3,10 +3,16 @@
 mkdir -p /home/runner/work/PetraRQ/main_repo/
 echo "Created main repo"
 
+sudo curl -L https://gonito.net/get/bin/geval -o /usr/local/bin/geval
+sudo chmod +x /usr/local/bin/geval
+
 cd /home/runner/work/PetraRQ/main_repo/
 git clone ssh://gitolite@gonito.net/eur-lex-documents
 cd eur-lex-documents
-#git init
+
+if [ ! -d "train" ]; then
+  git init
+fi
 
 cp /home/runner/work/PetraRQ/PetraRQ/README.md .
 cp /home/runner/work/PetraRQ/PetraRQ/config.txt .
@@ -30,7 +36,10 @@ gzip ./dev/expected.tsv
 
 geval --validate --expected-directory .
 
-git add .
-git commit -am $COMMIT_MESSAGE
-#git remote add origin ssh://gitolite@gonito.net/eur-lex-documents
-git push origin master
+git status
+tree
+
+#git add .
+#it commit -am $COMMIT_MESSAGE
+##git remote add origin ssh://gitolite@gonito.net/eur-lex-documents
+#git push origin "$BRANCH_NAME"
