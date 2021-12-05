@@ -91,11 +91,13 @@ mv ../expected.tsv.gz ./test-A/expected.tsv.gz
 
 tree
 
+git remote rm origin
+git remote add origin ssh://gitolite@gonito.net/eur-lex-documents-dont-peek
+git pull
+
 git add ./test-A/expected.tsv.gz
 git status
 git commit -m "$COMMIT_MESSAGE"
-git remote rm origin
-git remote add origin ssh://gitolite@gonito.net/eur-lex-documents-dont-peek
 git push origin "$BRANCH_NAME"
 
 
