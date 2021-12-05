@@ -1,6 +1,7 @@
 SHELL=/bin/bash
 
 all: ./data/in-header.tsv ./data/out-header.tsv
+	dvc pull
 	dvc repro --pull
 
 ./data/in-header.tsv ./data/out-header.tsv: ./data/parsed-pdfs.json
