@@ -45,6 +45,7 @@ mv ./test-A/expected.tsv.gz ../expected.tsv.gz
 tree
 
 git add .
+git status
 git commit -m "$COMMIT_MESSAGE"
 git push -f origin "$BRANCH_NAME"
 
@@ -53,6 +54,7 @@ mv ../expected.tsv.gz ./test-A/expected.tsv.gz
 tree
 
 git add ./test-A/expected.tsv.gz
+git status
 git commit -m "$COMMIT_MESSAGE"
 git remote rm origin
 git remote add origin ssh://gitolite@gonito.net/eur-lex-documents-dont-peek
