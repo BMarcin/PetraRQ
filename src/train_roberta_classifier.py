@@ -10,7 +10,7 @@ from sklearn.metrics import accuracy_score, f1_score, precision_score, recall_sc
 from transformers import RobertaConfig, RobertaTokenizerFast, RobertaForSequenceClassification, Trainer, \
     TrainingArguments
 
-from src.ClassificationDataset import ClassificationDataset
+from ClassificationDataset import ClassificationDataset
 
 
 def compute_metrics(pred):
