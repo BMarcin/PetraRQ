@@ -11,7 +11,7 @@ git clone ssh://gitolite@gonito.net/eur-lex-documents
 cd eur-lex-documents
 
 git switch -c "$BRANCH_NAME"
-git pull
+git branch --set-upstream-to=origin/"$BRANCH_NAME" "$BRANCH_NAME"
 
 cp /home/runner/work/PetraRQ/PetraRQ/README.md .
 cp /home/runner/work/PetraRQ/PetraRQ/config.txt .
