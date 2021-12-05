@@ -152,6 +152,31 @@ if __name__ == '__main__':
         'loss': eval_scores['eval_loss']
     }
 
+    # predict dev set
+    logging.info("Predicting dev set...")
+    dev_preds = trainer.predict(dev_ds)[1]
+    test_preds = trainer.predict(test_ds)[1]
+
+    translated_dev_preds = [" ".join(dev_ds.tensor2labels(model_outputs)) for model_outputs in dev_preds]
+    translated_test_preds = [" ".join(test_ds.tensor2labels(model_outputs)) for model_outputs in test_preds]
+
+    # save predictions to csv file
+    logging.info("Saving predictions to csv file...")
+    with open("./data/dev/out.tsv", "w", encoding="utf8") as f:
+        for pred in translated_dev_preds:
+            f.write(pred + "\n")
+
+    with open("./data/test/out.tsv", "w", encoding="utf8") as f:
+        for pred in translated_test_preds:
+            f.write(pred + "\n")
+
+    # save predictions
+    logging.info("Saving predictions...")
+
+    # save model
+    logging.info("Saving model")
+    trainer.save_model()
+
     # log results
     logging.info("Logging results...")
     with open("./scores_classification.json", "w", encoding="utf8") as f:

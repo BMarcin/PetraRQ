@@ -17,9 +17,19 @@ class ClassificationDataset(torch.utils.data.Dataset):
     def __len__(self):
         return len(self.input_texts)
 
+    def labels2tensor(self, labels):
+        return set([self.label2idx[label.strip().lower()] for label in labels])
+
+    def tensor2labels(self, tensor):
+        labels = []
+        for idx, label in enumerate(self.unique_labels):
+            if tensor[idx] == 1:
+                labels.append(label)
+        return labels
+
     def __getitem__(self, idx):
         tokenized = self.tokenizer(str(self.input_texts.iloc[idx][1]), truncation=True, padding="max_length", max_length=512)
-        labels = set([self.label2idx[label.strip().lower()] for label in self.input_labels.iloc[idx][0].split(' ')])
+        labels = self.labels2tensor(self.input_labels.iloc[idx][0].split(' '))
 
         item = {
             'input_ids': torch.tensor(tokenized['input_ids']),

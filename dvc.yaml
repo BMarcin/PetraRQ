@@ -84,6 +84,8 @@ stages:
     outs:
     - ./models/roberta_classifier/pytorch_model.bin
     - ./models/roberta_classifier/config.json
+    - ./data/dev/out.tsv
+    - ./data/test/out.tsv
     metrics:
       - scores_classification.json:
           cache: false
