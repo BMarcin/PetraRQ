@@ -23,3 +23,12 @@ language_modeling_train:
   epochs: 90
   per_device_train_batch_size: 18
   per_device_eval_batch_size: 32
+
+classification_train:
+  cuda_visible_devices: [3,4]
+
+  warmup_steps: 500
+  num_train_epochs: 5
+
+  per_device_train_batch_size: 17
+  per_device_eval_batch_size: 30
