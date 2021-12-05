@@ -92,7 +92,7 @@ if __name__ == '__main__':
     # get unique labels
     logging.info("Getting unique labels...")
     labels = pd.concat([labels1, labels2, labels3])
-    unique_labels = set([label for _, row in labels.iterrows() for label in row[0].split(" ")])
+    unique_labels = set([label.strip().lower() for _, row in labels.iterrows() for label in row[0].split(" ")])
 
     # create datasets
     logging.info("Creating datasets...")
