@@ -35,8 +35,10 @@ gzip ./train/in.tsv
 gzip ./train/expected.tsv
 gzip ./test-A/in.tsv
 gzip ./test-A/expected.tsv
+gzip ./test-A/out.tsv
 gzip ./dev-0/in.tsv
 gzip ./dev-0/expected.tsv
+gzip ./dev-0/out.tsv
 
 geval --validate --expected-directory .
 
@@ -47,7 +49,7 @@ tree
 git add .
 git status
 git commit -m "$COMMIT_MESSAGE"
-git push -f origin "$BRANCH_NAME"
+#git push origin "$BRANCH_NAME"
 
 mv ../expected.tsv.gz ./test-A/expected.tsv.gz
 
@@ -58,7 +60,7 @@ git status
 git commit -m "$COMMIT_MESSAGE"
 git remote rm origin
 git remote add origin ssh://gitolite@gonito.net/eur-lex-documents-dont-peek
-git push -f origin "$BRANCH_NAME"
+#git push origin "$BRANCH_NAME"
 
 
 #git commit -am $COMMIT_MESSAGE
