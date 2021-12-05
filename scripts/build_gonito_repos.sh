@@ -10,10 +10,6 @@ cd /home/runner/work/PetraRQ/main_repo/
 git clone ssh://gitolite@gonito.net/eur-lex-documents
 cd eur-lex-documents
 
-if [ ! -d "train" ]; then
-  git init
-fi
-
 git switch -c "$BRANCH_NAME"
 
 cp /home/runner/work/PetraRQ/PetraRQ/README.md .
@@ -56,16 +52,23 @@ if [ -f "./test-A/out.tsv.gz" ]; then
   rm ./test-A/out.tsv.gz
 fi
 
-cp /home/runner/work/PetraRQ/PetraRQ/data/dev/* ./dev-0/
-cp /home/runner/work/PetraRQ/PetraRQ/data/test/* ./test-A/
-cp /home/runner/work/PetraRQ/PetraRQ/data/train/* ./train/
+#cp /home/runner/work/PetraRQ/PetraRQ/data/dev/* ./dev-0/
+#cp /home/runner/work/PetraRQ/PetraRQ/data/test/* ./test-A/
+#cp /home/runner/work/PetraRQ/PetraRQ/data/train/* ./train/
+tr -d '\015' </home/runner/work/PetraRQ/PetraRQ/data/dev/in.tsv >./dev-0/in.tsv
+tr -d '\015' </home/runner/work/PetraRQ/PetraRQ/data/dev/expected.tsv >./dev-0/expected.tsv
+tr -d '\015' </home/runner/work/PetraRQ/PetraRQ/data/dev/out.tsv >./dev-0/out.tsv
+
+tr -d '\015' </home/runner/work/PetraRQ/PetraRQ/data/test/in.tsv >./test-A/in.tsv
+tr -d '\015' </home/runner/work/PetraRQ/PetraRQ/data/test/expected.tsv >./test-A/expected.tsv
+tr -d '\015' </home/runner/work/PetraRQ/PetraRQ/data/test/out.tsv >./test-A/out.tsv
+
+tr -d '\015' </home/runner/work/PetraRQ/PetraRQ/data/train/in.tsv >./train/in.tsv
+tr -d '\015' </home/runner/work/PetraRQ/PetraRQ/data/train/expected.tsv >./train/expected.tsv
+
+
 mv /home/runner/work/PetraRQ/PetraRQ/data/in-header.tsv ./
 mv /home/runner/work/PetraRQ/PetraRQ/data/out-header.tsv ./
-#rm ./test-A/expected.tsv
-
-rm ./dev-0/lm.txt
-rm ./test-A/lm.txt
-rm ./train/lm.txt
 
 gzip ./train/in.tsv
 gzip ./train/expected.tsv
@@ -85,19 +88,19 @@ tree
 git add .
 git status
 git commit -m "$COMMIT_MESSAGE"
-git push origin "$BRANCH_NAME"
+#git push origin "$BRANCH_NAME"
 
-git remote rm origin
-git remote add origin ssh://gitolite@gonito.net/eur-lex-documents-dont-peek
-git pull
-
-mv ../expected.tsv.gz ./test-A/expected.tsv.gz
-
-tree
-
-git add ./test-A/expected.tsv.gz
-git status
-git commit -m "$COMMIT_MESSAGE"
+#git remote rm origin
+#git remote add origin ssh://gitolite@gonito.net/eur-lex-documents-dont-peek
+#git pull
+#
+#mv ../expected.tsv.gz ./test-A/expected.tsv.gz
+#
+#tree
+#
+#git add ./test-A/expected.tsv.gz
+#git status
+#git commit -m "$COMMIT_MESSAGE"
 #git push origin "$BRANCH_NAME"
 
 
