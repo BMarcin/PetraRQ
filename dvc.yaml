@@ -61,7 +61,7 @@ stages:
       - scores.json:
           cache: false
 
-  train_lm:
+  train_classifier:
     cmd: python ./src/train_roberta_classifier.py
     deps:
     - ./src/train_roberta_classifier.py
