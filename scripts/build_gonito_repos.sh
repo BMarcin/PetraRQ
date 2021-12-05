@@ -88,7 +88,7 @@ tree
 git add .
 git status
 git commit -m "$COMMIT_MESSAGE"
-#git push origin "$BRANCH_NAME"
+git push origin "$BRANCH_NAME"
 
 #git remote rm origin
 #git remote add origin ssh://gitolite@gonito.net/eur-lex-documents-dont-peek
