@@ -58,11 +58,11 @@ fi
 #cp /home/runner/work/PetraRQ/PetraRQ/data/train/* ./train/
 tr -d '\015' </home/runner/work/PetraRQ/PetraRQ/data/dev/in.tsv >./dev-0/in.tsv
 tr -d '\015' </home/runner/work/PetraRQ/PetraRQ/data/dev/expected.tsv >./dev-0/expected.tsv
-tr -d '\015' </home/runner/work/PetraRQ/PetraRQ/data/dev/out.tsv >./dev-0/out.tsv
+#tr -d '\015' </home/runner/work/PetraRQ/PetraRQ/data/dev/out.tsv >./dev-0/out.tsv
 
 tr -d '\015' </home/runner/work/PetraRQ/PetraRQ/data/test/in.tsv >./test-A/in.tsv
 tr -d '\015' </home/runner/work/PetraRQ/PetraRQ/data/test/expected.tsv >./test-A/expected.tsv
-tr -d '\015' </home/runner/work/PetraRQ/PetraRQ/data/test/out.tsv >./test-A/out.tsv
+#tr -d '\015' </home/runner/work/PetraRQ/PetraRQ/data/test/out.tsv >./test-A/out.tsv
 
 tr -d '\015' </home/runner/work/PetraRQ/PetraRQ/data/train/in.tsv >./train/in.tsv
 tr -d '\015' </home/runner/work/PetraRQ/PetraRQ/data/train/expected.tsv >./train/expected.tsv
@@ -75,10 +75,10 @@ gzip ./train/in.tsv
 gzip ./train/expected.tsv
 gzip ./test-A/in.tsv
 gzip ./test-A/expected.tsv
-gzip ./test-A/out.tsv
+#gzip ./test-A/out.tsv
 gzip ./dev-0/in.tsv
 gzip ./dev-0/expected.tsv
-gzip ./dev-0/out.tsv
+#gzip ./dev-0/out.tsv
 
 geval --validate --expected-directory .
 
