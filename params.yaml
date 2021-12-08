@@ -28,7 +28,7 @@ classification_train:
   cuda_visible_devices: [3,4]
 
   warmup_steps: 500
-  num_train_epochs: 5
+  num_train_epochs: 100
 
-  per_device_train_batch_size: 17
+  per_device_train_batch_size: 20
   per_device_eval_batch_size: 30

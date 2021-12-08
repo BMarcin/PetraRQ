@@ -168,21 +168,21 @@ stages:
       size: 6169
     params:
       params.yaml:
-        classification_train.num_train_epochs: 5
+        classification_train.num_train_epochs: 100
         classification_train.warmup_steps: 500
     outs:
     - path: ./data/dev/out.tsv
-      md5: 1f5b981a5e2288541690f8370bbb72d6
+      md5: ae18becd0d01e6be5e5721f7e66fcbe5
       size: 45210
     - path: ./data/test/out.tsv
-      md5: 7456031c6cd7c5fdff8f298b36c6ccf9
+      md5: 2043df2a58073bdff58ae54357d6917f
       size: 103162
     - path: ./models/roberta_classifier/config.json
       md5: d3d3ef84a7aa01f9668532958558edd2
       size: 1413
     - path: ./models/roberta_classifier/pytorch_model.bin
-      md5: 1ff570baf8c844e7da2601387d3d99d9
+      md5: fc6d436d4c99c8d32683a282a6c6d6b1
       size: 393455085
     - path: scores_classification.json
-      md5: 36dfa5da5a521f5246ee3928e6c4fc2e
-      size: 181
+      md5: e7093a08406974f2eaeeb84ce32294e7
+      size: 175
