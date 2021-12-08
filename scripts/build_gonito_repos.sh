@@ -7,6 +7,7 @@ sudo curl -L https://gonito.net/get/bin/geval -o /usr/local/bin/geval
 sudo chmod +x /usr/local/bin/geval
 
 cd /home/runner/work/PetraRQ/main_repo/
+git config --global core.compression 9
 git clone ssh://gitolite@gonito.net/eur-lex-documents
 cd eur-lex-documents
 
