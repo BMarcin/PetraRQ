@@ -9,8 +9,9 @@ sudo chmod +x /usr/local/bin/geval
 cd /home/runner/work/PetraRQ/main_repo/
 
 git config --global pack.windowMemory "100m"
-git config --global pack.packSizeLimit "100m"
+git config --global pack.SizeLimit "100m"
 git config --global pack.threads "1"
+git config --global pack.window "0"
 
 git clone ssh://gitolite@gonito.net/eur-lex-documents
 cd eur-lex-documents
