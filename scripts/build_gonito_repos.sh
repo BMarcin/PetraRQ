@@ -11,7 +11,7 @@ git clone ssh://gitolite@gonito.net/eur-lex-documents
 cd eur-lex-documents
 
 git switch -c "$BRANCH_NAME"
-git branch --set-upstream-to=origin/"$BRANCH_NAME" "$BRANCH_NAME"
+#git branch --set-upstream-to=origin/"$BRANCH_NAME" "$BRANCH_NAME"
 
 cp /home/runner/work/PetraRQ/PetraRQ/README.md .
 cp /home/runner/work/PetraRQ/PetraRQ/config.txt .
@@ -89,7 +89,7 @@ tree
 git add .
 git status
 git commit -m "$COMMIT_MESSAGE"
-git push -f origin "$BRANCH_NAME"
+git push origin "$BRANCH_NAME"
 
 git remote rm origin
 git remote add origin ssh://gitolite@gonito.net/eur-lex-documents-dont-peek
@@ -101,7 +101,7 @@ tree
 git add ./test-A/expected.tsv.gz
 git status
 git commit -m "$COMMIT_MESSAGE"
-git push -f origin "$BRANCH_NAME"
+git push origin "$BRANCH_NAME"
 
 
 #git commit -am $COMMIT_MESSAGE
