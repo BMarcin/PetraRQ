@@ -70,6 +70,7 @@ tr -d '\015' </home/runner/work/PetraRQ/PetraRQ/data/train/expected.tsv >./train
 
 mv /home/runner/work/PetraRQ/PetraRQ/data/in-header.tsv ./
 mv /home/runner/work/PetraRQ/PetraRQ/data/out-header.tsv ./
+mv /home/runner/work/PetraRQ/PetraRQ/gonito.yaml ./
 
 gzip ./train/in.tsv
 gzip ./train/expected.tsv
