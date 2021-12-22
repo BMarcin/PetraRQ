@@ -108,7 +108,7 @@ tree
 git add ./test-A/expected.tsv.gz
 git status
 git commit -m "$COMMIT_MESSAGE"
-git push origin "$BRANCH_NAME"
+git push -f origin "$BRANCH_NAME"
 
 
 #git commit -am $COMMIT_MESSAGE
