@@ -1,0 +1,9 @@
+description: RoBERTa classifier
+tags:
+  - neural-network
+  - roberta-base
+param-files:
+  - "params.yaml"
+links:
+  - title: "Source repository"
+    url: "https://github.com/BMarcin/PetraRQ"

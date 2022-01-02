@@ -1,1 +1,1 @@
---metric MultiLabel-F2.0  --in-header ./data/in-header.tsv  --out-header ./data/out-header.tsv
+--metric MultiLabel-F1 --metric Accuracy --metric MultiLabel-F2.0  --in-header in-header.tsv  --out-header out-header.tsv

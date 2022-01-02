@@ -1,11 +1,12 @@
 SHELL=/bin/bash
 
 all: ./data/in-header.tsv ./data/out-header.tsv
+	dvc pull
 	dvc repro --pull
 
 ./data/in-header.tsv ./data/out-header.tsv: ./data/parsed-pdfs.json
-	echo "date    content" > ./data/in-header.tsv
-	echo "labels" > ./data/out-header.tsv
+	echo "InText	Time" >> ./data/in-header.tsv
+	echo "Labels" >> ./data/out-header.tsv
 
 ./data/parsed-pdfs.json:
 	dvc pull ./data/parsed-pdfs.json
@@ -17,3 +18,6 @@ clean:
 	rm -f ./data/train/*.tsv
 	rm -f ./data/in-header.tsv
 	rm -f ./data/out-header.tsv
+	rm -f ./data/dev/lm.txt
+	rm -f ./data/test/lm.txt
+	rm -f ./data/train/lm.txt

@@ -3,20 +3,29 @@ Eur-lex-documents
 =============================
 
 Eur-lex-documents multilabel long documents classification.
-
 Assign one, more than one or none labels to each doc.
 
-Directory structure
--------------------
+Documents were downloaded from [European Commision's website](https://eur-lex.europa.eu/browse/institutions/eu-commission.html).
 
-* `README.md` — this file
-* `config.txt` — configuration file
-* `train/` — directory with training data
-* `train/in.tsv` — input data for the train set
-* `train/expected.tsv` — expected (reference) data for the train set
-* `dev-0/` — directory with dev (test) data
-* `dev-0/in.tsv` — input data for the dev set
-* `dev-0/expected.tsv` — expected (reference) data for the dev set
-* `test-A` — directory with test data
-* `test-A/in.tsv` — input data for the test set
-* `test-A/expected.tsv` — expected (reference) data for the test set
+Dataset labels
+-------------------
+- agriculture
+- work_and_employment
+- education
+- taxes
+- industry
+- european_union
+- law
+- state_public_authorities
+- economy
+- environment
+- foreign_policy
+- science_research_and_technology
+- health
+- sports
+- social_policy
+- transport
+
+Repository source code
+-------------------
+[https://github.com/BMarcin/PetraRQ](https://github.com/BMarcin/PetraRQ)
