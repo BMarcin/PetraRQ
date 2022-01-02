@@ -125,7 +125,7 @@ if __name__ == '__main__':
         eval_steps=700,
         evaluation_strategy='steps',
         report_to="wandb",
-        run_name="roberta-classification"
+        run_name="petrarq-roberta-classification"
     )
 
     trainer = Trainer(
@@ -154,11 +154,11 @@ if __name__ == '__main__':
 
     # predict dev set
     logging.info("Predicting dev set...")
-    dev_preds = trainer.predict(dev_ds)[1]
-    test_preds = trainer.predict(test_ds)[1]
+    dev_preds = trainer.predict(dev_ds).predictions
+    test_preds = trainer.predict(test_ds).predictions
 
-    translated_dev_preds = [" ".join(dev_ds.tensor2labels(model_outputs)) for model_outputs in dev_preds]
-    translated_test_preds = [" ".join(test_ds.tensor2labels(model_outputs)) for model_outputs in test_preds]
+    translated_dev_preds = [" ".join(dev_ds.tensor2labels(model_outputs)) for model_outputs in (dev_preds >= 0.5).astype(int)]
+    translated_test_preds = [" ".join(test_ds.tensor2labels(model_outputs)) for model_outputs in (test_preds >= 0.5).astype(int)]
 
     # save predictions to csv file
     logging.info("Saving predictions to csv file...")

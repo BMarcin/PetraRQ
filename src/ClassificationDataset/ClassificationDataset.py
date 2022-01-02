@@ -28,7 +28,7 @@ class ClassificationDataset(torch.utils.data.Dataset):
         return labels
 
     def __getitem__(self, idx):
-        tokenized = self.tokenizer(str(self.input_texts.iloc[idx][1]), truncation=True, padding="max_length", max_length=512)
+        tokenized = self.tokenizer(str(self.input_texts.iloc[idx][0]), truncation=True, padding="max_length", max_length=512)
         labels = self.labels2tensor(self.input_labels.iloc[idx][0].split(' '))
 
         item = {
