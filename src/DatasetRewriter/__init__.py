@@ -1,1 +1,1 @@
-from .LanguageModelingRewriter import rewrite_datasets_to_txt
+from .LanguageModelingRewriter import process_datasets

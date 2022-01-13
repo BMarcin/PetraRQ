@@ -2,7 +2,6 @@ import logging
 from typing import List, Union
 
 from MordinezNLP.processors import BasicProcessor
-from tqdm.auto import tqdm
 
 
 def processing_function(
@@ -34,7 +33,7 @@ def processing_function(
     )
 
 
-def rewrite_datasets_to_txt(
+def process_datasets(
         dev_input_texts: List[str],
         test_input_texts: List[str],
         train_input_texts: List[str],
@@ -51,18 +50,7 @@ def rewrite_datasets_to_txt(
     logging.info('Processing train texts')
     train_output_texts = processing_function(train_input_texts, bp, threads)
 
-    #todo fix this to use abs path
-    with open("./data/dev/lm.txt", "w", encoding="utf8") as f:
-        for item in tqdm(dev_output_texts, desc="Saving dev ds"):
-            f.write(item + '\n')
-
-    with open("./data/test/lm.txt", "w", encoding="utf8") as f:
-        for item in tqdm(test_output_texts, desc="Saving test ds"):
-            f.write(item + '\n')
-
-    with open("./data/train/lm.txt", "w", encoding="utf8") as f:
-        for item in tqdm(train_output_texts, desc="Saving train ds"):
-            f.write(item + '\n')
-
     print('Used special chars')
     print(bp.get_special_tokens())
+
+    return dev_output_texts, test_output_texts, train_output_texts
