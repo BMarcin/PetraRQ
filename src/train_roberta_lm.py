@@ -135,7 +135,7 @@ if __name__ == '__main__':
         eval_steps=2500,
         evaluation_strategy='steps',
         report_to="wandb",
-        run_name="roberta-lm"
+        run_name="petrarq-roberta-lm"
     )
 
     trainer = Trainer(

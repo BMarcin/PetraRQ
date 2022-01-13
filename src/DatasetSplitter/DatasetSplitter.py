@@ -25,21 +25,23 @@ def dataset_splitter_by_time(
     for i in range(parts):
         start_pos = counter
         end_pos = round(len(dataset) * train_divided) + start_pos
+        logging.debug('#{} Adding to train from: {} to {}'.format(str(i), str(start_pos), str(end_pos)))
         divisions['train'] += [dataset[item] for item in range(start_pos, end_pos)]
         counter = end_pos
-        logging.debug('#{} Adding to train from: {} to {}'.format(str(i), str(start_pos), str(end_pos)))
 
         start_pos = counter
         end_pos = round(len(dataset) * test_divided) + start_pos
+        logging.debug('#{} Adding to test from: {} to {}'.format(str(i), str(start_pos), str(end_pos)))
         divisions['test'] += [dataset[item] for item in range(start_pos, end_pos)]
         counter = end_pos
-        logging.debug('#{} Adding to test from: {} to {}'.format(str(i), str(start_pos), str(end_pos)))
 
         start_pos = counter
         end_pos = round(len(dataset) * dev_divided) + start_pos
+        if end_pos > len(dataset):
+            end_pos = len(dataset)
+        logging.debug('#{} Adding to dev from: {} to {}'.format(str(i), str(start_pos), str(end_pos)))
         divisions['dev'] += [dataset[item] for item in range(start_pos, end_pos)]
         counter = end_pos
-        logging.debug('#{} Adding to dev from: {} to {}'.format(str(i), str(start_pos), str(end_pos)))
 
     start_pos = counter
     end_pos = len(dataset) - len(divisions['dev']) - len(divisions['test']) - len(divisions['train'])

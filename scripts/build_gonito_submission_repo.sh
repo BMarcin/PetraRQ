@@ -18,7 +18,6 @@ cd eur-lex-documents
 
 git switch -c "$BRANCH_NAME"
 #git branch --set-upstream-to=origin/"$BRANCH_NAME" "$BRANCH_NAME"
-#git pull
 
 cp /home/runner/work/PetraRQ/PetraRQ/README.md .
 cp /home/runner/work/PetraRQ/PetraRQ/config.txt .
@@ -65,11 +64,11 @@ fi
 #cp /home/runner/work/PetraRQ/PetraRQ/data/train/* ./train/
 tr -d '\015' </home/runner/work/PetraRQ/PetraRQ/data/dev/in.tsv >./dev-0/in.tsv
 tr -d '\015' </home/runner/work/PetraRQ/PetraRQ/data/dev/expected.tsv >./dev-0/expected.tsv
-#tr -d '\015' </home/runner/work/PetraRQ/PetraRQ/data/dev/out.tsv >./dev-0/out.tsv
+tr -d '\015' </home/runner/work/PetraRQ/PetraRQ/data/dev/out.tsv >./dev-0/out.tsv
 
 tr -d '\015' </home/runner/work/PetraRQ/PetraRQ/data/test/in.tsv >./test-A/in.tsv
 tr -d '\015' </home/runner/work/PetraRQ/PetraRQ/data/test/expected.tsv >./test-A/expected.tsv
-#tr -d '\015' </home/runner/work/PetraRQ/PetraRQ/data/test/out.tsv >./test-A/out.tsv
+tr -d '\015' </home/runner/work/PetraRQ/PetraRQ/data/test/out.tsv >./test-A/out.tsv
 
 tr -d '\015' </home/runner/work/PetraRQ/PetraRQ/data/train/in.tsv >./train/in.tsv
 tr -d '\015' </home/runner/work/PetraRQ/PetraRQ/data/train/expected.tsv >./train/expected.tsv
@@ -82,10 +81,10 @@ gzip ./train/in.tsv
 gzip ./train/expected.tsv
 gzip ./test-A/in.tsv
 gzip ./test-A/expected.tsv
-#gzip ./test-A/out.tsv
+gzip ./test-A/out.tsv
 gzip ./dev-0/in.tsv
 gzip ./dev-0/expected.tsv
-#gzip ./dev-0/out.tsv
+gzip ./dev-0/out.tsv
 
 geval --validate --expected-directory .
 
@@ -93,24 +92,11 @@ mv ./test-A/expected.tsv.gz ../expected.tsv.gz
 
 tree
 
+git remote rm origin
+git remote add origin ssh://gitolite@gonito.net/marcinb/eur-lex-documents
+
 git add .
 git status
 git commit -m "$COMMIT_MESSAGE"
 git push origin "$BRANCH_NAME"
 
-git remote rm origin
-git remote add origin ssh://gitolite@gonito.net/eur-lex-documents-dont-peek
-
-mv ../expected.tsv.gz ./test-A/expected.tsv.gz
-
-tree
-
-git add ./test-A/expected.tsv.gz
-git status
-git commit -m "$COMMIT_MESSAGE"
-git push -f origin "$BRANCH_NAME"
-
-
-#git commit -am $COMMIT_MESSAGE
-##git remote add origin ssh://gitolite@gonito.net/eur-lex-documents
-#git push origin "$BRANCH_NAME"
