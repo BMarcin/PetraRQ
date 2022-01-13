@@ -98,5 +98,5 @@ git remote add origin ssh://gitolite@gonito.net/marcinb/eur-lex-documents
 git add .
 git status
 git commit -m "$COMMIT_MESSAGE"
-git push origin "$BRANCH_NAME"
+git push origin -f "$BRANCH_NAME"
 
