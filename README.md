@@ -10,21 +10,24 @@ Documents were downloaded from [European Commision's website](https://eur-lex.eu
 Dataset labels
 -------------------
 - agriculture
-- work_and_employment
-- education
-- taxes
-- industry
-- european_union
-- law
-- state_public_authorities
 - economy
+- education
+- energy
 - environment
+- european_union
 - foreign_policy
-- science_research_and_technology
 - health
+- industry
+- internal_security
+- law
+- media_informations
+- politics_political_parties
+- research_science_and_technology
+- social_life
 - sports
-- social_policy
-- transport
+- taxes
+- transportation
+- work_and_employment
 
 Repository source code
 -------------------
