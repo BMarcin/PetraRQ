@@ -1,12 +1,12 @@
 import logging
-from typing import List
+from typing import List, Union
 
 from MordinezNLP.processors import BasicProcessor
 from tqdm.auto import tqdm
 
 
 def processing_function(
-        texts_list: List[str],
+        texts_list: Union[List[str], str],
         bp: BasicProcessor,
         threads: int = 12,
 ):

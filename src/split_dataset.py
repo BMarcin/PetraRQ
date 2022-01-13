@@ -4,6 +4,7 @@ import logging
 from pathlib import Path
 import yaml
 import pandas as pd
+import re
 
 from tqdm.auto import tqdm
 
@@ -17,8 +18,9 @@ def save_ds_part(items: list, in_filename: Path, expected_filename: Path, label_
             csv_expected_writer = csv.writer(expected_file, delimiter='\t', quoting=csv.QUOTE_MINIMAL, lineterminator="\n")
 
             for item in tqdm(items, desc='Saving {} and {}'.format(str(in_filename), str(expected_filename))):
-                if len(item['content'].replace("\n", " ").replace(" ", "")) >= 3:
-                    csv_in_writer.writerow([item['content'].replace("\n", " "), item['date']])
+                processed_item = item['content'].replace("\n", " ").replace("\t", " ")
+                if len(processed_item.replace(" ", "")) >= 3:
+                    csv_in_writer.writerow([processed_item, item['date']])
                     buckets = list(set([label_replacement_list[lab.lower().strip()] for lab in item['buckets']]))
                     csv_expected_writer.writerow([' '.join(buckets)])
 
