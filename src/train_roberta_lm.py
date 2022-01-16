@@ -33,7 +33,7 @@ if __name__ == '__main__':
     logging.info("Loading config...")
     config = yaml.safe_load(open("./params.yaml"))['language_modeling_train']
     os.environ["CUDA_VISIBLE_DEVICES"] = ",".join([str(item) for item in config['cuda_visible_devices']])
-    os.environ["WANDB_PROJECT"] = config['PetraRQ']
+    os.environ["WANDB_PROJECT"] = 'PetraRQ'
 
     # log to wandb
     logging.info("Logging to wandb...")
