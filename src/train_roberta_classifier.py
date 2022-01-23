@@ -42,6 +42,7 @@ if __name__ == '__main__':
     config = yaml.safe_load(open("./params.yaml"))['classification_train']
     config_train = yaml.safe_load(open("./params.yaml"))['language_modeling_train']
     os.environ["CUDA_VISIBLE_DEVICES"] = ",".join([str(item) for item in config['cuda_visible_devices']])
+    os.environ["WANDB_PROJECT"] = 'PetraRQ-Classifier'
 
     # log to wandb
     logging.info("Logging to wandb...")
@@ -77,13 +78,13 @@ if __name__ == '__main__':
 
     # load datasets
     logging.info("Loading datasets...")
-    data1 = pd.read_csv("./data/dev/in.tsv", delimiter='\t', header=None, encoding="utf8", quoting=0)
-    data2 = pd.read_csv("./data/test/in.tsv", delimiter='\t', header=None, encoding="utf8")
-    data3 = pd.read_csv("./data/train/in.tsv", delimiter='\t', header=None, encoding="utf8")
+    data1 = pd.read_csv("./data/dev/processed.tsv", delimiter='\t', header=None, encoding="utf8", quoting=0)
+    data2 = pd.read_csv("./data/test/processed.tsv", delimiter='\t', header=None, encoding="utf8", quoting=0)
+    data3 = pd.read_csv("./data/train/processed.tsv", delimiter='\t', header=None, encoding="utf8", quoting=0)
 
     labels1 = pd.read_csv("./data/dev/expected.tsv", delimiter='\t', header=None, encoding="utf8", quoting=0)
-    labels2 = pd.read_csv("./data/test/expected.tsv", delimiter='\t', header=None, encoding="utf8")
-    labels3 = pd.read_csv("./data/train/expected.tsv", delimiter='\t', header=None, encoding="utf8")
+    labels2 = pd.read_csv("./data/test/expected.tsv", delimiter='\t', header=None, encoding="utf8", quoting=0)
+    labels3 = pd.read_csv("./data/train/expected.tsv", delimiter='\t', header=None, encoding="utf8", quoting=0)
 
     assert len(data1) == len(labels1), "Dev set size mismatch"
     assert len(data2) == len(labels2), "Test set size mismatch"
@@ -181,3 +182,5 @@ if __name__ == '__main__':
     logging.info("Logging results...")
     with open("./scores_classification.json", "w", encoding="utf8") as f:
         json.dump(scores, f, indent=4)
+
+    wandb.finish()

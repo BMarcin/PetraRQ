@@ -1,8 +1,5 @@
 import torch.utils.data
-from MordinezNLP.processors import BasicProcessor
 from tqdm.auto import tqdm
-
-from src.DatasetRewriter.LanguageModelingRewriter import processing_function
 
 
 class ClassificationDataset(torch.utils.data.Dataset):
@@ -13,7 +10,7 @@ class ClassificationDataset(torch.utils.data.Dataset):
         self.tokenizer = tokenizer
         self.label2idx = {}
 
-        self.bp = BasicProcessor()
+        # self.bp = BasicProcessor()
 
         for label in self.unique_labels:
             self.label2idx[label] = len(self.label2idx)
@@ -22,14 +19,14 @@ class ClassificationDataset(torch.utils.data.Dataset):
 
         self.tokenized_texts = []
 
-        processed_texts = processing_function(
-            list(self.input_texts[0]),
-            self.bp,
-            threads=12
-        )
+        # processed_texts = processing_function(
+        #     list(self.input_texts[0]),
+        #     self.bp,
+        #     threads=12
+        # )
 
         for idx in tqdm(range(len(self.input_texts)), desc='Tokenizing texts'):
-            tokenized = self.tokenizer(processed_texts[idx], truncation=True, padding="max_length", max_length=512)
+            tokenized = self.tokenizer(self.input_texts.iloc[idx][0], truncation=True, padding="max_length", max_length=512)
             self.tokenized_texts.append(tokenized)
 
     def __len__(self):
