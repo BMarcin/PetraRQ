@@ -131,7 +131,7 @@ stages:
       md5: d869f95954c10ef7ad67ad2b4bd5208a
       size: 76
   train_classifier:
-    cmd: python ./src/train_random_forest.py
+    cmd: python ./src/train_xgboost.py
     deps:
     - path: ./data/dev/expected.tsv
       md5: 8e9e6cdb71e570a7c7503e782907adf7
@@ -154,26 +154,22 @@ stages:
     - path: ./src/SKLearnDS/SKLearnDS.py
       md5: 4d1063b5067b067968114bd06b7eb8be
       size: 1233
-    - path: ./src/train_random_forest.py
-      md5: bf60977578f8a9871e4c480e91e18806
-      size: 4960
-    params:
-      params.yaml:
-        random_forest.max_depth: 3
-        random_forest.n_estimators: 300
+    - path: ./src/train_xgboost.py
+      md5: 87c56c3f4d04a41e7a4632f2e0bf303e
+      size: 4870
     outs:
     - path: ./data/dev/out.tsv
-      md5: fba1bd3112dc30e4900877436e4c230c
-      size: 55093
+      md5: f162745267bc3aac39ee9b06bb394d97
+      size: 469716
       isexec: true
     - path: ./data/test/out.tsv
-      md5: 9c43843a1950ed3f58ccb03f8fcaba04
-      size: 111521
+      md5: ad7951f4e0c7a06069bccf5d5beebcd4
+      size: 954756
       isexec: true
-    - path: ./models/random_forest/model.pkl
-      md5: 84b38c1aed4c6cbfa6c8b9e9935e194d
-      size: 7094106
+    - path: ./models/xgboost/model.pkl
+      md5: 56757c6b2db84686368187e00e731a97
+      size: 6729330
       isexec: true
     - path: scores_classification.json
-      md5: 2d4bceee0be6c4f43dae66705131c945
-      size: 142
+      md5: 38d0fdc2e1020bb0a35cfab14144f917
+      size: 139
