@@ -35,61 +35,21 @@ stages:
     - ./data/test/processed.tsv
     - ./data/train/processed.tsv
 
-  train_lm:
-    cmd: python ./src/train_roberta_lm.py
-    deps:
-    - ./src/train_roberta_lm.py
-    - ./data/dev/lm.txt
-    - ./data/test/lm.txt
-    - ./data/train/lm.txt
-    params:
-    - language_modeling_train.vocab_size
-    - language_modeling_train.tokenizer_min_frequency
-    - language_modeling_train.max_seq_length
-    - language_modeling_train.mlm_probability
-    - language_modeling_train.num_attention_heads
-    - language_modeling_train.num_hidden_layers
-    - language_modeling_train.hidden_size
-    - language_modeling_train.hidden_dropout_prob
-    - language_modeling_train.epochs
-    outs:
-    - ./models/roberta_lm/merges.txt
-    - ./models/roberta_lm/vocab.json
-    - ./models/roberta_lm/pytorch_model.bin
-    - ./models/roberta_lm/tokenizer.json
-    - ./models/roberta_lm/config.json
-    - ./models/roberta_lm/special_tokens_map.json
-    - ./models/roberta_lm/tokenizer_config.json
-    metrics:
-      - scores.json:
-          cache: false
-
   train_classifier:
-    cmd: python ./src/train_roberta_classifier.py
+    cmd: python ./src/train_naive_bayes.py
     deps:
-    - ./src/ClassificationDataset/ClassificationDataset.py
-    - ./src/train_roberta_classifier.py
-    - ./models/roberta_lm/merges.txt
-    - ./models/roberta_lm/vocab.json
-    - ./models/roberta_lm/pytorch_model.bin
-    - ./models/roberta_lm/tokenizer.json
-    - ./models/roberta_lm/config.json
-    - ./models/roberta_lm/special_tokens_map.json
-    - ./models/roberta_lm/tokenizer_config.json
+    - ./src/SKLearnDS/SKLearnDS.py
+    - ./src/train_naive_bayes.py
     - ./data/dev/expected.tsv
     - ./data/dev/processed.tsv
     - ./data/test/expected.tsv
     - ./data/test/processed.tsv
     - ./data/train/expected.tsv
     - ./data/train/processed.tsv
-    params:
-    - classification_train.warmup_steps
-    - classification_train.num_train_epochs
     outs:
-    - ./models/roberta_classifier/pytorch_model.bin
-    - ./models/roberta_classifier/config.json
     - ./data/dev/out.tsv
     - ./data/test/out.tsv
+    - ./models/naive_bayes/model.pkl
     metrics:
       - scores_classification.json:
           cache: false

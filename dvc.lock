@@ -131,7 +131,7 @@ stages:
       md5: d869f95954c10ef7ad67ad2b4bd5208a
       size: 76
   train_classifier:
-    cmd: python ./src/train_roberta_classifier.py
+    cmd: python ./src/train_naive_bayes.py
     deps:
     - path: ./data/dev/expected.tsv
       md5: 8e9e6cdb71e570a7c7503e782907adf7
@@ -151,50 +151,25 @@ stages:
     - path: ./data/train/processed.tsv
       md5: e78ac7e6bcba6e2c70f7d343ef7eddd3
       size: 2064421323
-    - path: ./models/roberta_lm/config.json
-      md5: c3f8213d2122603dbc99a3fea1df705a
-      size: 637
-    - path: ./models/roberta_lm/merges.txt
-      md5: f7306d934e385329af1197c6c02dde1e
-      size: 146002
-    - path: ./models/roberta_lm/pytorch_model.bin
-      md5: d3e5967ae7bcbaf9e3a1c4febc9dde42
-      size: 393462571
-    - path: ./models/roberta_lm/special_tokens_map.json
-      md5: 30d0b45671f60afbb09abb28d04fcfa4
-      size: 845
-    - path: ./models/roberta_lm/tokenizer.json
-      md5: 911520617e7a647f03fe992bc53bf2b8
-      size: 426936
-    - path: ./models/roberta_lm/tokenizer_config.json
-      md5: 328be10604b380d16b8bf095a1bead5f
-      size: 1133
-    - path: ./models/roberta_lm/vocab.json
-      md5: c069d0d3e278577e04142e87b93b82ea
-      size: 247840
-    - path: ./src/ClassificationDataset/ClassificationDataset.py
-      md5: 1fcb0427fc78b90816d7689b023e6049
-      size: 1813
-    - path: ./src/train_roberta_classifier.py
-      md5: 102f5eb37431d833cc510ea73f734f68
-      size: 6377
-    params:
-      params.yaml:
-        classification_train.num_train_epochs: 20
-        classification_train.warmup_steps: 500
+    - path: ./src/SKLearnDS/SKLearnDS.py
+      md5: 4d1063b5067b067968114bd06b7eb8be
+      size: 1233
+    - path: ./src/train_naive_bayes.py
+      md5: 99d7271d6aefd5abb31ceba9a7b84186
+      size: 4615
     outs:
     - path: ./data/dev/out.tsv
-      md5: b12b2b6581dcd44e3e08d9ebf3c052a4
-      size: 182069
+      md5: 99702dba76b0e0745184ff424a2ce074
+      size: 44367
+      isexec: true
     - path: ./data/test/out.tsv
-      md5: 508e56b24b6730df579fdd4bf71e4369
-      size: 361973
-    - path: ./models/roberta_classifier/config.json
-      md5: 620322b658945d3afd6e8ebceec6c40a
-      size: 1539
-    - path: ./models/roberta_classifier/pytorch_model.bin
-      md5: 49f384ac01857c96060c9cd379e65e2e
-      size: 393464301
+      md5: a1a24cedad0855d52af2a3bcf07bff3a
+      size: 89795
+      isexec: true
+    - path: ./models/naive_bayes/model.pkl
+      md5: f42c36a95eb24e1911beaba1758b1d79
+      size: 483191042
+      isexec: true
     - path: scores_classification.json
-      md5: 04339b6de428463d4dc5f1be03d2882c
-      size: 170
+      md5: 1c7617c0e5efaa1001f0ad357bab3b7a
+      size: 141
