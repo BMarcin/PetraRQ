@@ -4,6 +4,8 @@ import os
 import pickle
 
 import pandas as pd
+import yaml
+
 from SKLearnDS import SKlearnDS
 
 from sklearn.linear_model import LogisticRegression
@@ -16,6 +18,10 @@ if __name__ == '__main__':
         level=logging.INFO,
         format='%(asctime)s - %(message)s',
         datefmt='%Y-%m-%d %H:%M:%S')
+
+    # Load config
+    logging.info("Loading config...")
+    config = yaml.safe_load(open("./params.yaml"))['logistic_regression']
 
     # Load the data
     logging.info('Loading data...')
@@ -45,7 +51,7 @@ if __name__ == '__main__':
 
     # Train the model
     logging.info('Training the model...')
-    log_reg = OneVsRestClassifier(LogisticRegression(solver='sag')).fit(ds_texts, ds_labels)
+    log_reg = OneVsRestClassifier(LogisticRegression(solver=config['solver'])).fit(ds_texts, ds_labels)
 
     # Predict
     logging.info('Predicting...')
