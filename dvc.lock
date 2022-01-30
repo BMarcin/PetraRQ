@@ -131,7 +131,7 @@ stages:
       md5: d869f95954c10ef7ad67ad2b4bd5208a
       size: 76
   train_classifier:
-    cmd: python ./src/train_logistic_regression.py
+    cmd: python ./src/train_svm.py
     deps:
     - path: ./data/dev/expected.tsv
       md5: 8e9e6cdb71e570a7c7503e782907adf7
@@ -154,25 +154,22 @@ stages:
     - path: ./src/SKLearnDS/SKLearnDS.py
       md5: 4d1063b5067b067968114bd06b7eb8be
       size: 1233
-    - path: ./src/train_logistic_regression.py
-      md5: 9bf0074c8a4255a8a3d2d1d4b980b6fd
-      size: 4935
-    params:
-      params.yaml:
-        logistic_regression.solver: sag
+    - path: ./src/train_svm.py
+      md5: 0d32863ef5d35c48cbab0d6eb0f6e64f
+      size: 4583
     outs:
     - path: ./data/dev/out.tsv
-      md5: 16ed4fdaecc28d6973da8673b5a0558a
-      size: 823115
+      md5: daad3bab17399bffe001bf1038ea67e2
+      size: 905729
       isexec: true
     - path: ./data/test/out.tsv
-      md5: e4a7be9b4523ab1a7de6bf5248f578a9
-      size: 1644815
+      md5: c189e2f553acca5d1cb0c84c08cf296e
+      size: 1813784
       isexec: true
-    - path: ./models/logistic_regression/model.pkl
-      md5: 6010be205339867d7bf88ee6352e26c8
-      size: 120802188
+    - path: ./models/svm/model.pkl
+      md5: ab5f610b333248c2de5fcf9f47f9683c
+      size: 120801646
       isexec: true
     - path: scores_classification.json
-      md5: fc6cd7ab6c33ee460e0df1f1462081c7
+      md5: 4448ef35844020e6c152a1d8a66f0bb3
       size: 141
