@@ -131,7 +131,7 @@ stages:
       md5: d869f95954c10ef7ad67ad2b4bd5208a
       size: 76
   train_classifier:
-    cmd: python ./src/train_svm.py
+    cmd: python ./src/train_random_forest.py
     deps:
     - path: ./data/dev/expected.tsv
       md5: 8e9e6cdb71e570a7c7503e782907adf7
@@ -154,22 +154,26 @@ stages:
     - path: ./src/SKLearnDS/SKLearnDS.py
       md5: 4d1063b5067b067968114bd06b7eb8be
       size: 1233
-    - path: ./src/train_svm.py
-      md5: 0d32863ef5d35c48cbab0d6eb0f6e64f
-      size: 4583
+    - path: ./src/train_random_forest.py
+      md5: bf60977578f8a9871e4c480e91e18806
+      size: 4960
+    params:
+      params.yaml:
+        random_forest.max_depth: 3
+        random_forest.n_estimators: 300
     outs:
     - path: ./data/dev/out.tsv
-      md5: daad3bab17399bffe001bf1038ea67e2
-      size: 905729
+      md5: fba1bd3112dc30e4900877436e4c230c
+      size: 55093
       isexec: true
     - path: ./data/test/out.tsv
-      md5: c189e2f553acca5d1cb0c84c08cf296e
-      size: 1813784
+      md5: 9c43843a1950ed3f58ccb03f8fcaba04
+      size: 111521
       isexec: true
-    - path: ./models/svm/model.pkl
-      md5: ab5f610b333248c2de5fcf9f47f9683c
-      size: 120801646
+    - path: ./models/random_forest/model.pkl
+      md5: 84b38c1aed4c6cbfa6c8b9e9935e194d
+      size: 7094106
       isexec: true
     - path: scores_classification.json
-      md5: 4448ef35844020e6c152a1d8a66f0bb3
-      size: 141
+      md5: 2d4bceee0be6c4f43dae66705131c945
+      size: 142

@@ -7,8 +7,9 @@ datasetsplit:
 datasetrewrite:
   threads: 64
 
-logistic_regression:
-  solver: sag
+random_forest:
+  n_estimators: 300
+  max_depth: 3
 
 #language_modeling_train:
 #  cuda_visible_devices: [3,4]
