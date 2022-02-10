@@ -14,71 +14,83 @@ stages:
       size: 3407420087
     - path: ./src/DatasetSplitter/DatasetSplitter.py
       md5: 74decfd061dccc1e8e9f604ede9ea119
-      size: 2254
+      size: 2315
     - path: ./src/split_dataset.py
-      md5: 3a6eb9fba837c36a71ea05818e743ed8
-      size: 3770
+      md5: 098f2f87ed3004a2e04757532524e73a
+      size: 4296
     params:
       params.yaml:
-        datasetsplit.dev: 0.1
-        datasetsplit.test: 0.2
-        datasetsplit.train: 0.7
+        datasetsplit.dev: 0.02
+        datasetsplit.test: 0.05
+        datasetsplit.train: 0.93
     outs:
     - path: ./data/dev/expected.tsv
-      md5: 8e9e6cdb71e570a7c7503e782907adf7
-      size: 184787
+      md5: c2102c972f8699a355efb0059c1d9692
+      size: 38592
+      isexec: true
     - path: ./data/dev/in.tsv
-      md5: e2a6ad2c71102942bfa1c91e1f79e2b6
-      size: 301229989
+      md5: 09d219c5b5fad5e982d67e43a91909dc
+      size: 99277263
+      isexec: true
     - path: ./data/test/expected.tsv
-      md5: a00d5d30e622be5f8825588c3a32ceb4
-      size: 366680
+      md5: 24768323edbde76d34484714682903d5
+      size: 92709
+      isexec: true
     - path: ./data/test/in.tsv
-      md5: dc5527f7a022d9d2ef53273d6a423346
-      size: 645106223
+      md5: 5c8a4c08a232c3a980c9577224e86140
+      size: 224334602
+      isexec: true
     - path: ./data/train/expected.tsv
-      md5: dbd9ee10a2a60858d60e13839dd71433
-      size: 1284249
+      md5: b614ee94eb175b6843335fab3819480b
+      size: 1704415
+      isexec: true
     - path: ./data/train/in.tsv
-      md5: e0553a33abb9b1ff95246ecf6cfa63ce
-      size: 2200856908
+      md5: 51b3112bb6e0385d2f229c55b9dad2d0
+      size: 2926756602
+      isexec: true
   rewrite_dataset_to_lm_texts:
     cmd: python ./src/rewrite_dataset.py
     deps:
     - path: ./data/dev/in.tsv
-      md5: e2a6ad2c71102942bfa1c91e1f79e2b6
-      size: 301229989
+      md5: 09d219c5b5fad5e982d67e43a91909dc
+      size: 99277263
     - path: ./data/test/in.tsv
-      md5: dc5527f7a022d9d2ef53273d6a423346
-      size: 645106223
+      md5: 5c8a4c08a232c3a980c9577224e86140
+      size: 224334602
     - path: ./data/train/in.tsv
-      md5: e0553a33abb9b1ff95246ecf6cfa63ce
-      size: 2200856908
+      md5: 51b3112bb6e0385d2f229c55b9dad2d0
+      size: 2926756602
     - path: ./src/DatasetRewriter/LanguageModelingRewriter.py
       md5: da1e1d32ff54803854ca0fbb0b7054b4
-      size: 1476
+      size: 1532
     - path: ./src/rewrite_dataset.py
       md5: 2feb4ef0cb9eaec8bf89af21690d4ffb
-      size: 1955
+      size: 2006
     outs:
     - path: ./data/dev/lm.txt
-      md5: 522616a256c93ed35beb5188659e4d16
-      size: 284351504
+      md5: 1165b95bb85b88610f52ba8bed5b19a0
+      size: 89228339
+      isexec: true
     - path: ./data/dev/processed.tsv
-      md5: 522616a256c93ed35beb5188659e4d16
-      size: 284351504
+      md5: 1165b95bb85b88610f52ba8bed5b19a0
+      size: 89228339
+      isexec: true
     - path: ./data/test/lm.txt
-      md5: b716a3b3d6cd3fb1965a75442c643848
-      size: 605907739
+      md5: 3cec1aac033028e6564c3a34ee2d09fc
+      size: 201919370
+      isexec: true
     - path: ./data/test/processed.tsv
-      md5: b716a3b3d6cd3fb1965a75442c643848
-      size: 605907739
+      md5: 3cec1aac033028e6564c3a34ee2d09fc
+      size: 201919370
+      isexec: true
     - path: ./data/train/lm.txt
-      md5: e78ac7e6bcba6e2c70f7d343ef7eddd3
-      size: 2064421323
+      md5: fa022cc29126fdf57a3c6f4410312489
+      size: 2663967621
+      isexec: true
     - path: ./data/train/processed.tsv
-      md5: e78ac7e6bcba6e2c70f7d343ef7eddd3
-      size: 2064421323
+      md5: fa022cc29126fdf57a3c6f4410312489
+      size: 2663967621
+      isexec: true
   train_lm:
     cmd: python ./src/train_roberta_lm.py
     deps:
