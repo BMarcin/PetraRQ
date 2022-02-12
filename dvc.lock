@@ -21,11 +21,12 @@ stages:
     params:
       params.yaml:
         datasetsplit.dev: 0.02
+        datasetsplit.sorty_by: date
         datasetsplit.test: 0.05
         datasetsplit.train: 0.93
     outs:
     - path: ./data/dev/expected.tsv
-      md5: c2102c972f8699a355efb0059c1d9692
+      md5: 3d12412abb2363b813ad378085ed19d1
       size: 38592
       isexec: true
     - path: ./data/dev/in.tsv
@@ -33,7 +34,7 @@ stages:
       size: 99277263
       isexec: true
     - path: ./data/test/expected.tsv
-      md5: 24768323edbde76d34484714682903d5
+      md5: 57dfcc14a1572db957dab74d62eca318
       size: 92709
       isexec: true
     - path: ./data/test/in.tsv
@@ -41,7 +42,7 @@ stages:
       size: 224334602
       isexec: true
     - path: ./data/train/expected.tsv
-      md5: b614ee94eb175b6843335fab3819480b
+      md5: 1958975d3ec0f8eb39f76b158bff008f
       size: 1704415
       isexec: true
     - path: ./data/train/in.tsv
