@@ -4,7 +4,8 @@ import logging
 from pathlib import Path
 import yaml
 import pandas as pd
-import re
+from datetime import datetime
+import hashlib
 
 from tqdm.auto import tqdm
 
@@ -18,7 +19,7 @@ def save_ds_part(items: list, in_filename: Path, expected_filename: Path, label_
             csv_expected_writer = csv.writer(expected_file, delimiter='\t', quoting=csv.QUOTE_MINIMAL, lineterminator="\n")
 
             for item in tqdm(items, desc='Saving {} and {}'.format(str(in_filename), str(expected_filename))):
-                processed_item = item['content'].replace("\n", " ").replace("\t", " ")
+                processed_item = item['content'].replace("\n", "\\n").replace("\t", "\\t")
                 if len(processed_item.replace(" ", "")) >= 3:
                     csv_in_writer.writerow([processed_item, item['date']])
                     buckets = list(set([label_replacement_list[lab.lower().strip()] for lab in item['buckets']]))
@@ -41,7 +42,17 @@ if __name__ == '__main__':
     ds_path = Path("./data/parsed-pdfs.json")
     if ds_path.exists():
         logging.info("Reading input file")
-        data = json.loads(ds_path.read_text(encoding="utf8"))
+        data_src = json.loads(ds_path.read_text(encoding="utf8"))
+
+        logging.info("Reformatting data")
+        data = []
+        for item in tqdm(data_src):
+            item['date'] = datetime.strptime(item['date'], "%d/%m/%Y").strftime("%Y-%m-%d")
+            item['hash'] = hashlib.md5(item['content'].encode('utf-8')).hexdigest()
+            data.append(item)
+
+        # sort data by date
+        data = sorted(data, key=lambda x: x[config['sort_by']])
 
         logging.info('Splitting dataset')
         splitted_items = dataset_splitter_by_time(

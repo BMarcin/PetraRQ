@@ -1,8 +1,9 @@
 datasetsplit:
-  train: 0.7
-  test: 0.2
-  dev: 0.1
+  train: 0.93
+  test: 0.05
+  dev: 0.02
   parts: 3
+  sort_by: date #date or hash
 
 datasetrewrite:
   threads: 64
