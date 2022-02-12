@@ -147,26 +147,26 @@ stages:
     cmd: python ./src/train_logistic_regression.py
     deps:
     - path: ./data/dev/expected.tsv
-      md5: 8e9e6cdb71e570a7c7503e782907adf7
-      size: 184787
+      md5: 411ad7833aebccec95c57af9fd65f774
+      size: 38592
     - path: ./data/dev/processed.tsv
-      md5: 522616a256c93ed35beb5188659e4d16
-      size: 284351504
+      md5: 1165b95bb85b88610f52ba8bed5b19a0
+      size: 89228339
     - path: ./data/test/expected.tsv
-      md5: a00d5d30e622be5f8825588c3a32ceb4
-      size: 366680
+      md5: 150878ea505a42443aac633a1b200eb0
+      size: 92709
     - path: ./data/test/processed.tsv
-      md5: b716a3b3d6cd3fb1965a75442c643848
-      size: 605907739
+      md5: 3cec1aac033028e6564c3a34ee2d09fc
+      size: 201919370
     - path: ./data/train/expected.tsv
-      md5: dbd9ee10a2a60858d60e13839dd71433
-      size: 1284249
+      md5: d470d6729e56d0fb54fa31392c5e8a2e
+      size: 1704415
     - path: ./data/train/processed.tsv
-      md5: e78ac7e6bcba6e2c70f7d343ef7eddd3
-      size: 2064421323
+      md5: fa022cc29126fdf57a3c6f4410312489
+      size: 2663967621
     - path: ./src/SKLearnDS/SKLearnDS.py
       md5: 4d1063b5067b067968114bd06b7eb8be
-      size: 1233
+      size: 1268
     - path: ./src/train_logistic_regression.py
       md5: 9bf0074c8a4255a8a3d2d1d4b980b6fd
       size: 4935
@@ -175,17 +175,17 @@ stages:
         logistic_regression.solver: sag
     outs:
     - path: ./data/dev/out.tsv
-      md5: 16ed4fdaecc28d6973da8673b5a0558a
-      size: 823115
+      md5: 84b59673d57509a4c7e9b6a3c68db137
+      size: 188058
       isexec: true
     - path: ./data/test/out.tsv
-      md5: e4a7be9b4523ab1a7de6bf5248f578a9
-      size: 1644815
+      md5: b85d893de42c0859814ec9b8632199a2
+      size: 431744
       isexec: true
     - path: ./models/logistic_regression/model.pkl
-      md5: 6010be205339867d7bf88ee6352e26c8
-      size: 120802188
+      md5: 4fa7559832f6fdf616f864d3f00378b7
+      size: 134345540
       isexec: true
     - path: scores_classification.json
-      md5: fc6cd7ab6c33ee460e0df1f1462081c7
+      md5: d7328321a3d8882f0aee1610a38e7d8e
       size: 141
