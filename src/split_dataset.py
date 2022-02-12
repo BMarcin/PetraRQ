@@ -52,7 +52,7 @@ if __name__ == '__main__':
             data.append(item)
 
         # sort data by date
-        data = sorted(data, key=lambda x: x[config['sorty_by']])
+        data = sorted(data, key=lambda x: x[config['sort_by']])
 
         logging.info('Splitting dataset')
         splitted_items = dataset_splitter_by_time(
