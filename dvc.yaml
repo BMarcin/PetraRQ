@@ -11,6 +11,7 @@ stages:
     - datasetsplit.dev
     - datasetsplit.test
     - datasetsplit.train
+    - datasetsplit.sorty_by
     outs:
     - ./data/dev/expected.tsv
     - ./data/dev/in.tsv
