@@ -147,23 +147,23 @@ stages:
     cmd: python ./src/train_logistic_regression.py
     deps:
     - path: ./data/dev/expected.tsv
-      md5: 411ad7833aebccec95c57af9fd65f774
-      size: 38592
+      md5: ede893922b331adf870dad11b67be295
+      size: 94971
     - path: ./data/dev/processed.tsv
-      md5: 1165b95bb85b88610f52ba8bed5b19a0
-      size: 89228339
+      md5: 3ded16b3953922cceaa90923883a7147
+      size: 215738076
     - path: ./data/test/expected.tsv
-      md5: 150878ea505a42443aac633a1b200eb0
-      size: 92709
+      md5: 91df714814cad93605ee6896113114cd
+      size: 181433
     - path: ./data/test/processed.tsv
-      md5: 3cec1aac033028e6564c3a34ee2d09fc
-      size: 201919370
+      md5: 61ed2915525aa2acd50189a964ddc46a
+      size: 348233057
     - path: ./data/train/expected.tsv
-      md5: d470d6729e56d0fb54fa31392c5e8a2e
-      size: 1704415
+      md5: 16d9ea238addf0b5afed8fd7ec17200c
+      size: 1559312
     - path: ./data/train/processed.tsv
-      md5: fa022cc29126fdf57a3c6f4410312489
-      size: 2663967621
+      md5: 5928e0910854642a694527f5d062f636
+      size: 2391144197
     - path: ./src/SKLearnDS/SKLearnDS.py
       md5: 4d1063b5067b067968114bd06b7eb8be
       size: 1268
@@ -175,17 +175,17 @@ stages:
         logistic_regression.solver: sag
     outs:
     - path: ./data/dev/out.tsv
-      md5: 84b59673d57509a4c7e9b6a3c68db137
-      size: 188058
+      md5: 5140826afda47e1b0ad217c53a6d308b
+      size: 448396
       isexec: true
     - path: ./data/test/out.tsv
-      md5: b85d893de42c0859814ec9b8632199a2
-      size: 431744
+      md5: 4ce3c0126005a22a8320b27816d5379f
+      size: 843822
       isexec: true
     - path: ./models/logistic_regression/model.pkl
-      md5: 4fa7559832f6fdf616f864d3f00378b7
-      size: 134345540
+      md5: d6c8fe9608d8f3c25004b859b67a1920
+      size: 126103796
       isexec: true
     - path: scores_classification.json
-      md5: d7328321a3d8882f0aee1610a38e7d8e
+      md5: 98c1fe1a9df73fbdeadba6f35374d63c
       size: 141
