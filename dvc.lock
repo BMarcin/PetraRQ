@@ -147,26 +147,26 @@ stages:
     cmd: python ./src/train_random_forest.py
     deps:
     - path: ./data/dev/expected.tsv
-      md5: 8e9e6cdb71e570a7c7503e782907adf7
-      size: 184787
+      md5: ede893922b331adf870dad11b67be295
+      size: 94971
     - path: ./data/dev/processed.tsv
-      md5: 522616a256c93ed35beb5188659e4d16
-      size: 284351504
+      md5: 3ded16b3953922cceaa90923883a7147
+      size: 215738076
     - path: ./data/test/expected.tsv
-      md5: a00d5d30e622be5f8825588c3a32ceb4
-      size: 366680
+      md5: 91df714814cad93605ee6896113114cd
+      size: 181433
     - path: ./data/test/processed.tsv
-      md5: b716a3b3d6cd3fb1965a75442c643848
-      size: 605907739
+      md5: 61ed2915525aa2acd50189a964ddc46a
+      size: 348233057
     - path: ./data/train/expected.tsv
-      md5: dbd9ee10a2a60858d60e13839dd71433
-      size: 1284249
+      md5: 16d9ea238addf0b5afed8fd7ec17200c
+      size: 1559312
     - path: ./data/train/processed.tsv
-      md5: e78ac7e6bcba6e2c70f7d343ef7eddd3
-      size: 2064421323
+      md5: 5928e0910854642a694527f5d062f636
+      size: 2391144197
     - path: ./src/SKLearnDS/SKLearnDS.py
       md5: 4d1063b5067b067968114bd06b7eb8be
-      size: 1233
+      size: 1268
     - path: ./src/train_random_forest.py
       md5: bf60977578f8a9871e4c480e91e18806
       size: 4960
@@ -176,17 +176,17 @@ stages:
         random_forest.n_estimators: 300
     outs:
     - path: ./data/dev/out.tsv
-      md5: fba1bd3112dc30e4900877436e4c230c
-      size: 55093
+      md5: 3c6f930ccc7d10d029b9ae6bae26e594
+      size: 23960
       isexec: true
     - path: ./data/test/out.tsv
-      md5: 9c43843a1950ed3f58ccb03f8fcaba04
-      size: 111521
+      md5: 0aa6d1599040a87a18d3f72006580a5c
+      size: 50880
       isexec: true
     - path: ./models/random_forest/model.pkl
-      md5: 84b38c1aed4c6cbfa6c8b9e9935e194d
-      size: 7094106
+      md5: 080bf5b4d4c3f93b7b458e1a2652773d
+      size: 7156757
       isexec: true
     - path: scores_classification.json
-      md5: 2d4bceee0be6c4f43dae66705131c945
+      md5: 59ee89b4b2f289d0d9973608da42308b
       size: 142
