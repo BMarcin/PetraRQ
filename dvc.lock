@@ -147,42 +147,42 @@ stages:
     cmd: python ./src/train_xgboost.py
     deps:
     - path: ./data/dev/expected.tsv
-      md5: 8e9e6cdb71e570a7c7503e782907adf7
-      size: 184787
+      md5: ede893922b331adf870dad11b67be295
+      size: 94971
     - path: ./data/dev/processed.tsv
-      md5: 522616a256c93ed35beb5188659e4d16
-      size: 284351504
+      md5: 3ded16b3953922cceaa90923883a7147
+      size: 215738076
     - path: ./data/test/expected.tsv
-      md5: a00d5d30e622be5f8825588c3a32ceb4
-      size: 366680
+      md5: 91df714814cad93605ee6896113114cd
+      size: 181433
     - path: ./data/test/processed.tsv
-      md5: b716a3b3d6cd3fb1965a75442c643848
-      size: 605907739
+      md5: 61ed2915525aa2acd50189a964ddc46a
+      size: 348233057
     - path: ./data/train/expected.tsv
-      md5: dbd9ee10a2a60858d60e13839dd71433
-      size: 1284249
+      md5: 16d9ea238addf0b5afed8fd7ec17200c
+      size: 1559312
     - path: ./data/train/processed.tsv
-      md5: e78ac7e6bcba6e2c70f7d343ef7eddd3
-      size: 2064421323
+      md5: 5928e0910854642a694527f5d062f636
+      size: 2391144197
     - path: ./src/SKLearnDS/SKLearnDS.py
       md5: 4d1063b5067b067968114bd06b7eb8be
-      size: 1233
+      size: 1268
     - path: ./src/train_xgboost.py
       md5: 87c56c3f4d04a41e7a4632f2e0bf303e
       size: 4870
     outs:
     - path: ./data/dev/out.tsv
-      md5: f162745267bc3aac39ee9b06bb394d97
-      size: 469716
+      md5: 4172943acdc91f7657ca1745dc80541f
+      size: 281523
       isexec: true
     - path: ./data/test/out.tsv
-      md5: ad7951f4e0c7a06069bccf5d5beebcd4
-      size: 954756
+      md5: 06a744742945fabd4b85a46efc9d4755
+      size: 515317
       isexec: true
     - path: ./models/xgboost/model.pkl
-      md5: 56757c6b2db84686368187e00e731a97
-      size: 6729330
+      md5: ee286e65b2ccd034994d1df51466327d
+      size: 6951036
       isexec: true
     - path: scores_classification.json
-      md5: 38d0fdc2e1020bb0a35cfab14144f917
-      size: 139
+      md5: 2c1ef39078327ba08410c79b9250cbf1
+      size: 138
