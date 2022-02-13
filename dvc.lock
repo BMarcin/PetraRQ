@@ -147,42 +147,42 @@ stages:
     cmd: python ./src/train_naive_bayes.py
     deps:
     - path: ./data/dev/expected.tsv
-      md5: 8e9e6cdb71e570a7c7503e782907adf7
-      size: 184787
+      md5: ede893922b331adf870dad11b67be295
+      size: 94971
     - path: ./data/dev/processed.tsv
-      md5: 522616a256c93ed35beb5188659e4d16
-      size: 284351504
+      md5: 3ded16b3953922cceaa90923883a7147
+      size: 215738076
     - path: ./data/test/expected.tsv
-      md5: a00d5d30e622be5f8825588c3a32ceb4
-      size: 366680
+      md5: 91df714814cad93605ee6896113114cd
+      size: 181433
     - path: ./data/test/processed.tsv
-      md5: b716a3b3d6cd3fb1965a75442c643848
-      size: 605907739
+      md5: 61ed2915525aa2acd50189a964ddc46a
+      size: 348233057
     - path: ./data/train/expected.tsv
-      md5: dbd9ee10a2a60858d60e13839dd71433
-      size: 1284249
+      md5: 16d9ea238addf0b5afed8fd7ec17200c
+      size: 1559312
     - path: ./data/train/processed.tsv
-      md5: e78ac7e6bcba6e2c70f7d343ef7eddd3
-      size: 2064421323
+      md5: 5928e0910854642a694527f5d062f636
+      size: 2391144197
     - path: ./src/SKLearnDS/SKLearnDS.py
       md5: 4d1063b5067b067968114bd06b7eb8be
-      size: 1233
+      size: 1268
     - path: ./src/train_naive_bayes.py
       md5: 99d7271d6aefd5abb31ceba9a7b84186
-      size: 4615
+      size: 4719
     outs:
     - path: ./data/dev/out.tsv
-      md5: 99702dba76b0e0745184ff424a2ce074
-      size: 44367
+      md5: f4c2af7f985860f28831332dfa32855b
+      size: 18435
       isexec: true
     - path: ./data/test/out.tsv
-      md5: a1a24cedad0855d52af2a3bcf07bff3a
-      size: 89795
+      md5: 8f2d33a36a39706499e4334362d3b765
+      size: 39792
       isexec: true
     - path: ./models/naive_bayes/model.pkl
-      md5: f42c36a95eb24e1911beaba1758b1d79
-      size: 483191042
+      md5: c83940dad811faafc04361b17ba79f15
+      size: 504397474
       isexec: true
     - path: scores_classification.json
-      md5: 1c7617c0e5efaa1001f0ad357bab3b7a
+      md5: faabd80e924c14eb5ec20380fac9ce01
       size: 141
