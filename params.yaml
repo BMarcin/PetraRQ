@@ -1,7 +1,7 @@
 datasetsplit:
-  train: 0.93
-  test: 0.05
-  dev: 0.02
+  train: 0.85
+  test: 0.1
+  dev: 0.05
   parts: 3
   sort_by: date #date or hash
 
