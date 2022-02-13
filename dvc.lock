@@ -147,42 +147,42 @@ stages:
     cmd: python ./src/train_svm.py
     deps:
     - path: ./data/dev/expected.tsv
-      md5: 8e9e6cdb71e570a7c7503e782907adf7
-      size: 184787
+      md5: ede893922b331adf870dad11b67be295
+      size: 94971
     - path: ./data/dev/processed.tsv
-      md5: 522616a256c93ed35beb5188659e4d16
-      size: 284351504
+      md5: 3ded16b3953922cceaa90923883a7147
+      size: 215738076
     - path: ./data/test/expected.tsv
-      md5: a00d5d30e622be5f8825588c3a32ceb4
-      size: 366680
+      md5: 91df714814cad93605ee6896113114cd
+      size: 181433
     - path: ./data/test/processed.tsv
-      md5: b716a3b3d6cd3fb1965a75442c643848
-      size: 605907739
+      md5: 61ed2915525aa2acd50189a964ddc46a
+      size: 348233057
     - path: ./data/train/expected.tsv
-      md5: dbd9ee10a2a60858d60e13839dd71433
-      size: 1284249
+      md5: 16d9ea238addf0b5afed8fd7ec17200c
+      size: 1559312
     - path: ./data/train/processed.tsv
-      md5: e78ac7e6bcba6e2c70f7d343ef7eddd3
-      size: 2064421323
+      md5: 5928e0910854642a694527f5d062f636
+      size: 2391144197
     - path: ./src/SKLearnDS/SKLearnDS.py
       md5: 4d1063b5067b067968114bd06b7eb8be
-      size: 1233
+      size: 1268
     - path: ./src/train_svm.py
       md5: 0d32863ef5d35c48cbab0d6eb0f6e64f
-      size: 4583
+      size: 4687
     outs:
     - path: ./data/dev/out.tsv
-      md5: daad3bab17399bffe001bf1038ea67e2
-      size: 905729
+      md5: 696d97c02116d228a4bdfe12f136692b
+      size: 561680
       isexec: true
     - path: ./data/test/out.tsv
-      md5: c189e2f553acca5d1cb0c84c08cf296e
-      size: 1813784
+      md5: 3a3d90d9ae3d620ef27871710d4607b4
+      size: 1097952
       isexec: true
     - path: ./models/svm/model.pkl
-      md5: ab5f610b333248c2de5fcf9f47f9683c
-      size: 120801646
+      md5: 840855968dd12fad625ae31d619c9ac3
+      size: 126103254
       isexec: true
     - path: scores_classification.json
-      md5: 4448ef35844020e6c152a1d8a66f0bb3
-      size: 141
+      md5: db2ac71913476aefffe2525fca3dca2c
+      size: 123
