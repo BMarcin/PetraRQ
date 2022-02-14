@@ -37,10 +37,10 @@ stages:
     - ./data/train/processed.tsv
 
   train_classifier:
-    cmd: python ./src/train_xgboost.py
+    cmd: python ./src/train_fasttext.py
     deps:
     - ./src/SKLearnDS/SKLearnDS.py
-    - ./src/train_xgboost.py
+    - ./src/train_fasttext.py
     - ./data/dev/expected.tsv
     - ./data/dev/processed.tsv
     - ./data/test/expected.tsv
@@ -50,7 +50,8 @@ stages:
     outs:
     - ./data/dev/out.tsv
     - ./data/test/out.tsv
-    - ./models/xgboost/model.pkl
+    - ./models/fasttext/fasttext.bin
+    - ./data/train/fasttext.txt
     metrics:
       - scores_classification.json:
           cache: false

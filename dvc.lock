@@ -144,45 +144,49 @@ stages:
       md5: d869f95954c10ef7ad67ad2b4bd5208a
       size: 76
   train_classifier:
-    cmd: python ./src/train_xgboost.py
+    cmd: python ./src/train_fasttext.py
     deps:
     - path: ./data/dev/expected.tsv
-      md5: 8e9e6cdb71e570a7c7503e782907adf7
-      size: 184787
+      md5: ede893922b331adf870dad11b67be295
+      size: 94971
     - path: ./data/dev/processed.tsv
-      md5: 522616a256c93ed35beb5188659e4d16
-      size: 284351504
+      md5: 3ded16b3953922cceaa90923883a7147
+      size: 215738076
     - path: ./data/test/expected.tsv
-      md5: a00d5d30e622be5f8825588c3a32ceb4
-      size: 366680
+      md5: 91df714814cad93605ee6896113114cd
+      size: 181433
     - path: ./data/test/processed.tsv
-      md5: b716a3b3d6cd3fb1965a75442c643848
-      size: 605907739
+      md5: 61ed2915525aa2acd50189a964ddc46a
+      size: 348233057
     - path: ./data/train/expected.tsv
-      md5: dbd9ee10a2a60858d60e13839dd71433
-      size: 1284249
+      md5: 16d9ea238addf0b5afed8fd7ec17200c
+      size: 1559312
     - path: ./data/train/processed.tsv
-      md5: e78ac7e6bcba6e2c70f7d343ef7eddd3
-      size: 2064421323
+      md5: 5928e0910854642a694527f5d062f636
+      size: 2391144197
     - path: ./src/SKLearnDS/SKLearnDS.py
       md5: 4d1063b5067b067968114bd06b7eb8be
-      size: 1233
-    - path: ./src/train_xgboost.py
-      md5: 87c56c3f4d04a41e7a4632f2e0bf303e
-      size: 4870
+      size: 1268
+    - path: ./src/train_fasttext.py
+      md5: 4f04e3e53fc33185693858b28771685c
+      size: 5542
     outs:
     - path: ./data/dev/out.tsv
-      md5: f162745267bc3aac39ee9b06bb394d97
-      size: 469716
+      md5: fde2abb824571b05ae403667c867d408
+      size: 54610
       isexec: true
     - path: ./data/test/out.tsv
-      md5: ad7951f4e0c7a06069bccf5d5beebcd4
-      size: 954756
+      md5: 3f5096723c6ca98b8374ff0e0d0d6959
+      size: 106973
       isexec: true
-    - path: ./models/xgboost/model.pkl
-      md5: 56757c6b2db84686368187e00e731a97
-      size: 6729330
+    - path: ./data/train/fasttext.txt
+      md5: 704bead006a24f452616b58a7a12a1e8
+      size: 2393995702
+      isexec: true
+    - path: ./models/fasttext/fasttext.bin
+      md5: af918c3ccca73623d40088c92bf441b1
+      size: 619170033
       isexec: true
     - path: scores_classification.json
-      md5: 38d0fdc2e1020bb0a35cfab14144f917
+      md5: a8e95a24dd35121ae69a6a10d0817502
       size: 139
