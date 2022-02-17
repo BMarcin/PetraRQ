@@ -1,7 +1,7 @@
 #!/bin/bash
 
-sudo apt-get update && sudo apt-get install -y xz-utils yum
-yum install git-annex
+sudo apt-get update && sudo apt-get install -y xz-utils pacman
+pacman -S git-annex
 
 mkdir -p /home/runner/work/PetraRQ/main_repo/
 echo "Created main repo"
