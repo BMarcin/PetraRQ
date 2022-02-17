@@ -1,6 +1,7 @@
 #!/bin/bash
 
-sudo apt-get update && sudo apt-get install -y git-annex xz-utils
+sudo apt-get update && sudo apt-get install -y xz-utils yum
+yum install git-annex
 
 mkdir -p /home/runner/work/PetraRQ/main_repo/
 echo "Created main repo"
@@ -37,8 +38,8 @@ if [ -f "./train/expected.tsv" ]; then
   rm ./train/expected.tsv
 fi
 
-if [ -f "./dev-0/in.tsv.gz" ]; then
-  rm ./dev-0/in.tsv.gz
+if [ -f "./dev-0/in.tsv.xz" ]; then
+  rm ./dev-0/in.tsv.xz
 fi
 
 if [ -f "./dev-0/expected.tsv" ]; then
@@ -79,8 +80,6 @@ tr -d '\015' </home/runner/work/PetraRQ/PetraRQ/data/train/expected.tsv >./train
 mv /home/runner/work/PetraRQ/PetraRQ/data/in-header.tsv ./
 mv /home/runner/work/PetraRQ/PetraRQ/data/out-header.tsv ./
 
-geval --validate --expected-directory .
-
 xz ./train/in.tsv
 #gzip ./train/expected.tsv
 xz ./test-A/in.tsv
@@ -99,6 +98,8 @@ git annex init
 git annex add ./train/in.tsv.xz
 git annex enableremote gonito-https
 git annex sync --content
+
+geval --validate --expected-directory .
 
 git remote rm origin
 git remote add origin ssh://gitolite@gonito.net/marcinb/eur-lex-documents
