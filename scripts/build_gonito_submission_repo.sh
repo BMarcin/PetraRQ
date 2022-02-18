@@ -30,6 +30,12 @@ mkdir -p ./train
 mkdir -p ./dev-0
 mkdir -p ./test-A
 
+# use git annex
+git annex init
+git annex add ./train/in.tsv.xz
+git annex enableremote gonito-https
+git annex sync --content
+
 if [ -f "./train/in.tsv.xz" ]; then
   rm ./train/in.tsv.xz
 fi
@@ -92,12 +98,6 @@ xz ./dev-0/in.tsv
 #mv ./test-A/expected.tsv ../expected.tsv
 
 tree
-
-# use git annex
-git annex init
-git annex add ./train/in.tsv.xz
-git annex enableremote gonito-https
-git annex sync --content
 
 geval --validate --expected-directory .
 
