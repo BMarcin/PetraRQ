@@ -1,7 +1,6 @@
-description: RoBERTa classifier
+description: Logistic regression classifier
 tags:
-  - neural-network
-  - roberta-base
+  - logistic-regression
 param-files:
   - "params.yaml"
 links:

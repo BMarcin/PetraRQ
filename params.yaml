@@ -10,6 +10,7 @@ datasetrewrite:
 
 logistic_regression:
   solver: sag
+  outputs: probabilities #labels or probabilities
 
 #language_modeling_train:
 #  cuda_visible_devices: [3,4]

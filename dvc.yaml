@@ -49,6 +49,7 @@ stages:
     - ./data/train/processed.tsv
     params:
     - logistic_regression.solver
+    - logistic_regression.outputs
     outs:
     - ./data/dev/out.tsv
     - ./data/test/out.tsv
