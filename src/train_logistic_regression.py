@@ -4,6 +4,7 @@ import os
 import pickle
 from itertools import repeat
 
+import numpy as np
 import pandas as pd
 import yaml
 
@@ -105,20 +106,24 @@ if __name__ == '__main__':
             for pred in translated_test_preds:
                 f.write(pred + "\n")
     else:
+        logging.info('Predicting probabilities...')
+        outs_test = log_reg.predict_proba(ds_train.count_vect.transform(data2[0])).astype(float)
+        outs_dev = log_reg.predict_proba(ds_train.count_vect.transform(data1[0])).astype(float)
+
         # Save propabilities for each label
         logging.info('Saving predictions...')
         translated_dev_preds = []
         for probabilities, labels in zip(outs_dev, repeat(unique_labels)):
             score_lines = []
             for prob, label in zip(probabilities, labels):
-                score_lines.append("{}:{}".format(label, str(prob)))
+                score_lines.append("{}:{:.9f}".format(label, prob))
             translated_dev_preds.append(" ".join(score_lines))
 
         translated_test_preds = []
         for probabilities, labels in zip(outs_test, repeat(unique_labels)):
             score_lines = []
             for prob, label in zip(probabilities, labels):
-                score_lines.append("{}:{}".format(label, str(prob)))
+                score_lines.append("{}:{:.9f}".format(label, prob))
             translated_test_preds.append(" ".join(score_lines))
 
         # save translated propabilities to tsvs

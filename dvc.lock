@@ -168,25 +168,25 @@ stages:
       md5: 4d1063b5067b067968114bd06b7eb8be
       size: 1268
     - path: ./src/train_logistic_regression.py
-      md5: e9d4d79cfcc79bd78430049d7c51cc4a
-      size: 6284
+      md5: a988754ffb7ae1c493197430c79fd45c
+      size: 6552
     params:
       params.yaml:
         logistic_regression.outputs: probabilities
         logistic_regression.solver: sag
     outs:
     - path: ./data/dev/out.tsv
-      md5: d5e931a29413b290ee08d41e77f8b9e6
-      size: 1465879
+      md5: 786cfe5ecd2d2adb9dc45cba64a75b4e
+      size: 2416449
       isexec: true
     - path: ./data/test/out.tsv
-      md5: 8ced63fe702dcfad2c8971b22751103b
-      size: 2933223
+      md5: 4755974a530a51c38172a5f51b0be7d9
+      size: 4835313
       isexec: true
     - path: ./models/logistic_regression/model.pkl
-      md5: 636c6673da55a3896cc21aec7858bb21
+      md5: 6fa82a1e71981adf2e11e6776eb802e5
       size: 126103796
       isexec: true
     - path: scores_classification.json
-      md5: 36aff9675bf5aea83a6646accbd2d4b1
+      md5: dab6f1a1d931c30d2bbcba8d54fc476c
       size: 141
