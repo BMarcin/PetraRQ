@@ -47,6 +47,10 @@ stages:
     - ./data/test/processed.tsv
     - ./data/train/expected.tsv
     - ./data/train/processed.tsv
+    params:
+    - xgboost.outputs
+    - xgboost.n_estimators
+    - xgboost.max_depth
     outs:
     - ./data/dev/out.tsv
     - ./data/test/out.tsv
