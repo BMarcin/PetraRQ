@@ -168,21 +168,26 @@ stages:
       md5: 4d1063b5067b067968114bd06b7eb8be
       size: 1268
     - path: ./src/train_xgboost.py
-      md5: 87c56c3f4d04a41e7a4632f2e0bf303e
-      size: 4870
+      md5: 8b9205b0b07796dc2d0d1ae9a86fa634
+      size: 6193
+    params:
+      params.yaml:
+        xgboost.max_depth: 3
+        xgboost.n_estimators: 300
+        xgboost.outputs: probabilities
     outs:
     - path: ./data/dev/out.tsv
-      md5: 4172943acdc91f7657ca1745dc80541f
-      size: 281523
+      md5: 5159c42152f252c85d45508ca0df448b
+      size: 2416449
       isexec: true
     - path: ./data/test/out.tsv
-      md5: 06a744742945fabd4b85a46efc9d4755
-      size: 515317
+      md5: f4accff06b5888c6df7eafa102ebb2d8
+      size: 4835313
       isexec: true
     - path: ./models/xgboost/model.pkl
-      md5: ee286e65b2ccd034994d1df51466327d
-      size: 6951036
+      md5: 2a67b414681b98c9e1016c57ca2cb41e
+      size: 1058080
       isexec: true
     - path: scores_classification.json
-      md5: 2c1ef39078327ba08410c79b9250cbf1
-      size: 138
+      md5: 422925250186f6c2c936e47db2f187b1
+      size: 143
