@@ -168,19 +168,22 @@ stages:
       md5: 4d1063b5067b067968114bd06b7eb8be
       size: 1268
     - path: ./src/train_svm.py
-      md5: 0d32863ef5d35c48cbab0d6eb0f6e64f
-      size: 4687
+      md5: 020e13c7fbdd61923842020858f484e8
+      size: 7010
+    params:
+      params.yaml:
+        svm.outputs: probabilities
     outs:
     - path: ./data/dev/out.tsv
-      md5: 696d97c02116d228a4bdfe12f136692b
-      size: 561680
+      md5: dc57e34ba8c241c1cb43cc9c1fdb6935
+      size: 2416449
       isexec: true
     - path: ./data/test/out.tsv
-      md5: 3a3d90d9ae3d620ef27871710d4607b4
-      size: 1097952
+      md5: 52c376dcf8201c1485f9e0d4f316b73a
+      size: 4835313
       isexec: true
     - path: ./models/svm/model.pkl
-      md5: 840855968dd12fad625ae31d619c9ac3
+      md5: b28e91d007cfae6aed9224a26fe7cbed
       size: 126103254
       isexec: true
     - path: scores_classification.json

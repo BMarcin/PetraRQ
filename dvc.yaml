@@ -51,6 +51,8 @@ stages:
     - ./data/dev/out.tsv
     - ./data/test/out.tsv
     - ./models/svm/model.pkl
+    params:
+    - svm.outputs
     metrics:
       - scores_classification.json:
           cache: false
