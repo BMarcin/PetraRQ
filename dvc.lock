@@ -168,25 +168,26 @@ stages:
       md5: 4d1063b5067b067968114bd06b7eb8be
       size: 1268
     - path: ./src/train_random_forest.py
-      md5: bf60977578f8a9871e4c480e91e18806
-      size: 4960
+      md5: e572b8e1e0d0fe99e1234a0ef0d7b306
+      size: 6495
     params:
       params.yaml:
         random_forest.max_depth: 3
         random_forest.n_estimators: 300
+        random_forest.outputs: probabilities
     outs:
     - path: ./data/dev/out.tsv
-      md5: 3c6f930ccc7d10d029b9ae6bae26e594
-      size: 23960
+      md5: 7eba770509c89aa2fbe598883837ebab
+      size: 2416449
       isexec: true
     - path: ./data/test/out.tsv
-      md5: 0aa6d1599040a87a18d3f72006580a5c
-      size: 50880
+      md5: 42b040dcd0a0bb69d566d6e575bb77ae
+      size: 4835313
       isexec: true
     - path: ./models/random_forest/model.pkl
-      md5: 080bf5b4d4c3f93b7b458e1a2652773d
-      size: 7156757
+      md5: e0b4c5db5f3e817d2b191e9cb36dd9ef
+      size: 7136021
       isexec: true
     - path: scores_classification.json
-      md5: 59ee89b4b2f289d0d9973608da42308b
-      size: 142
+      md5: 9d57d839b3950a187bdd3443b1ccfd67
+      size: 143

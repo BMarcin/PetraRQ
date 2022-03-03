@@ -50,6 +50,7 @@ stages:
     params:
     - random_forest.n_estimators
     - random_forest.max_depth
+    - random_forest.outputs
     outs:
     - ./data/dev/out.tsv
     - ./data/test/out.tsv
