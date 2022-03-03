@@ -1,7 +1,6 @@
-description: RoBERTa classifier
+description: SVM classifier
 tags:
-  - neural-network
-  - roberta-base
+  - svm
 param-files:
   - "params.yaml"
 links:
