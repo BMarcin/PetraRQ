@@ -1,7 +1,6 @@
-description: RoBERTa classifier
+description: Random forest classifier
 tags:
-  - neural-network
-  - roberta-base
+  - random-forest
 param-files:
   - "params.yaml"
 links:
