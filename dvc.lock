@@ -168,19 +168,22 @@ stages:
       md5: 4d1063b5067b067968114bd06b7eb8be
       size: 1268
     - path: ./src/train_naive_bayes.py
-      md5: 99d7271d6aefd5abb31ceba9a7b84186
-      size: 4719
+      md5: 88eae1f4173fc649f2b343aaeaf07b91
+      size: 6390
+    params:
+      params.yaml:
+        naive_bayes.outputs: probabilities
     outs:
     - path: ./data/dev/out.tsv
-      md5: f4c2af7f985860f28831332dfa32855b
-      size: 18435
+      md5: 48cbd705917570cd8f11ec258c6a76ec
+      size: 2416449
       isexec: true
     - path: ./data/test/out.tsv
-      md5: 8f2d33a36a39706499e4334362d3b765
-      size: 39792
+      md5: f70a2f54fc21cb08fd842b59cf1875d0
+      size: 4835313
       isexec: true
     - path: ./models/naive_bayes/model.pkl
-      md5: c83940dad811faafc04361b17ba79f15
+      md5: 88f0e4bf5e7730cd595a746507ade830
       size: 504397474
       isexec: true
     - path: scores_classification.json

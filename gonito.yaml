@@ -1,6 +1,6 @@
-description: Logistic regression classifier
+description: Naive bayes classifier
 tags:
-  - logistic-regression
+  - naive-bayes
 param-files:
   - "params.yaml"
 links:
