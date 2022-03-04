@@ -28,27 +28,21 @@ stages:
     - path: ./data/dev/expected.tsv
       md5: 94a461358327759f88fbf677c94a6eab
       size: 94971
-      isexec: true
     - path: ./data/dev/in.tsv
       md5: dafa7c488580f29a63431ce149d6416d
       size: 239789657
-      isexec: true
     - path: ./data/test/expected.tsv
       md5: 0d4f77dc18622b68dc842ba4e90e2591
       size: 181433
-      isexec: true
     - path: ./data/test/in.tsv
       md5: 965f5c51903a86b4627d19a578eaa5b4
       size: 388966317
-      isexec: true
     - path: ./data/train/expected.tsv
       md5: 2dca998d29033d272be2b1269be3e343
       size: 1559312
-      isexec: true
     - path: ./data/train/in.tsv
       md5: a2d8dfd76ceed3e0278f714429cd1fd1
       size: 2621612493
-      isexec: true
   rewrite_dataset_to_lm_texts:
     cmd: python ./src/rewrite_dataset.py
     deps:
