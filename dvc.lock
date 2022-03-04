@@ -4,11 +4,11 @@ stages:
     cmd: python ./src/split_dataset.py
     deps:
     - path: ./data/in-header.tsv
-      md5: 7ace96be50d1121ab573e6274b0d345b
-      size: 12
+      md5: 691f892e65c64cefe6e4bfb1493a997a
+      size: 24
     - path: ./data/out-header.tsv
-      md5: 757889307369887028c89db5646b73de
-      size: 7
+      md5: dc6c1d3eecfe40d374314b5d56aa536d
+      size: 14
     - path: ./data/parsed-pdfs.json
       md5: e9b60861734ddc93be6318db98c155e2
       size: 3407420087
@@ -26,29 +26,23 @@ stages:
         datasetsplit.train: 0.85
     outs:
     - path: ./data/dev/expected.tsv
-      md5: ede893922b331adf870dad11b67be295
+      md5: 94a461358327759f88fbf677c94a6eab
       size: 94971
-      isexec: true
     - path: ./data/dev/in.tsv
       md5: dafa7c488580f29a63431ce149d6416d
       size: 239789657
-      isexec: true
     - path: ./data/test/expected.tsv
-      md5: 91df714814cad93605ee6896113114cd
+      md5: 0d4f77dc18622b68dc842ba4e90e2591
       size: 181433
-      isexec: true
     - path: ./data/test/in.tsv
       md5: 965f5c51903a86b4627d19a578eaa5b4
       size: 388966317
-      isexec: true
     - path: ./data/train/expected.tsv
-      md5: 16d9ea238addf0b5afed8fd7ec17200c
+      md5: 2dca998d29033d272be2b1269be3e343
       size: 1559312
-      isexec: true
     - path: ./data/train/in.tsv
       md5: a2d8dfd76ceed3e0278f714429cd1fd1
       size: 2621612493
-      isexec: true
   rewrite_dataset_to_lm_texts:
     cmd: python ./src/rewrite_dataset.py
     deps:
@@ -147,19 +141,19 @@ stages:
     cmd: python ./src/train_svm.py
     deps:
     - path: ./data/dev/expected.tsv
-      md5: ede893922b331adf870dad11b67be295
+      md5: 94a461358327759f88fbf677c94a6eab
       size: 94971
     - path: ./data/dev/processed.tsv
       md5: 3ded16b3953922cceaa90923883a7147
       size: 215738076
     - path: ./data/test/expected.tsv
-      md5: 91df714814cad93605ee6896113114cd
+      md5: 0d4f77dc18622b68dc842ba4e90e2591
       size: 181433
     - path: ./data/test/processed.tsv
       md5: 61ed2915525aa2acd50189a964ddc46a
       size: 348233057
     - path: ./data/train/expected.tsv
-      md5: 16d9ea238addf0b5afed8fd7ec17200c
+      md5: 2dca998d29033d272be2b1269be3e343
       size: 1559312
     - path: ./data/train/processed.tsv
       md5: 5928e0910854642a694527f5d062f636
@@ -175,17 +169,18 @@ stages:
         svm.outputs: probabilities
     outs:
     - path: ./data/dev/out.tsv
-      md5: dc57e34ba8c241c1cb43cc9c1fdb6935
+      md5: 225a29caaff473567f665f5c58f09096
       size: 2416449
       isexec: true
     - path: ./data/test/out.tsv
-      md5: 52c376dcf8201c1485f9e0d4f316b73a
+      md5: be1077fb91d2022709a96e12f8febc4e
       size: 4835313
       isexec: true
     - path: ./models/svm/model.pkl
-      md5: b28e91d007cfae6aed9224a26fe7cbed
+      md5: e9cf37b1cbbbb0ecb8a0d6384f9a151a
       size: 126103254
       isexec: true
     - path: scores_classification.json
-      md5: db2ac71913476aefffe2525fca3dca2c
+      md5: c5776bb261d963610fe48f1f4674da6a
       size: 123
+      isexec: true
