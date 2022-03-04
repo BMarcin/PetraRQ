@@ -22,7 +22,7 @@ jobs:
           BMARCINAI_GOOGLE_CREDENTIALS: ${{secrets.BMARCINAI_GOOGLE_CREDENTIALS}}
 
       - name: Download & install DVC
-        run: wget https://dvc.org/download/linux-deb/dvc-2.7.4 && sudo dpkg -i dvc-2.7.4
+        run: wget https://dvc.org/download/linux-deb/dvc-2.8.3 && sudo dpkg -i dvc-2.8.3
 
       - name: Install requirements
         run: pip install -r requirements.txt
