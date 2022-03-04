@@ -42,11 +42,11 @@ if __name__ == '__main__':
     config = yaml.safe_load(open("./params.yaml"))['classification_train']
     config_train = yaml.safe_load(open("./params.yaml"))['language_modeling_train']
     os.environ["CUDA_VISIBLE_DEVICES"] = ",".join([str(item) for item in config['cuda_visible_devices']])
-    os.environ["WANDB_PROJECT"] = 'PetraRQ-Classifier'
+    # os.environ["WANDB_PROJECT"] = 'PetraRQ-Classifier'
 
     # log to wandb
-    logging.info("Logging to wandb...")
-    wandb.login()
+    # logging.info("Logging to wandb...")
+    # wandb.login()
 
     # setup datasets paths
     dev_ds = "./data/dev/"
@@ -183,4 +183,4 @@ if __name__ == '__main__':
     with open("./scores_classification.json", "w", encoding="utf8") as f:
         json.dump(scores, f, indent=4)
 
-    wandb.finish()
+    # wandb.finish()
