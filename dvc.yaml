@@ -58,4 +58,3 @@ stages:
     metrics:
       - scores_classification.json:
           cache: false
-
