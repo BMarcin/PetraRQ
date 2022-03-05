@@ -2,8 +2,11 @@ import json
 import logging
 import os
 import pickle
+from itertools import repeat
 
 import pandas as pd
+import yaml
+
 from SKLearnDS import SKlearnDS
 
 from sklearn.naive_bayes import MultinomialNB
@@ -16,6 +19,10 @@ if __name__ == '__main__':
         level=logging.INFO,
         format='%(asctime)s - %(message)s',
         datefmt='%Y-%m-%d %H:%M:%S')
+
+    # Load config
+    logging.info("Loading config...")
+    config = yaml.safe_load(open("./params.yaml"))['naive_bayes']
 
     # Load the data
     logging.info('Loading data...')
@@ -82,20 +89,51 @@ if __name__ == '__main__':
             "recall": recall_test
         }, f, indent=4)
 
-    # Save predictions to tsvs
-    logging.info('Saving predictions...')
-    translated_dev_preds = [" ".join(ds_dev.tensor2labels(model_outputs, unique_labels)) for model_outputs in (outs_dev >= 0.5).astype(int)]
-    translated_test_preds = [" ".join(ds_dev.tensor2labels(model_outputs, unique_labels)) for model_outputs in (outs_test >= 0.5).astype(int)]
+    if config['outputs'] == 'labels':
+        # Save predictions to tsvs
+        logging.info('Saving predictions...')
+        translated_dev_preds = [" ".join(ds_dev.tensor2labels(model_outputs, unique_labels)) for model_outputs in (outs_dev >= 0.5).astype(int)]
+        translated_test_preds = [" ".join(ds_dev.tensor2labels(model_outputs, unique_labels)) for model_outputs in (outs_test >= 0.5).astype(int)]
 
-    # save predictions to csv file
-    logging.info("Saving predictions to csv file...")
-    with open("./data/dev/out.tsv", "w", encoding="utf8") as f:
-        for pred in translated_dev_preds:
-            f.write(pred + "\n")
+        # save predictions to csv file
+        logging.info("Saving predictions to csv file...")
+        with open("./data/dev/out.tsv", "w", encoding="utf8") as f:
+            for pred in translated_dev_preds:
+                f.write(pred + "\n")
 
-    with open("./data/test/out.tsv", "w", encoding="utf8") as f:
-        for pred in translated_test_preds:
-            f.write(pred + "\n")
+        with open("./data/test/out.tsv", "w", encoding="utf8") as f:
+            for pred in translated_test_preds:
+                f.write(pred + "\n")
+    else:
+        logging.info('Predicting probabilities...')
+        outs_test = clf.predict_proba(ds_train.count_vect.transform(data2[0]))
+        outs_dev = clf.predict_proba(ds_train.count_vect.transform(data1[0]))
+
+        # Save propabilities for each label
+        logging.info('Saving predictions...')
+        translated_dev_preds = []
+        for probabilities, labels in zip(outs_dev, repeat(unique_labels)):
+            score_lines = []
+            for prob, label in zip(probabilities, labels):
+                score_lines.append("{}:{:.9f}".format(label, prob))
+            translated_dev_preds.append(" ".join(score_lines))
+
+        translated_test_preds = []
+        for probabilities, labels in zip(outs_test, repeat(unique_labels)):
+            score_lines = []
+            for prob, label in zip(probabilities, labels):
+                score_lines.append("{}:{:.9f}".format(label, prob))
+            translated_test_preds.append(" ".join(score_lines))
+
+        # save translated propabilities to tsvs
+        logging.info("Saving predictions to tsv file...")
+        with open("./data/dev/out.tsv", "w", encoding="utf8") as f:
+            for pred in translated_dev_preds:
+                f.write(pred + "\n")
+
+        with open("./data/test/out.tsv", "w", encoding="utf8") as f:
+            for pred in translated_test_preds:
+                f.write(pred + "\n")
 
     # Save the model
     logging.info('Saving the model...')

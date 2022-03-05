@@ -22,13 +22,13 @@ jobs:
           BMARCINAI_GOOGLE_CREDENTIALS: ${{secrets.BMARCINAI_GOOGLE_CREDENTIALS}}
 
       - name: Download & install DVC
-        run: wget https://dvc.org/download/linux-deb/dvc-2.7.4 && sudo dpkg -i dvc-2.7.4
+        run: wget https://dvc.org/download/linux-deb/dvc-2.9.4 && sudo dpkg -i dvc-2.9.4
 
       - name: Install requirements
         run: pip install -r requirements.txt
 
       - name: Makefile
-        run: make
+        run: make all
 
       - name: Add SSH key
         run: chmod +x ./scripts/add_ssh_key.sh && ./scripts/add_ssh_key.sh
