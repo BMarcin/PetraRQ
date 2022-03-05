@@ -4,11 +4,11 @@ stages:
     cmd: python ./src/split_dataset.py
     deps:
     - path: ./data/in-header.tsv
-      md5: 691f892e65c64cefe6e4bfb1493a997a
-      size: 24
+      md5: 7ace96be50d1121ab573e6274b0d345b
+      size: 12
     - path: ./data/out-header.tsv
-      md5: dc6c1d3eecfe40d374314b5d56aa536d
-      size: 14
+      md5: 757889307369887028c89db5646b73de
+      size: 7
     - path: ./data/parsed-pdfs.json
       md5: e9b60861734ddc93be6318db98c155e2
       size: 3407420087
@@ -26,23 +26,29 @@ stages:
         datasetsplit.train: 0.85
     outs:
     - path: ./data/dev/expected.tsv
-      md5: 94a461358327759f88fbf677c94a6eab
+      md5: ede893922b331adf870dad11b67be295
       size: 94971
+      isexec: true
     - path: ./data/dev/in.tsv
       md5: dafa7c488580f29a63431ce149d6416d
       size: 239789657
+      isexec: true
     - path: ./data/test/expected.tsv
-      md5: 0d4f77dc18622b68dc842ba4e90e2591
+      md5: 91df714814cad93605ee6896113114cd
       size: 181433
+      isexec: true
     - path: ./data/test/in.tsv
       md5: 965f5c51903a86b4627d19a578eaa5b4
       size: 388966317
+      isexec: true
     - path: ./data/train/expected.tsv
-      md5: 2dca998d29033d272be2b1269be3e343
+      md5: 16d9ea238addf0b5afed8fd7ec17200c
       size: 1559312
+      isexec: true
     - path: ./data/train/in.tsv
       md5: a2d8dfd76ceed3e0278f714429cd1fd1
       size: 2621612493
+      isexec: true
   rewrite_dataset_to_lm_texts:
     cmd: python ./src/rewrite_dataset.py
     deps:
