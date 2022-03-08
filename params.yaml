@@ -11,3 +11,4 @@ datasetrewrite:
 fasttext:
   epochs: 25
   lr: 0.1
+  outputs: probabilities #labels or probabilities

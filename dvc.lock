@@ -117,25 +117,31 @@ stages:
       md5: 4d1063b5067b067968114bd06b7eb8be
       size: 1268
     - path: ./src/train_fasttext.py
-      md5: 4f04e3e53fc33185693858b28771685c
-      size: 5542
+      md5: c9dda59dd55a1321ace6f3b6d9755492
+      size: 6986
+    params:
+      params.yaml:
+        fasttext.epochs: 25
+        fasttext.lr: 0.1
+        fasttext.outputs: probabilities
     outs:
     - path: ./data/dev/out.tsv
-      md5: fde2abb824571b05ae403667c867d408
-      size: 54610
+      md5: 2ca010fba3eed5098983e97202af43db
+      size: 2416449
       isexec: true
     - path: ./data/test/out.tsv
-      md5: 3f5096723c6ca98b8374ff0e0d0d6959
-      size: 106973
+      md5: 814f708b032cb6368308fe1455c030b9
+      size: 4835313
       isexec: true
     - path: ./data/train/fasttext.txt
       md5: 704bead006a24f452616b58a7a12a1e8
       size: 2393995702
       isexec: true
     - path: ./models/fasttext/fasttext.bin
-      md5: af918c3ccca73623d40088c92bf441b1
+      md5: 350460c371bbcccf6c6743a86f4a6146
       size: 619170033
       isexec: true
     - path: scores_classification.json
-      md5: a8e95a24dd35121ae69a6a10d0817502
-      size: 139
+      md5: 69e939c607d09c6f9ee758aa50cb2be0
+      size: 137
+      isexec: true

@@ -48,9 +48,9 @@ stages:
     - ./data/train/expected.tsv
     - ./data/train/processed.tsv
     params:
-    - xgboost.outputs
-    - xgboost.n_estimators
-    - xgboost.max_depth
+    - fasttext.outputs
+    - fasttext.epochs
+    - fasttext.lr
     outs:
     - ./data/dev/out.tsv
     - ./data/test/out.tsv

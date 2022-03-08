@@ -13,7 +13,10 @@ import numpy as np
 from sklearn.metrics import accuracy_score, f1_score, precision_score, recall_score
 
 def labels2tensor(labels, label2idx):
+    # print(labels)
     unique = set([label2idx[label.strip().lower()] for label in labels])
+    if len(unique) == 0:
+        return torch.zeros([len(label2idx)], dtype=torch.long).tolist()
     return torch.zeros([len(label2idx)]).index_fill_(0, torch.tensor(list(unique)), 1).tolist()
 
 if __name__ == '__main__':
@@ -63,9 +66,20 @@ if __name__ == '__main__':
     dev_preds = []
     dev_gt = []
     translated_dev_preds = []
+    dev_label_probs = []
     for item, lab in zip(data1[0], labels1[0]):
-        pred_labels = model.predict(item)[0]
-        pred_rewrited_labels = [label.replace("__label__", "") for label in pred_labels]
+        preds = model.predict(item, k=len(label2idx))
+
+        true_labels = []
+        probes = []
+        for label_name, label_weight in zip(preds[0], preds[1]):
+            label_name = label_name.replace("__label__", "")
+            if label_weight >= 0.5:
+                true_labels.append(label_name)
+            probes.append("{}:{:.9f}".format(label_name, label_weight))
+        dev_label_probs.append(probes)
+
+        pred_rewrited_labels = [label for label in true_labels]
         translated_dev_preds.append(" ".join(pred_rewrited_labels))
 
         pred_tensor = labels2tensor(pred_rewrited_labels, label2idx)
@@ -77,9 +91,22 @@ if __name__ == '__main__':
     test_preds = []
     test_gt = []
     translated_test_preds = []
+    test_label_probs = []
     for item, lab in zip(data2[0], labels2[0]):
-        pred_labels = model.predict(item)[0]
-        pred_rewrited_labels = [label.replace("__label__", "") for label in pred_labels]
+        preds = model.predict(item, k=len(label2idx))
+        # print(preds)
+        # pred_labels = preds[0]
+
+        true_labels = []
+        probes = []
+        for label_name, label_weight in zip(preds[0], preds[1]):
+            label_name = label_name.replace("__label__", "")
+            if label_weight >= 0.5:
+                true_labels.append(label_name)
+            probes.append("{}:{:.9f}".format(label_name, label_weight))
+        test_label_probs.append(probes)
+
+        pred_rewrited_labels = [label.replace("__label__", "") for label in true_labels]
         translated_test_preds.append(" ".join(pred_rewrited_labels))
 
         pred_tensor = labels2tensor(pred_rewrited_labels, label2idx)
@@ -118,15 +145,25 @@ if __name__ == '__main__':
             "recall": recall_test
         }, f, indent=4)
 
-    # save predictions to csv file
-    logging.info("Saving predictions to csv file...")
-    with open("./data/dev/out.tsv", "w", encoding="utf8") as f:
-        for pred in translated_dev_preds:
-            f.write(pred + "\n")
+    if config['outputs'] == 'labels':
+        # save predictions to csv file
+        logging.info("Saving predictions to csv file...")
+        with open("./data/dev/out.tsv", "w", encoding="utf8") as f:
+            for pred in translated_dev_preds:
+                f.write(pred + "\n")
 
-    with open("./data/test/out.tsv", "w", encoding="utf8") as f:
-        for pred in translated_test_preds:
-            f.write(pred + "\n")
+        with open("./data/test/out.tsv", "w", encoding="utf8") as f:
+            for pred in translated_test_preds:
+                f.write(pred + "\n")
+    else:
+        logging.info("Saving probabilities to csv file...")
+        with open("./data/dev/out.tsv", "w", encoding="utf8") as f:
+            for pred in dev_label_probs:
+                f.write(",".join(pred) + "\n")
+
+        with open("./data/test/out.tsv", "w", encoding="utf8") as f:
+            for pred in test_label_probs:
+                f.write(",".join(pred) + "\n")
 
     # Save the model
     logging.info('Saving the model...')
