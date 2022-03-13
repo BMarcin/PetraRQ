@@ -1,6 +1,6 @@
 #!/bin/bash
 
-sudo apt-get update && sudo apt-get install -y xz-utils build-essential
+apt-get update && apt-get install -y xz-utils build-essential
 /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"
 eval "$(/home/linuxbrew/.linuxbrew/bin/brew shellenv)"
 brew install git-annex
@@ -8,8 +8,8 @@ brew install git-annex
 mkdir -p /home/runner/work/PetraRQ/main_repo/
 echo "Created main repo"
 
-sudo curl -L https://gonito.net/get/bin/geval -o /usr/local/bin/geval
-sudo chmod +x /usr/local/bin/geval
+curl -L https://gonito.net/get/bin/geval -o /usr/local/bin/geval
+chmod +x /usr/local/bin/geval
 
 cd /home/runner/work/PetraRQ/main_repo/
 
