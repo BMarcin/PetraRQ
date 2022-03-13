@@ -37,10 +37,10 @@ stages:
     - ./data/train/processed.tsv
 
   train_classifier:
-    cmd: python ./src/train_random_forest.py
+    cmd: python ./src/train_naive_bayes.py
     deps:
     - ./src/SKLearnDS/SKLearnDS.py
-    - ./src/train_random_forest.py
+    - ./src/train_naive_bayes.py
     - ./data/dev/expected.tsv
     - ./data/dev/processed.tsv
     - ./data/test/expected.tsv
@@ -48,13 +48,11 @@ stages:
     - ./data/train/expected.tsv
     - ./data/train/processed.tsv
     params:
-    - random_forest.n_estimators
-    - random_forest.max_depth
-    - random_forest.outputs
+    - naive_bayes.outputs
     outs:
     - ./data/dev/out.tsv
     - ./data/test/out.tsv
-    - ./models/random_forest/model.pkl
+    - ./models/naive_bayes/model.pkl
     metrics:
       - scores_classification.json:
           cache: false

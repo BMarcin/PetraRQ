@@ -92,57 +92,6 @@ stages:
       md5: 5928e0910854642a694527f5d062f636
       size: 2391144197
       isexec: true
-  train_lm:
-    cmd: python ./src/train_roberta_lm.py
-    deps:
-    - path: ./data/dev/lm.txt
-      md5: 522616a256c93ed35beb5188659e4d16
-      size: 284351504
-    - path: ./data/test/lm.txt
-      md5: b716a3b3d6cd3fb1965a75442c643848
-      size: 605907739
-    - path: ./data/train/lm.txt
-      md5: e78ac7e6bcba6e2c70f7d343ef7eddd3
-      size: 2064421323
-    - path: ./src/train_roberta_lm.py
-      md5: 29c1004ad79268b7c70774ee06e5bc84
-      size: 4866
-    params:
-      params.yaml:
-        language_modeling_train.epochs: 90
-        language_modeling_train.hidden_dropout_prob: 0.1
-        language_modeling_train.hidden_size: 768
-        language_modeling_train.max_seq_length: 512
-        language_modeling_train.mlm_probability: 0.15
-        language_modeling_train.num_attention_heads: 12
-        language_modeling_train.num_hidden_layers: 12
-        language_modeling_train.tokenizer_min_frequency: 2
-        language_modeling_train.vocab_size: 16000
-    outs:
-    - path: ./models/roberta_lm/config.json
-      md5: c3f8213d2122603dbc99a3fea1df705a
-      size: 637
-    - path: ./models/roberta_lm/merges.txt
-      md5: f7306d934e385329af1197c6c02dde1e
-      size: 146002
-    - path: ./models/roberta_lm/pytorch_model.bin
-      md5: d3e5967ae7bcbaf9e3a1c4febc9dde42
-      size: 393462571
-    - path: ./models/roberta_lm/special_tokens_map.json
-      md5: 30d0b45671f60afbb09abb28d04fcfa4
-      size: 845
-    - path: ./models/roberta_lm/tokenizer.json
-      md5: 911520617e7a647f03fe992bc53bf2b8
-      size: 426936
-    - path: ./models/roberta_lm/tokenizer_config.json
-      md5: 328be10604b380d16b8bf095a1bead5f
-      size: 1133
-    - path: ./models/roberta_lm/vocab.json
-      md5: c069d0d3e278577e04142e87b93b82ea
-      size: 247840
-    - path: scores.json
-      md5: d869f95954c10ef7ad67ad2b4bd5208a
-      size: 76
   train_classifier:
     cmd: python ./src/train_random_forest.py
     deps:
@@ -167,28 +116,26 @@ stages:
     - path: ./src/SKLearnDS/SKLearnDS.py
       md5: 4d1063b5067b067968114bd06b7eb8be
       size: 1268
-    - path: ./src/train_random_forest.py
-      md5: e572b8e1e0d0fe99e1234a0ef0d7b306
-      size: 6495
+    - path: ./src/train_naive_bayes.py
+      md5: 88eae1f4173fc649f2b343aaeaf07b91
+      size: 6390
     params:
       params.yaml:
-        random_forest.max_depth: 3
-        random_forest.n_estimators: 300
-        random_forest.outputs: probabilities
+        naive_bayes.outputs: probabilities
     outs:
     - path: ./data/dev/out.tsv
-      md5: c2bc064cfae6179b978ba811a6c2d149
+      md5: 924386d9a17f0d8bd783ed6a88534482
       size: 2416449
       isexec: true
     - path: ./data/test/out.tsv
-      md5: ca5a7f425cfe82caa45c98fd90077a71
+      md5: 2e55175c0850b29ee22dcbf55c42ddd6
       size: 4835313
       isexec: true
-    - path: ./models/random_forest/model.pkl
-      md5: 6acba1c250d1e446a809148cd2570189
-      size: 7157621
+    - path: ./models/naive_bayes/model.pkl
+      md5: 90280fa357885e8de58b057cfd88eee7
+      size: 504397474
       isexec: true
     - path: scores_classification.json
-      md5: 207a5024df66f4bc2b1c2faf5ab5ece8
-      size: 143
+      md5: faabd80e924c14eb5ec20380fac9ce01
+      size: 141
       isexec: true
