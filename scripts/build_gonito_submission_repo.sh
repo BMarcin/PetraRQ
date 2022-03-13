@@ -27,6 +27,7 @@ git switch -c "$BRANCH_NAME"
 cp /home/runner/work/PetraRQ/PetraRQ/README.md .
 cp /home/runner/work/PetraRQ/PetraRQ/config.txt .
 cp /home/runner/work/PetraRQ/PetraRQ/.gitignore .
+cp /home/runner/work/PetraRQ/PetraRQ/gonito.yaml .
 
 mkdir -p ./train
 mkdir -p ./dev-0
