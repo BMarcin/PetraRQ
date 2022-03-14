@@ -33,3 +33,5 @@ classification_train:
 
   per_device_train_batch_size: 21
   per_device_eval_batch_size: 30
+
+  outputs: probabilities #labels or probabilities
