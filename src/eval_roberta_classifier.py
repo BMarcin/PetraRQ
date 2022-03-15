@@ -62,19 +62,17 @@ if __name__ == '__main__':
     labels = pd.concat([labels1, labels2, labels3])
     unique_labels = set([label.strip().lower() for _, row in labels.iterrows() for label in row[0].split(" ")])
 
-    # create datasets
-    logging.info("Creating datasets...")
-    dev_ds = ClassificationDataset(data1, labels1, unique_labels, tokenizer)
-    test_ds = ClassificationDataset(data2, labels2, unique_labels, tokenizer)
-
-    num_labels = len(unique_labels)
-
     # define model
     logging.info("Defining model...")
-    model = RobertaForSequenceClassification.from_pretrained(models_path, num_labels=num_labels)
+    model = RobertaForSequenceClassification.from_pretrained(models_path)
 
-    # predict dev set
-    logging.info("Predicting dev set...")
-    dev_preds = model(dev_ds).predictions
-    test_preds = model(test_ds).predictions
+    for id, text in data1.iterrows():
+        predictions = model([text[0]])
+        print(predictions)
+        break
+
+    # # predict dev set
+    # logging.info("Predicting dev set...")
+    # dev_preds = model(dev_ds).predictions
+    # test_preds = model(test_ds).predictions
 
