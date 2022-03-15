@@ -2,10 +2,9 @@ import logging
 import os
 
 import pandas as pd
+import torch
 import yaml
-from transformers import RobertaTokenizerFast, RobertaForSequenceClassification, Trainer
-
-from ClassificationDataset import ClassificationDataset
+from transformers import TextClassificationPipeline, RobertaForSequenceClassification, RobertaTokenizerFast
 
 if __name__ == '__main__':
     logging.basicConfig(
@@ -40,11 +39,6 @@ if __name__ == '__main__':
     tokenizer = RobertaTokenizerFast.from_pretrained(lm_model_path, max_len=config_train['max_seq_length'],
                                                      use_fast=True)
 
-    # add special tokens
-    tokenizer.add_special_tokens({
-        'additional_special_tokens': special_tokens
-    })
-
     # load datasets
     logging.info("Loading datasets...")
     data1 = pd.read_csv("./data/dev/processed.tsv", delimiter='\t', header=None, encoding="utf8", quoting=0)
@@ -64,10 +58,17 @@ if __name__ == '__main__':
 
     # define model
     logging.info("Defining model...")
-    model = RobertaForSequenceClassification.from_pretrained(models_path)
+    # model = RobertaForSequenceClassification.from_pretrained(models_path)
+    pipe = TextClassificationPipeline(
+        model=RobertaForSequenceClassification.from_pretrained(models_path),
+        tokenizer=tokenizer,
+        return_all_scores=True,
+    )
+
+    print(tokenizer("Hello!"))
 
     for id, text in data1.iterrows():
-        predictions = model([text[0]])
+        predictions = pipe("Hello!")
         print(predictions)
         break
 
