@@ -22,10 +22,9 @@ jobs:
         env:
           GONITO_PRIVATE_SSH: ${{secrets.GONITO_PRIVATE_SSH}}
 
-      - name: check SSH key file
+      - name: test cloning
         run: |
-            ls -l ~/.ssh/ && \
-            cat ~/.ssh/known_hosts
+            git clone ssh://gitolite@gonito.net/eur-lex-documents
 
       - name: Checkout code
         uses: actions/checkout@v2
