@@ -1,6 +1,6 @@
-description: Random forest classifier
+description: Fast text classifier
 tags:
-  - random-forest
+  - fasttext
 param-files:
   - "params.yaml"
 links:
