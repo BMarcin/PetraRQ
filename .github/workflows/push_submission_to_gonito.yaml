@@ -17,16 +17,15 @@ jobs:
           apt-get upgrade -y && \
           apt-get install -y git ssh
 
-      - name: Add SSH key
-        run: chmod +x ./scripts/add_ssh_key.sh && ./scripts/add_ssh_key.sh
-        env:
-          GONITO_PRIVATE_SSH: ${{secrets.GONITO_PRIVATE_SSH}}
-
       - name: test cloning
         run: |
+            chmod +x ./scripts/add_ssh_key.sh && \
+            ./scripts/add_ssh_key.sh && \
             mkdir -p /home/runner/work/PetraRQ/main_repo/ && \
             cd /home/runner/work/PetraRQ/main_repo/ && \
             git clone ssh://gitolite@gonito.net/eur-lex-documents
+        env:
+          GONITO_PRIVATE_SSH: ${{secrets.GONITO_PRIVATE_SSH}}
 
       - name: Checkout code
         uses: actions/checkout@v2
