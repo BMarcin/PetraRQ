@@ -1,6 +1,6 @@
-description: Random forest classifier
+description: XGBoost classifier
 tags:
-  - random-forest
+  - xgboost
 param-files:
   - "params.yaml"
 links:
