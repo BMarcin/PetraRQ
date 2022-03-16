@@ -17,6 +17,14 @@ jobs:
           apt-get upgrade -y && \
           apt-get install -y git ssh
 
+      - name: Add SSH key
+        run: chmod +x ./scripts/add_ssh_key.sh && ./scripts/add_ssh_key.sh
+        env:
+          GONITO_PRIVATE_SSH: ${{secrets.GONITO_PRIVATE_SSH}}
+
+      - name: check SSH key file
+        run: ls -l ~/.ssh/
+
       - name: Checkout code
         uses: actions/checkout@v2
 
@@ -36,11 +44,6 @@ jobs:
 
       - name: Makefile
         run: make all
-
-      - name: Add SSH key
-        run: chmod +x ./scripts/add_ssh_key.sh && ./scripts/add_ssh_key.sh
-        env:
-          GONITO_PRIVATE_SSH: ${{secrets.GONITO_PRIVATE_SSH}}
 
       - name: Set Branch Environment
         run: echo "BRANCH_NAME=${GITHUB_REF##*/}" >> $GITHUB_ENV
