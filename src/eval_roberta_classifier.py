@@ -4,6 +4,7 @@ import os
 import pandas as pd
 import torch
 import yaml
+from tqdm.auto import tqdm
 from transformers import TextClassificationPipeline, RobertaForSequenceClassification, RobertaTokenizerFast
 
 if __name__ == '__main__':
@@ -36,8 +37,9 @@ if __name__ == '__main__':
     ]
 
     logging.info("Loading tokenizer...")
-    tokenizer = RobertaTokenizerFast.from_pretrained(lm_model_path, max_len=config_train['max_seq_length'],
-                                                     use_fast=True)
+    tokenizer = RobertaTokenizerFast.from_pretrained(
+        lm_model_path,
+        use_fast=True)
 
     # load datasets
     logging.info("Loading datasets...")
@@ -60,24 +62,31 @@ if __name__ == '__main__':
     logging.info("Defining model...")
     # model = RobertaForSequenceClassification.from_pretrained(models_path)
     pipe = TextClassificationPipeline(
-        model=RobertaForSequenceClassification.from_pretrained(models_path),
+        model=RobertaForSequenceClassification.from_pretrained(models_path, ),
         tokenizer=tokenizer,
         return_all_scores=True,
+        max_length=config_train['max_seq_length'],
+        truncation=True,
     )
 
-    print(tokenizer("Hello!"))
+    print(data1[0])
 
-    for id, text in data1.iterrows():
-        predictions = pipe("Hello!")
+    dev_probabilities = []
+    dev_predictions = pipe(list(data1[0]))
 
+    for probe in tqdm(dev_predictions, desc="Predicting dev set"):
         labels_probabilities = []
-        for label, label_name in zip(predictions[0], unique_labels):
+        for label, label_name in zip(probe, unique_labels):
             labels_probabilities.append("{}:{:.9f}".format(label_name, label['score']))
-        print(labels_probabilities)
-        break
+        dev_probabilities.append(" ".join(labels_probabilities))
 
-    # # predict dev set
-    # logging.info("Predicting dev set...")
-    # dev_preds = model(dev_ds).predictions
-    # test_preds = model(test_ds).predictions
+    test_probabilities = []
+    test_predictions = pipe(list(data2[0]))
+
+    for probe in tqdm(test_predictions, desc="Predicting test set"):
+        labels_probabilities = []
+        for label, label_name in zip(probe, unique_labels):
+            labels_probabilities.append("{}:{:.9f}".format(label_name, label['score']))
+        test_probabilities.append(" ".join(labels_probabilities))
+
 
