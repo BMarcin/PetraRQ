@@ -69,7 +69,11 @@ if __name__ == '__main__':
 
     for id, text in data1.iterrows():
         predictions = pipe("Hello!")
-        print(predictions)
+
+        labels_probabilities = []
+        for label, label_name in zip(predictions[0], unique_labels):
+            labels_probabilities.append("{}:{:.9f}".format(label_name, label['score']))
+        print(labels_probabilities)
         break
 
     # # predict dev set
