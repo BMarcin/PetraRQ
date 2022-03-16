@@ -23,7 +23,9 @@ jobs:
           GONITO_PRIVATE_SSH: ${{secrets.GONITO_PRIVATE_SSH}}
 
       - name: check SSH key file
-        run: ls -l ~/.ssh/
+        run: |
+            ls -l ~/.ssh/ && \
+            cat ~/.ssh/known_hosts
 
       - name: Checkout code
         uses: actions/checkout@v2
