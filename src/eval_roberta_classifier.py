@@ -69,24 +69,42 @@ if __name__ == '__main__':
         truncation=True,
     )
 
-    print(data1[0])
-
+    # predict dev set
+    logging.info("Predicting dev set...")
     dev_probabilities = []
-    dev_predictions = pipe(list(data1[0]))
+    dev_predictions = pipe(list(data1[0]), batch_size=config['per_device_eval_batch_size'])
 
+    # rewrite predictions
+    logging.info("Rewriting predictions...")
     for probe in tqdm(dev_predictions, desc="Predicting dev set"):
         labels_probabilities = []
         for label, label_name in zip(probe, unique_labels):
             labels_probabilities.append("{}:{:.9f}".format(label_name, label['score']))
         dev_probabilities.append(" ".join(labels_probabilities))
 
-    test_probabilities = []
-    test_predictions = pipe(list(data2[0]))
+    # write predictions to file
+    logging.info("Writing predictions to file...")
+    with open("./data/dev/out.tsv", "w") as f:
+        for line in dev_probabilities:
+            f.write(line + "\n")
 
+    # predict test set
+    logging.info("Predicting test set...")
+    test_probabilities = []
+    test_predictions = pipe(list(data2[0]), batch_size=config['per_device_eval_batch_size'])
+
+    # rewrite predictions
+    logging.info("Rewriting predictions...")
     for probe in tqdm(test_predictions, desc="Predicting test set"):
         labels_probabilities = []
         for label, label_name in zip(probe, unique_labels):
             labels_probabilities.append("{}:{:.9f}".format(label_name, label['score']))
         test_probabilities.append(" ".join(labels_probabilities))
+
+    # write predictions to file
+    logging.info("Writing predictions to file...")
+    with open("./data/test/out.tsv", "w") as f:
+        for line in test_probabilities:
+            f.write(line + "\n")
 
 
