@@ -24,6 +24,8 @@ jobs:
 
       - name: test cloning
         run: |
+            mkdir -p /home/runner/work/PetraRQ/main_repo/ && \
+            cd /home/runner/work/PetraRQ/main_repo/ && \
             git clone ssh://gitolite@gonito.net/eur-lex-documents
 
       - name: Checkout code
