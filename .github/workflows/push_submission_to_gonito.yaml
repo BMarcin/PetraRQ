@@ -21,8 +21,7 @@ jobs:
         run: |
             chmod +x ./scripts/add_ssh_key.sh && \
             ./scripts/add_ssh_key.sh && \
-            ls -la ~/.ssh/ && \
-            cat ~/.ssh/known_hosts && \
+            ls -la ~/.ssh/ &&
             mkdir -p /home/runner/work/PetraRQ/main_repo/ && \
             cd /home/runner/work/PetraRQ/main_repo/ && \
             git clone ssh://gitolite@gonito.net/eur-lex-documents
