@@ -8,7 +8,6 @@ on:
 jobs:
   PushToGonito:
     runs-on: self-hosted
-    container: python:3.9
 
     steps:
       - name: Checkout code
@@ -18,10 +17,6 @@ jobs:
         run: chmod +x ./scripts/add_ssh_key.sh && ./scripts/add_ssh_key.sh
         env:
           GONITO_PRIVATE_SSH: ${{secrets.GONITO_PRIVATE_SSH}}
-
-      - name: test
-        run: |
-          git clone ssh://gitolite@gonito.net/eur-lex-documents
 
       - name: Add needed dirs
         run: mkdir ./.dvc/tmp
