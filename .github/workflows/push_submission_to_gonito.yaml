@@ -11,12 +11,6 @@ jobs:
     container: bmarcin/docker-kubectl-azurecli:latest
 
     steps:
-      - name: Install SSH & git
-        run: |
-          apt-get update && \
-          apt-get upgrade -y && \
-          apt-get install -y git ssh
-
       - name: test cloning
         run: |
             chmod +x ./scripts/add_ssh_key.sh && \
