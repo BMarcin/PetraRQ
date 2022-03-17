@@ -8,7 +8,7 @@ on:
 jobs:
   PushToGonito:
     runs-on: self-hosted
-    container: bmarcin/docker-kubectl-azurecli:latest
+    container: python:3.9
 
     steps:
       - name: Checkout code
