@@ -8,6 +8,7 @@ on:
 jobs:
   PushToGonito:
     runs-on: self-hosted
+    image: python:3.8
 
     steps:
       - name: Checkout code
