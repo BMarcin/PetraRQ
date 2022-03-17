@@ -13,11 +13,6 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@v2
 
-      - name: Add SSH key
-        run: chmod +x ./scripts/add_ssh_key.sh && ./scripts/add_ssh_key.sh
-        env:
-          GONITO_PRIVATE_SSH: ${{secrets.GONITO_PRIVATE_SSH}}
-
       - name: Add needed dirs
         run: mkdir ./.dvc/tmp
 
@@ -27,13 +22,18 @@ jobs:
           BMARCINAI_GOOGLE_CREDENTIALS: ${{secrets.BMARCINAI_GOOGLE_CREDENTIALS}}
 
       - name: Download & install DVC
-        run: apt-get update && apt-get install -y wget && wget https://dvc.org/download/linux-deb/dvc-2.9.4 && dpkg -i dvc-2.9.4
+        run: wget https://dvc.org/download/linux-deb/dvc-2.7.4 && sudo dpkg -i dvc-2.7.4
 
       - name: Install requirements
         run: pip install -r requirements.txt
 
       - name: Makefile
         run: make
+
+      - name: Add SSH key
+        run: chmod +x ./scripts/add_ssh_key.sh && ./scripts/add_ssh_key.sh
+        env:
+          GONITO_PRIVATE_SSH: ${{secrets.GONITO_PRIVATE_SSH}}
 
       - name: Set Branch Environment
         run: echo "BRANCH_NAME=${GITHUB_REF##*/}" >> $GITHUB_ENV
