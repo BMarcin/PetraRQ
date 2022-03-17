@@ -11,19 +11,17 @@ jobs:
     container: bmarcin/docker-kubectl-azurecli:latest
 
     steps:
-      - name: test cloning
-        run: |
-            chmod +x ./scripts/add_ssh_key.sh && \
-            ./scripts/add_ssh_key.sh && \
-            ls -la ~/.ssh/ &&
-            mkdir -p /home/runner/work/PetraRQ/main_repo/ && \
-            cd /home/runner/work/PetraRQ/main_repo/ && \
-            git clone ssh://gitolite@gonito.net/eur-lex-documents
+      - name: Checkout code
+        uses: actions/checkout@v2
+
+      - name: Add SSH key
+        run: chmod +x ./scripts/add_ssh_key.sh && ./scripts/add_ssh_key.sh
         env:
           GONITO_PRIVATE_SSH: ${{secrets.GONITO_PRIVATE_SSH}}
 
-      - name: Checkout code
-        uses: actions/checkout@v2
+      - name: test
+        run: |
+          git clone ssh://gitolite@gonito.net/eur-lex-documents
 
       - name: Add needed dirs
         run: mkdir ./.dvc/tmp
@@ -40,7 +38,7 @@ jobs:
         run: pip install -r requirements.txt
 
       - name: Makefile
-        run: make all
+        run: make
 
       - name: Set Branch Environment
         run: echo "BRANCH_NAME=${GITHUB_REF##*/}" >> $GITHUB_ENV
