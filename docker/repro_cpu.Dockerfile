@@ -44,3 +44,5 @@ COPY requirements.txt ./requirements.txt
 RUN pip install -r requirements.txt --no-cache-dir
 
 COPY . .
+
+RUN chmod -R 777 /app/scripts/
