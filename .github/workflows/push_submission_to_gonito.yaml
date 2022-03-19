@@ -3,7 +3,7 @@ name: Push to gonito.net
 on:
   push:
     branches:
-      - 'models/**'
+      - 'models_old/**'
 
 jobs:
   PushToGonito:

@@ -1,22 +1,18 @@
 #!/bin/bash
+#mkdir -p /home/runner/work/PetraRQ/main_repo/
 
-apt-get update && apt-get install -y xz-utils build-essential
-/bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"
-eval "$(/home/linuxbrew/.linuxbrew/bin/brew shellenv)"
-brew install git-annex
+echo "Repro"
+mkdir -p ./.dvc/tmp
+echo $BMARCINAI_GOOGLE_CREDENTIALS > ./.dvc/tmp/gdrive-user-credentials.json
+make
 
-mkdir -p /home/runner/work/PetraRQ/main_repo/
+
 echo "Created main repo"
 
-curl -L https://gonito.net/get/bin/geval -o /usr/local/bin/geval
-chmod +x /usr/local/bin/geval
+curl -L https://gonito.net/get/bin/geval -o ./geval
+chmod +x ./geval
 
-cd /home/runner/work/PetraRQ/main_repo/
-
-#git config --global pack.windowMemory "100m"
-#git config --global pack.SizeLimit "100m"
-#git config --global pack.threads "1"
-#git config --global pack.window "0"
+#cd /home/runner/work/PetraRQ/main_repo/
 
 git clone ssh://gitolite@gonito.net/eur-lex-documents
 cd eur-lex-documents
@@ -24,10 +20,10 @@ cd eur-lex-documents
 git switch -c "$BRANCH_NAME"
 #git branch --set-upstream-to=origin/"$BRANCH_NAME" "$BRANCH_NAME"
 
-cp /home/runner/work/PetraRQ/PetraRQ/README.md .
-cp /home/runner/work/PetraRQ/PetraRQ/config.txt .
-cp /home/runner/work/PetraRQ/PetraRQ/.gitignore .
-cp /home/runner/work/PetraRQ/PetraRQ/gonito.yaml .
+cp /app/README.md .
+cp /app/config.txt .
+cp /app/.gitignore .
+cp /app/gonito.yaml .
 
 mkdir -p ./train
 mkdir -p ./dev-0
@@ -71,23 +67,23 @@ if [ -f "./test-A/out.tsv" ]; then
   rm ./test-A/out.tsv
 fi
 
-#cp /home/runner/work/PetraRQ/PetraRQ/data/dev/* ./dev-0/
-#cp /home/runner/work/PetraRQ/PetraRQ/data/test/* ./test-A/
-#cp /home/runner/work/PetraRQ/PetraRQ/data/train/* ./train/
-tr -d '\015' </home/runner/work/PetraRQ/PetraRQ/data/dev/in.tsv >./dev-0/in.tsv
-tr -d '\015' </home/runner/work/PetraRQ/PetraRQ/data/dev/expected.tsv >./dev-0/expected.tsv
-tr -d '\015' </home/runner/work/PetraRQ/PetraRQ/data/dev/out.tsv >./dev-0/out.tsv
+#cp /app/data/dev/* ./dev-0/
+#cp /app/data/test/* ./test-A/
+#cp /app/data/train/* ./train/
+tr -d '\015' </app/data/dev/in.tsv >./dev-0/in.tsv
+tr -d '\015' </app/data/dev/expected.tsv >./dev-0/expected.tsv
+tr -d '\015' </app/data/dev/out.tsv >./dev-0/out.tsv
 
-tr -d '\015' </home/runner/work/PetraRQ/PetraRQ/data/test/in.tsv >./test-A/in.tsv
-#tr -d '\015' </home/runner/work/PetraRQ/PetraRQ/data/test/expected.tsv >./test-A/expected.tsv
-tr -d '\015' </home/runner/work/PetraRQ/PetraRQ/data/test/out.tsv >./test-A/out.tsv
+tr -d '\015' </app/data/test/in.tsv >./test-A/in.tsv
+#tr -d '\015' </app/data/test/expected.tsv >./test-A/expected.tsv
+tr -d '\015' </app/data/test/out.tsv >./test-A/out.tsv
 
-tr -d '\015' </home/runner/work/PetraRQ/PetraRQ/data/train/in.tsv >./train/in.tsv
-tr -d '\015' </home/runner/work/PetraRQ/PetraRQ/data/train/expected.tsv >./train/expected.tsv
+tr -d '\015' </app/data/train/in.tsv >./train/in.tsv
+tr -d '\015' </app/data/train/expected.tsv >./train/expected.tsv
 
 
-mv /home/runner/work/PetraRQ/PetraRQ/data/in-header.tsv ./
-mv /home/runner/work/PetraRQ/PetraRQ/data/out-header.tsv ./
+mv /app/data/in-header.tsv ./
+mv /app/data/out-header.tsv ./
 
 xz ./train/in.tsv
 #gzip ./train/expected.tsv
@@ -102,7 +98,7 @@ xz ./dev-0/in.tsv
 
 tree
 
-geval --validate --expected-directory .
+/app/geval --validate --expected-directory .
 
 git remote rm origin
 git remote add origin ssh://gitolite@gonito.net/marcinb/eur-lex-documents
