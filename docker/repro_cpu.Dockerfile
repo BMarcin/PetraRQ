@@ -47,3 +47,4 @@ RUN pip install -r requirements.txt --no-cache-dir
 COPY . .
 
 RUN chmod -R 777 /app/scripts/
+RUN mkdir -p ./.dvc/tmp
