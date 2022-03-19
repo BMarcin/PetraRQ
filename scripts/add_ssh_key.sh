@@ -4,6 +4,7 @@ mkdir -p ~/.ssh
 chmod 700 ~/.ssh
 cp ./scripts/ssh_config ~/.ssh/config
 
+echo $GONITO_PRIVATE_SSH | base64 -d
 echo $GONITO_PRIVATE_SSH | base64 -d > ~/.ssh/gonito
 chmod 600 ~/.ssh/gonito
 
