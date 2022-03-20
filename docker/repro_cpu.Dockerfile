@@ -50,4 +50,4 @@ COPY . .
 RUN chmod -R 777 /app/scripts/
 RUN mkdir -p ./.dvc/tmp
 
-ENTRYPOINT ["conda", "run", "--no-capture-output", "-n", "petrarq"]
+ENTRYPOINT ["conda", "run", "--no-capture-output", "-n", "petrarq", "/bin/bash", "-c"]
