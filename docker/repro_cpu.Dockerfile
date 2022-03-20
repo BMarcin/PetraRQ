@@ -48,3 +48,5 @@ COPY . .
 
 RUN chmod -R 777 /app/scripts/
 RUN mkdir -p ./.dvc/tmp
+
+ENTRYPOINT ["conda", "run", "-n", "petrarq", "/bin/bash", "-c"]
