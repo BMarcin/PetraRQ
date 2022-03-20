@@ -36,7 +36,7 @@ SHELL ["conda", "run", "-n", "petrarq", "/bin/bash", "-c"]
 RUN pip install unidecode --upgrade
 RUN python -m pip install --upgrade pip setuptools wheel
 
-RUN conda install -c conda-forge git-annex
+RUN conda install -c conda-forge -y git-annex
 
 RUN wget https://dvc.org/download/linux-deb/dvc-2.7.4
 RUN dpkg -i dvc-2.7.4
