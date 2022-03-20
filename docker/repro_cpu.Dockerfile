@@ -50,5 +50,4 @@ COPY . .
 RUN chmod -R 777 /app/scripts/
 RUN mkdir -p ./.dvc/tmp
 
-RUN conda init bash
 RUN echo "conda activate petrarq" > ~/.bashrc
