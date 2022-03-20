@@ -32,6 +32,7 @@ RUN rm -f Miniconda3-latest-Linux-x86_64.sh
 RUN conda update -n base -c defaults conda
 RUN conda create -n petrarq python=3.8
 SHELL ["conda", "run", "-n", "petrarq", "/bin/bash", "-c"]
+ENV PATH /root/.conda/envs/petrarq/bin:$PATH
 
 RUN pip install unidecode --upgrade
 RUN python -m pip install --upgrade pip setuptools wheel
@@ -49,4 +50,4 @@ COPY . .
 RUN chmod -R 777 /app/scripts/
 RUN mkdir -p ./.dvc/tmp
 
-ENTRYPOINT ["conda", "run", "-n", "petrarq"]
+#ENTRYPOINT ["conda", "run", "-n", "petrarq"]
