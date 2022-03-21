@@ -7,7 +7,7 @@ on:
 
 jobs:
   DockerBuildPush:
-    runs-on: ubuntu-lastest
+    runs-on: ubuntu-latest
 
     steps:
       - name: Checkout code
@@ -42,3 +42,7 @@ jobs:
           cache-to: type=inline
           build-args: |
             BRANCH=${{ env.BRANCH }}
+
+  PushToGonito:
+    runs-on: self-hosted
+    container: ghcr.io/bmarcin/petrarq
