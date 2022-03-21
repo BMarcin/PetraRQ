@@ -159,11 +159,11 @@ if __name__ == '__main__':
         logging.info("Saving probabilities to csv file...")
         with open("./data/dev/out.tsv", "w", encoding="utf8") as f:
             for pred in dev_label_probs:
-                f.write(",".join(pred) + "\n")
+                f.write(" ".join(pred) + "\n")
 
         with open("./data/test/out.tsv", "w", encoding="utf8") as f:
             for pred in test_label_probs:
-                f.write(",".join(pred) + "\n")
+                f.write(" ".join(pred) + "\n")
 
     # Save the model
     logging.info('Saving the model...')
