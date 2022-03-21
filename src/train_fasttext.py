@@ -76,6 +76,8 @@ if __name__ == '__main__':
             label_name = label_name.replace("__label__", "")
             if label_weight >= 0.5:
                 true_labels.append(label_name)
+            if label_weight > 1:
+                label_weight = 1
             probes.append("{}:{:.9f}".format(label_name, label_weight))
         dev_label_probs.append(probes)
 
@@ -103,6 +105,8 @@ if __name__ == '__main__':
             label_name = label_name.replace("__label__", "")
             if label_weight >= 0.5:
                 true_labels.append(label_name)
+            if label_weight > 1:
+                label_weight = 1
             probes.append("{}:{:.9f}".format(label_name, label_weight))
         test_label_probs.append(probes)
 
