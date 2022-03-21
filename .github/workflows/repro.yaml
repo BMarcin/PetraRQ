@@ -43,6 +43,3 @@ jobs:
           build-args: |
             BRANCH=${{ env.BRANCH }}
 
-  PushToGonito:
-    runs-on: self-hosted
-    container: ghcr.io/bmarcin/petrarq
