@@ -70,7 +70,7 @@ jobs:
         run: echo "BRANCH_NAME=${GITHUB_REF##*/}" >> $GITHUB_ENV
 
       - name: Submit to Gonito
-        run: cp -rT /app/ /app2/ && /app2/scripts/build_gonito_submission_repo.sh
+        run: whoami && pwd && cp -rT /app/ /app2/ && /app2/scripts/build_gonito_submission_repo.sh
         env:
           COMMIT_MESSAGE: ${{ github.event.head_commit.message }}
           BRANCH_NAME: ${{ env.BRANCH_NAME }}

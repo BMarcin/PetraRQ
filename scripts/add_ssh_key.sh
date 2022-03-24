@@ -1,5 +1,8 @@
 #!/bin/bash
 
+whoami
+pwd
+
 mkdir -p ~/.ssh
 chmod 700 ~/.ssh
 cp ./scripts/ssh_config ~/.ssh/config
