@@ -48,7 +48,7 @@ jobs:
     needs:
       - DockerBuildPush
     container:
-      image: ghcr.io/bmarcin/petrarq
+      image: ghcr.io/bmarcin/petrarq:fasttext
       volumes:
         - /storage/petrarq_volume:/app2/
       credentials:
