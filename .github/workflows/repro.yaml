@@ -50,7 +50,7 @@ jobs:
     container:
       image: ghcr.io/bmarcin/petrarq:fasttext
       volumes:
-        - /storage/petrarq_volume:/app2/
+        - /mnt/e/actions-runner/data/petrarq-fasttext/:/app2/
       credentials:
        username: ${{ github.actor }}
        password: ${{ secrets.DOCKER_TOKEN }}
