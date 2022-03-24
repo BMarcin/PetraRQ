@@ -57,9 +57,9 @@ jobs:
 
     steps:
       - name: Test secrets
-        run: echo ${{TEST}} >> ./test.txt
+        run: echo ${TEST} >> ./test.txt
         env:
-          TEST: ${{ secrets.TEST }}
+          TEST: ${{secrets.TEST}}
 
       - name: Add SSH key
         run: /app/scripts/add_ssh_key.sh
