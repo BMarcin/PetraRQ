@@ -51,9 +51,9 @@ jobs:
       image: ghcr.io/bmarcin/petrarq
       volumes:
         - /storage/petrarq_volume:/app2/
-    credentials:
-     username: ${{ github.actor }}
-     password: ${{ secrets.DOCKER_TOKEN }}
+      credentials:
+       username: ${{ github.actor }}
+       password: ${{ secrets.DOCKER_TOKEN }}
 
     steps:
       - name: Add SSH key
