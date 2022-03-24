@@ -49,7 +49,7 @@ jobs:
       - DockerBuildPush
     container:
       image: ghcr.io/bmarcin/petrarq
-      volmes:
+      volumes:
         - /storage/petrarq_volume:/app2/
 
     steps:
