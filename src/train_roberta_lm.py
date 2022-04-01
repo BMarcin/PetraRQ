@@ -13,6 +13,7 @@ from transformers import Trainer, TrainingArguments
 import math
 
 os.environ['TOKENIZERS_PARALLELISM'] = 'true'
+os.environ["WANDB_DISABLED"] = "true"
 
 
 def encode(examples):
