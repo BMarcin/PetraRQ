@@ -3,6 +3,7 @@ import logging
 import os
 import pickle
 from itertools import repeat
+import random
 
 import numpy as np
 import pandas as pd
@@ -24,6 +25,10 @@ if __name__ == '__main__':
     # Load config
     logging.info("Loading config...")
     config = yaml.safe_load(open("./params.yaml"))['logistic_regression']
+
+    # set random state
+    np.random.seed(config['seed'])
+    random.seed(config['seed'])
 
     # Load the data
     logging.info('Loading data...')
@@ -53,7 +58,7 @@ if __name__ == '__main__':
 
     # Train the model
     logging.info('Training the model...')
-    log_reg = OneVsRestClassifier(LogisticRegression(solver=config['solver'])).fit(ds_texts, ds_labels)
+    log_reg = OneVsRestClassifier(LogisticRegression(solver=config['solver']), n_jobs=config['threads']).fit(ds_texts, ds_labels)
 
     # Predict
     logging.info('Predicting...')
@@ -141,5 +146,11 @@ if __name__ == '__main__':
     os.makedirs("./models/logistic_regression", exist_ok=True)
     with open("./models/logistic_regression/model.pkl", "wb") as f:
         pickle.dump(log_reg, f)
+
+    with open("./models/logistic_regression/vectorizer.pkl", "wb") as f:
+        pickle.dump(ds_train.count_vect, f)
+
+    with open("./models/logistic_regression/labels.pkl", "wb") as f:
+        pickle.dump(unique_labels, f)
 
     logging.info('Done!')
