@@ -20,6 +20,22 @@ stages:
     - ./data/train/expected.tsv
     - ./data/train/in.tsv
 
+  rewrite_dataset_to_lm_texts:
+    cmd: python ./src/rewrite_dataset.py
+    deps:
+    - ./src/DatasetRewriter/LanguageModelingRewriter.py
+    - ./src/rewrite_dataset.py
+    - ./data/dev/in.tsv
+    - ./data/test/in.tsv
+    - ./data/train/in.tsv
+    outs:
+    - ./data/dev/lm.txt
+    - ./data/test/lm.txt
+    - ./data/train/lm.txt
+    - ./data/dev/processed.tsv
+    - ./data/test/processed.tsv
+    - ./data/train/processed.tsv
+
   train_classifier:
     cmd: python ./src/train_logistic_regression.py
     deps:
