@@ -1,7 +1,7 @@
 #!/bin/bash
 set -euo pipefail
 
-cd /app
+cd /app2
 
 echo "Repro"
 mkdir -p ./.dvc/tmp
