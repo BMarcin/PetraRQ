@@ -44,11 +44,13 @@ jobs:
             BRANCH=${{ env.BRANCH }}
 
   PushToGonito:
-    runs-on: ubuntu-latest
+    runs-on: self-hosted
     needs:
       - DockerBuildPush
     container:
-      image: ghcr.io/bmarcin/petrarq:logistic_regression
+      image: ghcr.io/bmarcin/petrarq:fasttext
+      volumes:
+        - /mnt/e/actions-runner/data/petrarq-logistic_regression/:/app2/
       credentials:
        username: ${{ github.actor }}
        password: ${{ secrets.DOCKER_TOKEN }}
