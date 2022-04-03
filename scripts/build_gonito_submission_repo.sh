@@ -4,7 +4,7 @@ set -euo pipefail
 cd /app2
 
 echo "Repro"
-mkdir -p ./.dvc/tmp
+mkdir -p /app2/.dvc/tmp
 echo $BMARCINAI_GOOGLE_CREDENTIALS > ./.dvc/tmp/gdrive-user-credentials.json
 make
 
@@ -18,8 +18,8 @@ cd eur-lex-documents
 
 git switch -c "$BRANCH_NAME"
 
-mkdir -p ./src
-mkdir -p ./docker
+mkdir -p /app2/src
+mkdir -p /app2/docker
 
 cp /app2/README.md .
 cp /app2/config.txt .
