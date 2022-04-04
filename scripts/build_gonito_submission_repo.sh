@@ -18,8 +18,8 @@ cd eur-lex-documents
 
 git switch -c "$BRANCH_NAME"
 
-mkdir -p /app2/src
-mkdir -p /app2/docker
+mkdir -p ./src
+mkdir -p ./docker
 
 cp /app2/README.md .
 cp /app2/config.txt .
