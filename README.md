@@ -13,8 +13,7 @@ Repository has got already builded docker image. To use it just pull it from ghc
 docker pull ghcr.io/BMarcin/PetraRQ:<branch tag>
 ```
 
-For example to pull docker image for branch "models/logistic_regression" (on github) 
-or "logistic_regression" (on gonito.net) run:
+For example to pull docker image for branch "models/logistic_regression" (on github) or "logistic_regression" (on gonito.net) run:
 ```bash
 docker pull ghcr.io/BMarcin/PetraRQ:logistic_regression
 ```
