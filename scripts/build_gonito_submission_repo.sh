@@ -67,6 +67,10 @@ if [ -f "./test-A/in.tsv.xz" ]; then
   rm ./test-A/in.tsv.xz
 fi
 
+if [ -f "./test-A/expected.tsv" ]; then
+  rm ./test-A/expected.tsv
+fi
+
 if [ -f "./test-A/out.tsv" ]; then
   rm ./test-A/out.tsv
 fi
@@ -87,13 +91,9 @@ mv /app2/data/out-header.tsv ./
 xz ./train/in.tsv
 xz ./test-A/in.tsv
 xz ./dev-0/in.tsv
-/app2/geval --validate --expected-directory .
+#/app2/geval --validate --expected-directory .
 
 tr -d '\015' </app2/data/dev/out.tsv >./dev-0/out.tsv
-
-if [ -f "./test-A/expected.tsv" ]; then
-  rm ./test-A/expected.tsv
-fi
 
 git remote rm origin
 git remote add origin ssh://gitolite@gonito.net/marcinb/eur-lex-documents
