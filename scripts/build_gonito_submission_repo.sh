@@ -77,7 +77,6 @@ fi
 
 tr -d '\015' </app2/data/dev/in.tsv >./dev-0/in.tsv
 tr -d '\015' </app2/data/dev/expected.tsv >./dev-0/expected.tsv
-tr -d '\015' </app2/data/dev/out.tsv >./dev-0/out.tsv
 
 tr -d '\015' </app2/data/test/in.tsv >./test-A/in.tsv
 tr -d '\015' </app2/data/test/out.tsv >./test-A/out.tsv
@@ -93,6 +92,8 @@ xz ./train/in.tsv
 xz ./test-A/in.tsv
 xz ./dev-0/in.tsv
 /app2/geval --validate --expected-directory .
+
+tr -d '\015' </app2/data/dev/out.tsv >./dev-0/out.tsv
 
 git remote rm origin
 git remote add origin ssh://gitolite@gonito.net/marcinb/eur-lex-documents
