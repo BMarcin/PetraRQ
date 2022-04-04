@@ -18,6 +18,12 @@ cd eur-lex-documents
 
 git switch -c "$BRANCH_NAME"
 
+# use git annex
+git-annex init
+git-annex add ./train/in.tsv.xz
+git-annex enableremote gonito-https
+git-annex sync --content
+
 mkdir -p ./src
 mkdir -p ./docker
 
@@ -36,12 +42,6 @@ chmod +x ./predict.sh
 mkdir -p ./train
 mkdir -p ./dev-0
 mkdir -p ./test-A
-
-# use git annex
-git-annex init
-git-annex add ./train/in.tsv.xz
-git-annex enableremote gonito-https
-git-annex sync --content
 
 if [ -f "./train/in.tsv.xz" ]; then
   rm ./train/in.tsv.xz
