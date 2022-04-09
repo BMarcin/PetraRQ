@@ -114,38 +114,51 @@ stages:
       md5: 5928e0910854642a694527f5d062f636
       size: 2391144197
     - path: ./src/SKLearnDS/SKLearnDS.py
-      md5: 4d1063b5067b067968114bd06b7eb8be
-      size: 1268
+      md5: aa57d27be0bb7e74d34bf309a8e7ebb9
+      size: 1328
     - path: ./src/train_logistic_regression.py
-      md5: 1625bfa12005fd4077f01412326cdbf8
-      size: 6920
+      md5: 0cc860f6dbf808ceed8375c0db580a08
+      size: 2150
     params:
       params.yaml:
         logistic_regression.outputs: probabilities
         logistic_regression.seed: 42
         logistic_regression.solver: sag
     outs:
-    - path: ./data/dev/out.tsv
-      md5: 98a8b864184a596eb6aa2b98d66ecf33
-      size: 2416449
-      isexec: true
-    - path: ./data/test/out.tsv
-      md5: d5b83601c309a9c11885da2f34a1752e
-      size: 4835313
-      isexec: true
     - path: ./models/logistic_regression/labels.pkl
-      md5: 1542237c7b417135db47c841738a1c00
+      md5: 87dc94ccdf95894e7f2a568303c4546b
       size: 309
       isexec: true
     - path: ./models/logistic_regression/model.pkl
-      md5: 6677d49210dd7845a64e4f30b263c039
+      md5: a2a1ef92c780741247d7f4e6cf25a0f7
       size: 126106565
       isexec: true
     - path: ./models/logistic_regression/vectorizer.pkl
-      md5: ef5fd4281a3c001396c7c2e4a1582ad0
+      md5: 8a9b682b3abc0a1c5822ae929af0ba62
       size: 14041464
       isexec: true
+  eval_classifier:
+    cmd: python ./src/eval.py
+    deps:
+    - path: ./models/logistic_regression/labels.pkl
+      md5: 87dc94ccdf95894e7f2a568303c4546b
+      size: 309
+    - path: ./models/logistic_regression/model.pkl
+      md5: a2a1ef92c780741247d7f4e6cf25a0f7
+      size: 126106565
+    - path: ./models/logistic_regression/vectorizer.pkl
+      md5: 8a9b682b3abc0a1c5822ae929af0ba62
+      size: 14041464
+    outs:
+    - path: ./data/dev/out.tsv
+      md5: b27659e7b06e81efb0d0f0d3195dea9c
+      size: 2416449
+      isexec: true
+    - path: ./data/test/out.tsv
+      md5: 4b6664b787f91548845e3cac20203a9b
+      size: 4835313
+      isexec: true
     - path: scores_classification.json
-      md5: 6f529a29241d942a8f5d5a63bed3d903
-      size: 141
+      md5: a5b9b2ec479f60dafbd638049876e7bf
+      size: 140
       isexec: true

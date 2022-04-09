@@ -52,12 +52,19 @@ stages:
     - logistic_regression.outputs
     - logistic_regression.seed
     outs:
-    - ./data/dev/out.tsv
-    - ./data/test/out.tsv
     - ./models/logistic_regression/model.pkl
     - ./models/logistic_regression/vectorizer.pkl
     - ./models/logistic_regression/labels.pkl
-    metrics:
-      - scores_classification.json:
-          cache: false
 
+  eval_classifier:
+    cmd: python ./src/eval.py
+    deps:
+    - ./models/logistic_regression/model.pkl
+    - ./models/logistic_regression/vectorizer.pkl
+    - ./models/logistic_regression/labels.pkl
+    outs:
+    - ./data/dev/out.tsv
+    - ./data/test/out.tsv
+    metrics:
+    - scores_classification.json:
+        cache: false
