@@ -80,6 +80,8 @@ if __name__ == '__main__':
     if not data_path.exists():
         logging.info(f'No data folder found at {data_path}. Creating one...')
         data_path.mkdir(parents=True)
+        # copy ./labels.tsv to ./data/
+        shutil.copy("./labels.tsv", "./data/")
 
         # copy ./dev-0 to ./data/dev
         dev_path = Path("./dev-0/")

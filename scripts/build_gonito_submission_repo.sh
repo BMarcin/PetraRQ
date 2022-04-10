@@ -35,6 +35,8 @@ cp /app2/scripts/train.sh .
 cp /app2/scripts/predict.sh .
 cp -r /app2/src/* ./src/
 cp -r /app2/docker/* ./docker/
+cp /app2/requirements.txt .
+cp /app2/data/labels.tsv .
 
 chmod +x ./train.sh
 chmod +x ./predict.sh
