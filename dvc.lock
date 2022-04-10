@@ -114,28 +114,51 @@ stages:
       md5: 5928e0910854642a694527f5d062f636
       size: 2391144197
     - path: ./src/SKLearnDS/SKLearnDS.py
-      md5: 4d1063b5067b067968114bd06b7eb8be
-      size: 1268
-    - path: ./src/train_naive_bayes.py
-      md5: 88eae1f4173fc649f2b343aaeaf07b91
-      size: 6390
+      md5: aa57d27be0bb7e74d34bf309a8e7ebb9
+      size: 1328
+    - path: ./src/train_logistic_regression.py
+      md5: 0cc860f6dbf808ceed8375c0db580a08
+      size: 2150
     params:
       params.yaml:
-        naive_bayes.outputs: probabilities
+        logistic_regression.outputs: probabilities
+        logistic_regression.seed: 42
+        logistic_regression.solver: sag
+    outs:
+    - path: ./models/logistic_regression/labels.pkl
+      md5: 87dc94ccdf95894e7f2a568303c4546b
+      size: 309
+      isexec: true
+    - path: ./models/logistic_regression/model.pkl
+      md5: a2a1ef92c780741247d7f4e6cf25a0f7
+      size: 126106565
+      isexec: true
+    - path: ./models/logistic_regression/vectorizer.pkl
+      md5: 8a9b682b3abc0a1c5822ae929af0ba62
+      size: 14041464
+      isexec: true
+  eval_classifier:
+    cmd: python ./src/eval.py
+    deps:
+    - path: ./models/logistic_regression/labels.pkl
+      md5: 87dc94ccdf95894e7f2a568303c4546b
+      size: 309
+    - path: ./models/logistic_regression/model.pkl
+      md5: a2a1ef92c780741247d7f4e6cf25a0f7
+      size: 126106565
+    - path: ./models/logistic_regression/vectorizer.pkl
+      md5: 8a9b682b3abc0a1c5822ae929af0ba62
+      size: 14041464
     outs:
     - path: ./data/dev/out.tsv
-      md5: 924386d9a17f0d8bd783ed6a88534482
+      md5: b27659e7b06e81efb0d0f0d3195dea9c
       size: 2416449
       isexec: true
     - path: ./data/test/out.tsv
-      md5: 2e55175c0850b29ee22dcbf55c42ddd6
+      md5: 4b6664b787f91548845e3cac20203a9b
       size: 4835313
       isexec: true
-    - path: ./models/naive_bayes/model.pkl
-      md5: 90280fa357885e8de58b057cfd88eee7
-      size: 504397474
-      isexec: true
     - path: scores_classification.json
-      md5: faabd80e924c14eb5ec20380fac9ce01
-      size: 141
+      md5: a5b9b2ec479f60dafbd638049876e7bf
+      size: 140
       isexec: true
