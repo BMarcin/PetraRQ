@@ -104,3 +104,4 @@ git add .
 git status
 git commit -m "$COMMIT_MESSAGE"
 git push -f origin "$BRANCH_NAME"
+git-annex sync --content --force --push
