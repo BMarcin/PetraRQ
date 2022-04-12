@@ -37,7 +37,6 @@ cp -r /app2/src/* ./src/
 cp -r /app2/docker/* ./docker/
 cp /app2/requirements.txt .
 cp /app2/data/labels.tsv .
-#cp /app2/get-annexed-files.sh .
 
 chmod +x ./train.sh
 chmod +x ./predict.sh
@@ -102,7 +101,8 @@ git remote rm origin
 git remote add origin ssh://gitolite@gonito.net/marcinb/eur-lex-documents
 
 git add .
+git-annex add ./train/in.tsv.xz
 git status
-git-annex sync --content --force --push
 git commit -m "$COMMIT_MESSAGE"
 git push -f origin "$BRANCH_NAME"
+git-annex sync --content --force --push
