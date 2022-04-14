@@ -1,10 +1,10 @@
 #!/bin/bash
 set -euo pipefail
 
-cd /app2
+cd /app
 
 echo "Repro"
-mkdir -p /app2/.dvc/tmp
+mkdir -p /app/.dvc/tmp
 echo $BMARCINAI_GOOGLE_CREDENTIALS > ./.dvc/tmp/gdrive-user-credentials.json
 make
 
@@ -28,16 +28,16 @@ git-annex sync --content
 mkdir -p ./src
 mkdir -p ./docker
 
-cp /app2/README.md .
-cp /app2/config.txt .
-cp /app2/.gitignore .
-cp /app2/gonito.yaml .
-cp /app2/scripts/train.sh .
-cp /app2/scripts/predict.sh .
-cp -r /app2/src/* ./src/
-cp -r /app2/docker/* ./docker/
-cp /app2/requirements.txt .
-cp /app2/data/labels.tsv .
+cp /app/README.md .
+cp /app/config.txt .
+cp /app/.gitignore .
+cp /app/gonito.yaml .
+cp /app/scripts/train.sh .
+cp /app/scripts/predict.sh .
+cp -r /app/src/* ./src/
+cp -r /app/docker/* ./docker/
+cp /app/requirements.txt .
+cp /app/data/labels.tsv .
 
 chmod +x ./train.sh
 chmod +x ./predict.sh
@@ -78,25 +78,25 @@ if [ -f "./test-A/out.tsv" ]; then
   rm ./test-A/out.tsv
 fi
 
-tr -d '\015' </app2/data/dev/in.tsv >./dev-0/in.tsv
-tr -d '\015' </app2/data/dev/expected.tsv >./dev-0/expected.tsv
+tr -d '\015' </app/data/dev/in.tsv >./dev-0/in.tsv
+tr -d '\015' </app/data/dev/expected.tsv >./dev-0/expected.tsv
 
-tr -d '\015' </app2/data/test/in.tsv >./test-A/in.tsv
-tr -d '\015' </app2/data/test/out.tsv >./test-A/out.tsv
+tr -d '\015' </app/data/test/in.tsv >./test-A/in.tsv
+tr -d '\015' </app/data/test/out.tsv >./test-A/out.tsv
 
-tr -d '\015' </app2/data/train/in.tsv >./train/in.tsv
-tr -d '\015' </app2/data/train/expected.tsv >./train/expected.tsv
+tr -d '\015' </app/data/train/in.tsv >./train/in.tsv
+tr -d '\015' </app/data/train/expected.tsv >./train/expected.tsv
 
 
-mv /app2/data/in-header.tsv ./
-mv /app2/data/out-header.tsv ./
+mv /app/data/in-header.tsv ./
+mv /app/data/out-header.tsv ./
 
 xz ./train/in.tsv
 xz ./test-A/in.tsv
 xz ./dev-0/in.tsv
-#/app2/geval --validate --expected-directory .
+#/app/geval --validate --expected-directory .
 
-tr -d '\015' </app2/data/dev/out.tsv >./dev-0/out.tsv
+tr -d '\015' </app/data/dev/out.tsv >./dev-0/out.tsv
 
 git remote rm origin
 git remote add origin ssh://gitolite@gonito.net/marcinb/eur-lex-documents

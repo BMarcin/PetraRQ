@@ -49,8 +49,8 @@ jobs:
       - DockerBuildPush
     container:
       image: ghcr.io/bmarcin/petrarq:logistic_regression
-      volumes:
-        - /mnt/e/actions-runner/data/petrarq-logistic_regression/:/app2/
+#       volumes:
+#         - /mnt/e/actions-runner/data/petrarq-logistic_regression/:/app2/
       credentials:
        username: ${{ github.actor }}
        password: ${{ secrets.DOCKER_TOKEN }}
@@ -65,7 +65,7 @@ jobs:
         run: echo "BRANCH_NAME=${GITHUB_REF##*/}" >> $GITHUB_ENV
 
       - name: Submit to Gonito
-        run: cp -rT /app/ /app2/ && /app2/scripts/build_gonito_submission_repo.sh
+        run: /app/scripts/build_gonito_submission_repo.sh
         env:
           COMMIT_MESSAGE: ${{ github.event.head_commit.message }}
           BRANCH_NAME: ${{ env.BRANCH_NAME }}
