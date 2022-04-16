@@ -106,5 +106,5 @@ git-annex add ./train/in.tsv.xz
 chmod 777 ./train/in.tsv.xz
 git status
 git commit -m "$COMMIT_MESSAGE"
-git push -f origin "$BRANCH_NAME"
 git-annex sync --content --force --push
+git push -f origin "$BRANCH_NAME"
