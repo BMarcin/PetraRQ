@@ -43,7 +43,3 @@ if __name__ == '__main__':
         translated_probabilities.append(" ".join(score_lines))
 
     print("\n".join(translated_probabilities))
-
-
-
-
