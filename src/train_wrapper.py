@@ -124,3 +124,4 @@ if __name__ == '__main__':
                 with lzma.open(file, "rb") as f_in, open(file.with_suffix(""), "wb") as f_out:
                     for chunk in iter(lambda: f_in.read(1024), b""):
                         f_out.write(chunk)
+
