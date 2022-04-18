@@ -100,7 +100,7 @@ tr -d '\015' </app/data/dev/out.tsv >./dev-0/out.tsv
 git remote rm origin
 git remote add origin ssh://gitolite@gonito.net/marcinb/eur-lex-documents
 
-git annex forget
+git annex forget --force
 
 git add .
 git-annex add ./train/in.tsv.xz
