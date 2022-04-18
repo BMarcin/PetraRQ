@@ -15,7 +15,6 @@ chmod +x ./geval
 
 git clone ssh://gitolite@gonito.net/eur-lex-documents
 cd eur-lex-documents
-chmod -R 777 .git
 
 git switch -c "$BRANCH_NAME"
 
@@ -103,8 +102,8 @@ git remote add origin ssh://gitolite@gonito.net/marcinb/eur-lex-documents
 
 git add .
 git-annex add ./train/in.tsv.xz
-chmod 777 ./train/in.tsv.xz
+#chmod 777 ./train/in.tsv.xz
 git status
 git commit -m "$COMMIT_MESSAGE"
-git-annex sync --content --force --no-pull
 git push -f origin "$BRANCH_NAME"
+git-annex sync --content --force --no-pull
