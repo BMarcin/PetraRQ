@@ -16,13 +16,13 @@ chmod +x ./geval
 git clone ssh://gitolite@gonito.net/eur-lex-documents
 cd eur-lex-documents
 
-git switch -c "$BRANCH_NAME"
-
 # use git annex
 git-annex init
 git-annex add ./train/in.tsv.xz
 git-annex enableremote gonito-https
 git-annex sync --content
+
+git switch -c "$BRANCH_NAME"
 
 mkdir -p ./src
 mkdir -p ./docker
@@ -100,6 +100,8 @@ tr -d '\015' </app/data/dev/out.tsv >./dev-0/out.tsv
 git remote rm origin
 git remote add origin ssh://gitolite@gonito.net/marcinb/eur-lex-documents
 
+git annex forget
+
 git add .
 git-annex add ./train/in.tsv.xz
 #chmod 777 ./train/in.tsv.xz
@@ -107,5 +109,6 @@ git status
 echo "before commit"
 git commit -m "$COMMIT_MESSAGE"
 echo "after commit"
+git-annex sync --content --force --no-pull --push --all
+echo "after sync"
 git push -f origin "$BRANCH_NAME"
-git-annex sync --content --force --no-pull
