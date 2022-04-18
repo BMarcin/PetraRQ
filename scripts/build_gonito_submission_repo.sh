@@ -109,6 +109,7 @@ git status
 echo "before commit"
 git commit -m "$COMMIT_MESSAGE"
 echo "after commit"
+git push -f origin "$BRANCH_NAME"
+echo "after push"
 git-annex sync --content --force --no-pull --push --all
 echo "after sync"
-git push -f origin "$BRANCH_NAME"
