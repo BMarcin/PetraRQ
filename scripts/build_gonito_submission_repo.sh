@@ -108,4 +108,4 @@ echo "before commit"
 git commit -m "$COMMIT_MESSAGE"
 echo "after commit"
 git push -f origin "$BRANCH_NAME"
-#git-annex sync --content --force --no-pull
+git-annex sync --content --force --no-pull
