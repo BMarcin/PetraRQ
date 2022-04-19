@@ -35,6 +35,7 @@ if __name__ == '__main__':
     # predict
     predictions = model.predict_proba(input_data)
 
+    # translate predictions to labels
     translated_probabilities = []
     for probabilities, labels in zip(predictions, repeat(labels)):
         score_lines = []
@@ -42,4 +43,5 @@ if __name__ == '__main__':
             score_lines.append("{}:{:.9f}".format(label, prob))
         translated_probabilities.append(" ".join(score_lines))
 
+    # print results
     print("\n".join(translated_probabilities))
