@@ -49,9 +49,8 @@ stages:
     - ./data/train/processed.tsv
     params:
     - naive_bayes.outputs
+    - naive_bayes.seed
     outs:
-    - ./data/dev/out.tsv
-    - ./data/test/out.tsv
     - ./models/naive_bayes/model.pkl
     - ./models/naive_bayes/vectorizer.pkl
     - ./models/naive_bayes/labels.pkl
@@ -68,4 +67,3 @@ stages:
     metrics:
     - scores_classification.json:
         cache: false
-
