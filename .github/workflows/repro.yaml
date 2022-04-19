@@ -48,7 +48,7 @@ jobs:
     needs:
       - DockerBuildPush
     container:
-      image: ghcr.io/bmarcin/petrarq:naive_bayes
+      image: ghcr.io/bmarcin/petrarq:random_forest
       credentials:
        username: ${{ github.actor }}
        password: ${{ secrets.DOCKER_TOKEN }}

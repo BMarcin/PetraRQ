@@ -93,7 +93,7 @@ stages:
       size: 2391144197
       isexec: true
   train_classifier:
-    cmd: python ./src/train_naive_bayes.py
+    cmd: python ./src/train_random_forest.py
     deps:
     - path: ./data/dev/expected.tsv
       md5: ede893922b331adf870dad11b67be295
@@ -116,48 +116,50 @@ stages:
     - path: ./src/SKLearnDS/SKLearnDS.py
       md5: aa57d27be0bb7e74d34bf309a8e7ebb9
       size: 1328
-    - path: ./src/train_naive_bayes.py
-      md5: 537de0a5dcf10b527c57e39329da05c6
-      size: 2042
+    - path: ./src/train_random_forest.py
+      md5: b448db2a1e2f312937eba4f0b0ab6131
+      size: 2139
     params:
       params.yaml:
-        naive_bayes.outputs: probabilities
-        naive_bayes.seed: 42
+        random_forest.max_depth: 3
+        random_forest.n_estimators: 300
+        random_forest.outputs: probabilities
+        random_forest.seed: 42
     outs:
-    - path: ./models/naive_bayes/labels.pkl
+    - path: ./models/random_forest/labels.pkl
       md5: 87dc94ccdf95894e7f2a568303c4546b
       size: 309
       isexec: true
-    - path: ./models/naive_bayes/model.pkl
-      md5: 67e33a5315e27bcd2f39d43b217f350e
-      size: 504397474
+    - path: ./models/random_forest/model.pkl
+      md5: d4da33c5407ff40e87d5069407626812
+      size: 7156469
       isexec: true
-    - path: ./models/naive_bayes/vectorizer.pkl
-      md5: b973b7a845b1b4899640f2b1a53b4e6d
+    - path: ./models/random_forest/vectorizer.pkl
+      md5: 4e7120085561942404be56a4b3ac12e7
       size: 14041464
       isexec: true
   eval_classifier:
     cmd: python ./src/eval.py
     deps:
-    - path: ./models/naive_bayes/labels.pkl
+    - path: ./models/random_forest/labels.pkl
       md5: 87dc94ccdf95894e7f2a568303c4546b
       size: 309
-    - path: ./models/naive_bayes/model.pkl
-      md5: 67e33a5315e27bcd2f39d43b217f350e
-      size: 504397474
-    - path: ./models/naive_bayes/vectorizer.pkl
-      md5: b973b7a845b1b4899640f2b1a53b4e6d
+    - path: ./models/random_forest/model.pkl
+      md5: d4da33c5407ff40e87d5069407626812
+      size: 7156469
+    - path: ./models/random_forest/vectorizer.pkl
+      md5: 4e7120085561942404be56a4b3ac12e7
       size: 14041464
     outs:
     - path: ./data/dev/out.tsv
-      md5: fb343f27e5fcd0ac0049ebf17a017ceb
+      md5: bb6ae87fea0ba8ec57f693ee32e451da
       size: 2416449
       isexec: true
     - path: ./data/test/out.tsv
-      md5: 3c07d15e9c4fe0903ed0b496d320f3ab
+      md5: 596347ecacf3e7990841a6dfca8a980c
       size: 4835313
       isexec: true
     - path: scores_classification.json
-      md5: b38516e6ab7767aec3a4fdb30a2e5deb
-      size: 142
+      md5: 85840d64558af284190664d61fc9e5ca
+      size: 141
       isexec: true

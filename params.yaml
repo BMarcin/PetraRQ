@@ -8,7 +8,9 @@ datasetsplit:
 datasetrewrite:
   threads: 64
 
-naive_bayes:
+random_forest:
   outputs: probabilities #labels or probabilities
   seed: 42
   threads: 8
+  n_estimators: 300
+  max_depth: 3

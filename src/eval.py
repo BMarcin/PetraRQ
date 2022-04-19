@@ -18,7 +18,7 @@ if __name__ == '__main__':
 
     # Load config
     logging.info("Loading config...")
-    config = yaml.safe_load(open("./params.yaml"))['naive_bayes']
+    config = yaml.safe_load(open("./params.yaml"))['random_forest']
 
     # Check if we can use Test data
     use_test_data = False
@@ -50,13 +50,13 @@ if __name__ == '__main__':
 
     # Load models
     logging.info('Loading models...')
-    with open("./models/naive_bayes/model.pkl", "rb") as f:
+    with open("./models/random_forest/model.pkl", "rb") as f:
         model = pickle.load(f)
 
-    with open("./models/naive_bayes/vectorizer.pkl", "rb") as f:
+    with open("./models/random_forest/vectorizer.pkl", "rb") as f:
         vectorizer = pickle.load(f)
 
-    with open("./models/naive_bayes/labels.pkl", "rb") as f:
+    with open("./models/random_forest/labels.pkl", "rb") as f:
         labels = pickle.load(f)
 
     # Predict

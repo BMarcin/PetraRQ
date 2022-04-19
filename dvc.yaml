@@ -37,10 +37,10 @@ stages:
     - ./data/train/processed.tsv
 
   train_classifier:
-    cmd: python ./src/train_naive_bayes.py
+    cmd: python ./src/train_random_forest.py
     deps:
     - ./src/SKLearnDS/SKLearnDS.py
-    - ./src/train_naive_bayes.py
+    - ./src/train_random_forest.py
     - ./data/dev/expected.tsv
     - ./data/dev/processed.tsv
     - ./data/test/expected.tsv
@@ -48,19 +48,21 @@ stages:
     - ./data/train/expected.tsv
     - ./data/train/processed.tsv
     params:
-    - naive_bayes.outputs
-    - naive_bayes.seed
+    - random_forest.outputs
+    - random_forest.seed
+    - random_forest.n_estimators
+    - random_forest.max_depth
     outs:
-    - ./models/naive_bayes/model.pkl
-    - ./models/naive_bayes/vectorizer.pkl
-    - ./models/naive_bayes/labels.pkl
+    - ./models/random_forest/model.pkl
+    - ./models/random_forest/vectorizer.pkl
+    - ./models/random_forest/labels.pkl
 
   eval_classifier:
     cmd: python ./src/eval.py
     deps:
-    - ./models/naive_bayes/model.pkl
-    - ./models/naive_bayes/vectorizer.pkl
-    - ./models/naive_bayes/labels.pkl
+    - ./models/random_forest/model.pkl
+    - ./models/random_forest/vectorizer.pkl
+    - ./models/random_forest/labels.pkl
     outs:
     - ./data/dev/out.tsv
     - ./data/test/out.tsv
