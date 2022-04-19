@@ -38,7 +38,7 @@ jobs:
           context: .
           push: true
           tags: ghcr.io/bmarcin/petrarq:${{ env.BRANCH }}
-          cache-from: type=registry,ref=ghcr.io/bmarcin/petrarq:${{ env.BRANCH }}
+          cache-from: type=registry,ref=ghcr.io/bmarcin/petrarq:logistic_regression
           cache-to: type=inline
           build-args: |
             BRANCH=${{ env.BRANCH }}
