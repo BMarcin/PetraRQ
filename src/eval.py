@@ -18,7 +18,7 @@ if __name__ == '__main__':
 
     # Load config
     logging.info("Loading config...")
-    config = yaml.safe_load(open("./params.yaml"))['logistic_regression']
+    config = yaml.safe_load(open("./params.yaml"))['naive_bayes']
 
     # Check if we can use Test data
     use_test_data = False
@@ -50,13 +50,13 @@ if __name__ == '__main__':
 
     # Load models
     logging.info('Loading models...')
-    with open("./models/logistic_regression/model.pkl", "rb") as f:
+    with open("./models/naive_bayes/model.pkl", "rb") as f:
         model = pickle.load(f)
 
-    with open("./models/logistic_regression/vectorizer.pkl", "rb") as f:
+    with open("./models/naive_bayes/vectorizer.pkl", "rb") as f:
         vectorizer = pickle.load(f)
 
-    with open("./models/logistic_regression/labels.pkl", "rb") as f:
+    with open("./models/naive_bayes/labels.pkl", "rb") as f:
         labels = pickle.load(f)
 
     # Predict

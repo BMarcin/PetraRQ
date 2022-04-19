@@ -51,10 +51,9 @@ if __name__ == '__main__':
     if not config_path.exists():
         logging.info(f'No config file found at {config_path}. Creating one...')
         config = {
-            "logistic_regression": {
+            "naive_bayes": {
                 "seed": seed,
                 "threads": threads,
-                "solver": "sag",
                 "outputs": "probabilities"
             },
             "datasetrewrite": {
@@ -69,8 +68,8 @@ if __name__ == '__main__':
         logging.info(f'Loading config from {config_path.absolute()}')
 
         config = yaml.safe_load(open(config_path))
-        config["logistic_regression"]["seed"] = seed
-        config["logistic_regression"]["threads"] = threads
+        config["naive_bayes"]["seed"] = seed
+        config["naive_bayes"]["threads"] = threads
 
         logging.info(f'Saving config to {config_path.absolute()}')
         with open(config_path, "w") as f:
