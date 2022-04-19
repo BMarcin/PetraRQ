@@ -1,6 +1,6 @@
-description: Random forest classifier
+description: Naive bayes classifier
 tags:
-  - random-forest
+  - naive-bayes
 param-files:
   - "params.yaml"
 links:
