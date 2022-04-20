@@ -51,12 +51,19 @@ stages:
     - fasttext.outputs
     - fasttext.epochs
     - fasttext.lr
+    - fasttext.seed
+    outs:
+    - ./models/fasttext/fasttext.bin
+    - ./data/train/fasttext.txt
+
+  eval_classifier:
+    cmd: python ./src/eval.py
+    deps:
+    - ./src/eval.py
+    - ./models/fasttext/fasttext.bin
     outs:
     - ./data/dev/out.tsv
     - ./data/test/out.tsv
-    - ./models/fasttext/fasttext.bin
-    - ./data/train/fasttext.txt
     metrics:
-      - scores_classification.json:
-          cache: false
-
+    - scores_classification.json:
+        cache: false

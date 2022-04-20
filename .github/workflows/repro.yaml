@@ -38,7 +38,7 @@ jobs:
           context: .
           push: true
           tags: ghcr.io/bmarcin/petrarq:${{ env.BRANCH }}
-          cache-from: type=registry,ref=ghcr.io/bmarcin/petrarq:${{ env.BRANCH }}
+          cache-from: type=registry,ref=ghcr.io/bmarcin/petrarq:logistic_regression
           cache-to: type=inline
           build-args: |
             BRANCH=${{ env.BRANCH }}
@@ -49,18 +49,11 @@ jobs:
       - DockerBuildPush
     container:
       image: ghcr.io/bmarcin/petrarq:fasttext
-      volumes:
-        - /mnt/e/actions-runner/data/petrarq-fasttext/:/app2/
       credentials:
        username: ${{ github.actor }}
        password: ${{ secrets.DOCKER_TOKEN }}
 
     steps:
-      - name: Test secrets
-        run: echo ${TEST} >> /app2/test.txt
-        env:
-          TEST: ${{secrets.TEST}}
-
       - name: Add SSH key
         run: /app/scripts/add_ssh_key.sh
         env:
@@ -70,7 +63,7 @@ jobs:
         run: echo "BRANCH_NAME=${GITHUB_REF##*/}" >> $GITHUB_ENV
 
       - name: Submit to Gonito
-        run: whoami && pwd && cp -rT /app/ /app2/ && /app2/scripts/build_gonito_submission_repo.sh
+        run: /app/scripts/build_gonito_submission_repo.sh
         env:
           COMMIT_MESSAGE: ${{ github.event.head_commit.message }}
           BRANCH_NAME: ${{ env.BRANCH_NAME }}

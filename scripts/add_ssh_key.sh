@@ -1,11 +1,13 @@
 #!/bin/bash
+whoami
+
 
 mkdir -p ~/.ssh
 chmod 700 ~/.ssh
-cp ./scripts/ssh_config ~/.ssh/config
+cp /app/scripts/ssh_config ~/.ssh/config
 mkdir -p /root/.ssh
 chmod 700 /root/.ssh
-cp ./scripts/ssh_config /root/.ssh/config
+cp /app/scripts/ssh_config /root/.ssh/config
 
 echo $GONITO_PRIVATE_SSH | base64 -d > ~/.ssh/gonito
 echo $GONITO_PRIVATE_SSH | base64 -d > /root/.ssh/gonito
