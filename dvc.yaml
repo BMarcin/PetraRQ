@@ -68,6 +68,7 @@ stages:
   train_classifier:
     cmd: python ./src/train_roberta_classifier.py
     deps:
+    - ./src/train_roberta_classifier.py
     - ./src/ClassificationDataset/ClassificationDataset.py
     - ./src/train_roberta_classifier.py
     - ./models/roberta_lm/merges.txt
@@ -86,6 +87,7 @@ stages:
     params:
     - classification_train.warmup_steps
     - classification_train.num_train_epochs
+    - classification_train.seed
     outs:
     - ./models/roberta_classifier/pytorch_model.bin
     - ./models/roberta_classifier/config.json

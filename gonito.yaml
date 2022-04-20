@@ -1,6 +1,6 @@
-description: Logistic regression classifier
+description: Fast text classifier
 tags:
-  - logistic-regression
+  - fasttext
 param-files:
   - "params.yaml"
 links:

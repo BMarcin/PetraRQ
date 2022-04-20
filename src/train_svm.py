@@ -9,7 +9,7 @@ import yaml
 
 from SKLearnDS import SKlearnDS
 
-from sklearn.naive_bayes import MultinomialNB
+from sklearn.svm import LinearSVC
 from sklearn.multiclass import OneVsRestClassifier
 
 if __name__ == '__main__':
@@ -20,7 +20,7 @@ if __name__ == '__main__':
 
     # Load config
     logging.info("Loading config...")
-    config = yaml.safe_load(open("./params.yaml"))['naive_bayes']
+    config = yaml.safe_load(open("./params.yaml"))['svm']
 
     # set random state
     np.random.seed(config['seed'])
@@ -47,18 +47,16 @@ if __name__ == '__main__':
 
     # Train the model
     logging.info('Training the model...')
-    clf = OneVsRestClassifier(MultinomialNB()).fit(ds_texts, ds_labels)
+    svc = OneVsRestClassifier(LinearSVC()).fit(ds_texts, ds_labels)
 
     # Save the model
     logging.info('Saving the model...')
-    os.makedirs("./models/naive_bayes", exist_ok=True)
-    with open("./models/naive_bayes/model.pkl", "wb") as f:
-        pickle.dump(clf, f)
+    os.makedirs("./models/svm", exist_ok=True)
+    with open("./models/svm/model.pkl", "wb") as f:
+        pickle.dump(svc, f)
 
-    with open("./models/naive_bayes/vectorizer.pkl", "wb") as f:
+    with open("./models/svm/vectorizer.pkl", "wb") as f:
         pickle.dump(ds_train.count_vect, f)
 
-    with open("./models/naive_bayes/labels.pkl", "wb") as f:
+    with open("./models/svm/labels.pkl", "wb") as f:
         pickle.dump(unique_labels, f)
-
-    logging.info('Done!')

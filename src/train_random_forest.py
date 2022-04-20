@@ -9,7 +9,7 @@ import yaml
 
 from SKLearnDS import SKlearnDS
 
-from sklearn.naive_bayes import MultinomialNB
+from sklearn.ensemble import RandomForestClassifier
 from sklearn.multiclass import OneVsRestClassifier
 
 if __name__ == '__main__':
@@ -20,7 +20,7 @@ if __name__ == '__main__':
 
     # Load config
     logging.info("Loading config...")
-    config = yaml.safe_load(open("./params.yaml"))['naive_bayes']
+    config = yaml.safe_load(open("./params.yaml"))['random_forest']
 
     # set random state
     np.random.seed(config['seed'])
@@ -47,18 +47,18 @@ if __name__ == '__main__':
 
     # Train the model
     logging.info('Training the model...')
-    clf = OneVsRestClassifier(MultinomialNB()).fit(ds_texts, ds_labels)
+    forest = OneVsRestClassifier(RandomForestClassifier(n_estimators=config['n_estimators'], max_depth=config['max_depth'])).fit(ds_texts, ds_labels)
 
     # Save the model
     logging.info('Saving the model...')
-    os.makedirs("./models/naive_bayes", exist_ok=True)
-    with open("./models/naive_bayes/model.pkl", "wb") as f:
-        pickle.dump(clf, f)
+    os.makedirs("./models/random_forest", exist_ok=True)
+    with open("./models/random_forest/model.pkl", "wb") as f:
+        pickle.dump(forest, f)
 
-    with open("./models/naive_bayes/vectorizer.pkl", "wb") as f:
+    with open("./models/random_forest/vectorizer.pkl", "wb") as f:
         pickle.dump(ds_train.count_vect, f)
 
-    with open("./models/naive_bayes/labels.pkl", "wb") as f:
+    with open("./models/random_forest/labels.pkl", "wb") as f:
         pickle.dump(unique_labels, f)
 
     logging.info('Done!')
