@@ -165,28 +165,50 @@ stages:
       md5: 5928e0910854642a694527f5d062f636
       size: 2391144197
     - path: ./src/SKLearnDS/SKLearnDS.py
-      md5: 4d1063b5067b067968114bd06b7eb8be
-      size: 1268
+      md5: aa57d27be0bb7e74d34bf309a8e7ebb9
+      size: 1328
     - path: ./src/train_svm.py
-      md5: 020e13c7fbdd61923842020858f484e8
-      size: 7010
+      md5: 58adc8ae8bb1894b934175a48d91f3bc
+      size: 1957
     params:
       params.yaml:
         svm.outputs: probabilities
+        svm.seed: 42
+    outs:
+    - path: ./models/svm/labels.pkl
+      md5: 87dc94ccdf95894e7f2a568303c4546b
+      size: 309
+      isexec: true
+    - path: ./models/svm/model.pkl
+      md5: 9cb3876e878d42929c9f536657cb599c
+      size: 126103254
+      isexec: true
+    - path: ./models/svm/vectorizer.pkl
+      md5: a9996ae8bfa9b563b9ac1169151b234f
+      size: 14041464
+      isexec: true
+  eval_classifier:
+    cmd: python ./src/eval.py
+    deps:
+    - path: ./models/svm/labels.pkl
+      md5: 87dc94ccdf95894e7f2a568303c4546b
+      size: 309
+    - path: ./models/svm/model.pkl
+      md5: 9cb3876e878d42929c9f536657cb599c
+      size: 126103254
+    - path: ./models/svm/vectorizer.pkl
+      md5: a9996ae8bfa9b563b9ac1169151b234f
+      size: 14041464
     outs:
     - path: ./data/dev/out.tsv
-      md5: ce44359f4d3fdca86971ee31edaf6cc7
+      md5: bb6ae87fea0ba8ec57f693ee32e451da
       size: 2416449
       isexec: true
     - path: ./data/test/out.tsv
-      md5: d08d643aa421e10932fe0a18e6751bbb
+      md5: 596347ecacf3e7990841a6dfca8a980c
       size: 4835313
       isexec: true
-    - path: ./models/svm/model.pkl
-      md5: 48c1d58dad0f6b27b5ae23f5efae28bf
-      size: 126103254
-      isexec: true
     - path: scores_classification.json
-      md5: a5971c78ccce2e2e9b66b638998c9782
-      size: 123
+      md5: 85840d64558af284190664d61fc9e5ca
+      size: 141
       isexec: true

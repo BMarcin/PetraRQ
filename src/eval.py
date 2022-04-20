@@ -4,11 +4,17 @@ import pickle
 from itertools import repeat
 from pathlib import Path
 
+import numpy as np
 import pandas as pd
 import yaml
 from sklearn.metrics import accuracy_score, f1_score, precision_score, recall_score
 
 from SKLearnDS import SKlearnDS
+
+def softmax(x):
+    """Compute softmax values for each sets of scores in x."""
+    e_x = np.exp(x - np.max(x))
+    return e_x / e_x.sum(axis=0)
 
 if __name__ == '__main__':
     logging.basicConfig(
@@ -18,7 +24,7 @@ if __name__ == '__main__':
 
     # Load config
     logging.info("Loading config...")
-    config = yaml.safe_load(open("./params.yaml"))['random_forest']
+    config = yaml.safe_load(open("./params.yaml"))['svm']
 
     # Check if we can use Test data
     use_test_data = False
@@ -29,7 +35,6 @@ if __name__ == '__main__':
     logging.info('Loading data...')
     data_dev = pd.read_csv("./data/dev/processed.tsv", delimiter='\t', header=None, encoding="utf8", quoting=0)
     labels_dev = pd.read_csv("./data/dev/expected.tsv", delimiter='\t', header=None, encoding="utf8", quoting=0)
-
 
     data_test = pd.read_csv("./data/test/processed.tsv", delimiter='\t', header=None, encoding="utf8", quoting=0)
     if use_test_data:
