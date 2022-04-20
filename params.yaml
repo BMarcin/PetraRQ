@@ -10,3 +10,5 @@ datasetrewrite:
 
 svm:
   outputs: probabilities #labels or probabilities
+  seed: 42
+  threads: 8

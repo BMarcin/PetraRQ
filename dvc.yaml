@@ -47,13 +47,24 @@ stages:
     - ./data/test/processed.tsv
     - ./data/train/expected.tsv
     - ./data/train/processed.tsv
+    params:
+    - svm.outputs
+    - svm.seed
+    outs:
+    - ./models/svm/model.pkl
+    - ./models/svm/vectorizer.pkl
+    - ./models/svm/labels.pkl
+
+  eval_classifier:
+    cmd: python ./src/eval.py
+    deps:
+    - ./models/svm/model.pkl
+    - ./models/svm/vectorizer.pkl
+    - ./models/svm/labels.pkl
     outs:
     - ./data/dev/out.tsv
     - ./data/test/out.tsv
-    - ./models/svm/model.pkl
-    params:
-    - svm.outputs
     metrics:
-      - scores_classification.json:
-          cache: false
+    - scores_classification.json:
+        cache: false
 
