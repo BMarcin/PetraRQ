@@ -12,3 +12,5 @@ xgboost:
   n_estimators: 300
   max_depth: 3
   outputs: probabilities #labels or probabilities
+  seed: 42
+  threads: 8
