@@ -59,6 +59,7 @@ stages:
   eval_classifier:
     cmd: python ./src/eval.py
     deps:
+    - ./src/eval.py
     - ./models/logistic_regression/model.pkl
     - ./models/logistic_regression/vectorizer.pkl
     - ./models/logistic_regression/labels.pkl

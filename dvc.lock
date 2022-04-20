@@ -149,6 +149,9 @@ stages:
     - path: ./models/logistic_regression/vectorizer.pkl
       md5: 8a9b682b3abc0a1c5822ae929af0ba62
       size: 14041464
+    - path: ./src/eval.py
+      md5: a6075734c9b189a56032b7d224df9bb5
+      size: 6697
     outs:
     - path: ./data/dev/out.tsv
       md5: b27659e7b06e81efb0d0f0d3195dea9c
