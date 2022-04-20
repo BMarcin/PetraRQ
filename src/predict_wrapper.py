@@ -17,13 +17,13 @@ if __name__ == '__main__':
     stdin_data = args.stdin.read()
 
     # load saved sklearn model
-    with open("./models/random_forest/model.pkl", "rb") as f:
+    with open("./models/svm/model.pkl", "rb") as f:
         model = pickle.load(f)
 
-    with open("./models/random_forest/vectorizer.pkl", "rb") as f:
+    with open("./models/svm/vectorizer.pkl", "rb") as f:
         vectorizer = pickle.load(f)
 
-    with open("./models/random_forest/labels.pkl", "rb") as f:
+    with open("./models/svm/labels.pkl", "rb") as f:
         labels = pickle.load(f)
 
     # delete empty lines

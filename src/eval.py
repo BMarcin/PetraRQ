@@ -55,13 +55,13 @@ if __name__ == '__main__':
 
     # Load models
     logging.info('Loading models...')
-    with open("./models/random_forest/model.pkl", "rb") as f:
+    with open("./models/svm/model.pkl", "rb") as f:
         model = pickle.load(f)
 
-    with open("./models/random_forest/vectorizer.pkl", "rb") as f:
+    with open("./models/svm/vectorizer.pkl", "rb") as f:
         vectorizer = pickle.load(f)
 
-    with open("./models/random_forest/labels.pkl", "rb") as f:
+    with open("./models/svm/labels.pkl", "rb") as f:
         labels = pickle.load(f)
 
     # Predict
@@ -131,8 +131,8 @@ if __name__ == '__main__':
     else:
         # Predict proba
         logging.info('Predicting probabilities...')
-        outs_dev_proba = model.predict_proba(vectorizer.transform(data_dev[0])).astype(float)
-        outs_test_proba = model.predict_proba(vectorizer.transform(data_test[0])).astype(float)
+        outs_dev_proba = model.decision_function(vectorizer.transform(data_dev[0])).astype(float)
+        outs_test_proba = model.decision_function(vectorizer.transform(data_test[0])).astype(float)
 
         # Translate predictions
         logging.info('Translate predictions...')

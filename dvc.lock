@@ -199,16 +199,19 @@ stages:
     - path: ./models/svm/vectorizer.pkl
       md5: a9996ae8bfa9b563b9ac1169151b234f
       size: 14041464
+    - path: ./src/eval.py
+      md5: 26d10856e154c1eddba8635454affadc
+      size: 6809
     outs:
     - path: ./data/dev/out.tsv
-      md5: bb6ae87fea0ba8ec57f693ee32e451da
-      size: 2416449
+      md5: b80e0253b41c5d4bf96e1c62e030fd23
+      size: 2587771
       isexec: true
     - path: ./data/test/out.tsv
-      md5: 596347ecacf3e7990841a6dfca8a980c
-      size: 4835313
+      md5: a86e107c5cf79d99e7d42a7d19c78b06
+      size: 5175563
       isexec: true
     - path: scores_classification.json
-      md5: 85840d64558af284190664d61fc9e5ca
-      size: 141
+      md5: 4f867e6daed1bec340306f7f9014da5b
+      size: 142
       isexec: true

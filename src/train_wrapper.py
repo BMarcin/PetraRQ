@@ -51,12 +51,10 @@ if __name__ == '__main__':
     if not config_path.exists():
         logging.info(f'No config file found at {config_path}. Creating one...')
         config = {
-            "random_forest": {
+            "svm": {
                 "seed": seed,
                 "threads": threads,
-                "outputs": "probabilities",
-                "n_estimators": 300,
-                "max_depth": 3,
+                "outputs": "probabilities"
             },
             "datasetrewrite": {
                 "threads": threads
@@ -70,8 +68,8 @@ if __name__ == '__main__':
         logging.info(f'Loading config from {config_path.absolute()}')
 
         config = yaml.safe_load(open(config_path))
-        config["random_forest"]["seed"] = seed
-        config["random_forest"]["threads"] = threads
+        config["svm"]["seed"] = seed
+        config["svm"]["threads"] = threads
 
         logging.info(f'Saving config to {config_path.absolute()}')
         with open(config_path, "w") as f:
