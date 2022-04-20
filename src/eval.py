@@ -4,12 +4,19 @@ import pickle
 from itertools import repeat
 from pathlib import Path
 
-import numpy as np
+import fasttext
 import pandas as pd
+import torch
 import yaml
 from sklearn.metrics import accuracy_score, f1_score, precision_score, recall_score
 
-from SKLearnDS import SKlearnDS
+
+def labels2tensor(labels, label2idx):
+    # print(labels)
+    unique = set([label2idx[label.strip().lower()] for label in labels])
+    if len(unique) == 0:
+        return torch.zeros([len(label2idx)], dtype=torch.long).tolist()
+    return torch.zeros([len(label2idx)]).index_fill_(0, torch.tensor(list(unique)), 1).tolist()
 
 
 if __name__ == '__main__':
@@ -20,7 +27,7 @@ if __name__ == '__main__':
 
     # Load config
     logging.info("Loading config...")
-    config = yaml.safe_load(open("./params.yaml"))['xgboost']
+    config = yaml.safe_load(open("./params.yaml"))['fasttext']
 
     # Check if we can use Test data
     use_test_data = False
@@ -45,51 +52,96 @@ if __name__ == '__main__':
     for label in unique_labels:
         label2idx[label] = len(label2idx)
 
-    ds_dev = SKlearnDS(data_dev[0], labels_dev, label2idx)
-    if use_test_data:
-        ds_test = SKlearnDS(data_test[0], labels_test, label2idx)
-
     # Load models
     logging.info('Loading models...')
-    with open("./models/xgboost/model.pkl", "rb") as f:
-        model = pickle.load(f)
-
-    with open("./models/xgboost/vectorizer.pkl", "rb") as f:
-        vectorizer = pickle.load(f)
-
-    with open("./models/xgboost/labels.pkl", "rb") as f:
-        labels = pickle.load(f)
+    model = fasttext.load_model("./models/fasttext/fasttext.bin")
 
     # Predict
     logging.info('Predicting...')
-    outs_dev = model.predict(vectorizer.transform(data_dev[0]))
-    outs_test = model.predict(vectorizer.transform(data_test[0]))
+    dev_preds = []
+    dev_gt = []
+    translated_dev_preds = []
+    dev_label_probs = []
+
+    for item, lab in zip(data_dev[0], labels_dev[0]):
+        preds = model.predict(item, k=len(label2idx))
+
+        true_labels = []
+        probes = []
+        for label_name, label_weight in zip(preds[0], preds[1]):
+            label_name = label_name.replace("__label__", "")
+            if label_weight >= 0.5:
+                true_labels.append(label_name)
+            if label_weight > 1:
+                label_weight = 1
+            probes.append("{}:{:.9f}".format(label_name, label_weight))
+        dev_label_probs.append(probes)
+
+        pred_rewrited_labels = [label for label in true_labels]
+        translated_dev_preds.append(" ".join(pred_rewrited_labels))
+
+        pred_tensor = labels2tensor(pred_rewrited_labels, label2idx)
+        gt_tensor = labels2tensor(lab.split(" "), label2idx)
+
+        dev_preds.append(pred_tensor)
+        dev_gt.append(gt_tensor)
+
+    if use_test_data:
+        test_preds = []
+        test_gt = []
+        translated_test_preds = []
+        test_label_probs = []
+
+        for item, lab in zip(data_test[0], labels_test[0]):
+            preds = model.predict(item, k=len(label2idx))
+            # print(preds)
+            # pred_labels = preds[0]
+
+            true_labels = []
+            probes = []
+            for label_name, label_weight in zip(preds[0], preds[1]):
+                label_name = label_name.replace("__label__", "")
+                if label_weight >= 0.5:
+                    true_labels.append(label_name)
+                if label_weight > 1:
+                    label_weight = 1
+                probes.append("{}:{:.9f}".format(label_name, label_weight))
+            test_label_probs.append(probes)
+
+            pred_rewrited_labels = [label.replace("__label__", "") for label in true_labels]
+            translated_test_preds.append(" ".join(pred_rewrited_labels))
+
+            pred_tensor = labels2tensor(pred_rewrited_labels, label2idx)
+            gt_tensor = labels2tensor(lab.split(" "), label2idx)
+
+            test_preds.append(pred_tensor)
+            test_gt.append(gt_tensor)
 
     # Evaluate
     logging.info('Evaluating...')
-    acc_dev = accuracy_score(ds_dev.X_train_labels, outs_dev)
-    logging.info('Accuracy on dev set: {}'.format(acc_dev))
+    acc_dev = accuracy_score(dev_gt, dev_preds)
+    logging.info('Accuracy on dev set: %.2f%%' % (acc_dev * 100))
     if use_test_data:
-        acc_test = accuracy_score(ds_test.X_train_labels, outs_test)
-        logging.info('Accuracy on test set: {}'.format(acc_test))
+        acc_test = accuracy_score(test_gt, test_preds)
+        logging.info('Accuracy on test set: %.2f%%' % (acc_test * 100))
 
-    f1_dev = f1_score(y_true=ds_dev.X_train_labels, y_pred=outs_dev, average='weighted')
-    logging.info('F1 score on dev set: {}'.format(f1_dev))
+    f1_dev = f1_score(y_true=dev_gt, y_pred=dev_preds, average='macro')
+    logging.info('F1 on dev set: %.2f%%' % (f1_dev * 100))
     if use_test_data:
-        f1_test = f1_score(y_true=ds_test.X_train_labels, y_pred=outs_test, average='weighted')
-        logging.info('F1 score on test set: {}'.format(f1_test))
+        f1_test = f1_score(y_true=test_gt, y_pred=test_preds, average='macro')
+        logging.info('F1 on test set: %.2f%%' % (f1_test * 100))
 
-    precision_dev = precision_score(y_true=ds_dev.X_train_labels, y_pred=outs_dev, average='weighted')
-    logging.info('Precision score on dev set: {}'.format(precision_dev))
+    precision_dev = precision_score(y_true=dev_gt, y_pred=dev_preds, average='macro')
+    logging.info('Precision on dev set: %.2f%%' % (precision_dev * 100))
     if use_test_data:
-        precision_test = precision_score(y_true=ds_test.X_train_labels, y_pred=outs_test, average='weighted')
-        logging.info('Precision score on test set: {}'.format(precision_test))
+        precision_test = precision_score(y_true=test_gt, y_pred=test_preds, average='macro')
+        logging.info('Precision on test set: %.2f%%' % (precision_test * 100))
 
-    recall_dev = recall_score(y_true=ds_dev.X_train_labels, y_pred=outs_dev, average='weighted')
-    logging.info('Recall score on dev set: {}'.format(recall_dev))
+    recall_dev = recall_score(y_true=dev_gt, y_pred=dev_preds, average='macro')
+    logging.info('Recall on dev set: %.2f%%' % (recall_dev * 100))
     if use_test_data:
-        recall_test = recall_score(y_true=ds_test.X_train_labels, y_pred=outs_test, average='weighted')
-        logging.info('Recall score on test set: {}'.format(recall_test))
+        recall_test = recall_score(y_true=test_gt, y_pred=test_preds, average='macro')
+        logging.info('Recall on test set: %.2f%%' % (recall_test * 100))
 
     # save results to "scores_classification.json"
     logging.info('Saving results...')
@@ -112,48 +164,25 @@ if __name__ == '__main__':
 
     # Save ds predictions outputs
     if config['outputs'] == 'labels':
-        translated_dev_preds = [" ".join(ds_dev.tensor2labels(model_outputs, unique_labels)) for model_outputs in (outs_dev >= 0.5).astype(int)]
-        translated_test_preds = [" ".join(ds_test.tensor2labels(model_outputs, unique_labels)) for model_outputs in (outs_test >= 0.5).astype(int)]
-
         # save predictions to csv file
-        logging.info('Saving predictions...')
+        logging.info("Saving predictions to csv file...")
         with open("./data/dev/out.tsv", "w", encoding="utf8") as f:
             for pred in translated_dev_preds:
                 f.write(pred + "\n")
 
-        with open("./data/test/out.tsv", "w", encoding="utf8") as f:
-            for pred in translated_test_preds:
-                f.write(pred + "\n")
+        if use_test_data:
+            with open("./data/test/out.tsv", "w", encoding="utf8") as f:
+                for pred in translated_test_preds:
+                    f.write(pred + "\n")
     else:
-        # Predict proba
-        logging.info('Predicting probabilities...')
-        outs_dev_proba = model.predict_proba(vectorizer.transform(data_dev[0])).astype(float)
-        outs_test_proba = model.predict_proba(vectorizer.transform(data_test[0])).astype(float)
-
-        # Translate predictions
-        logging.info('Translate predictions...')
-        translated_dev_preds = []
-        for probabilities, labels in zip(outs_dev_proba, repeat(unique_labels)):
-            score_lines = []
-            for prob, label in zip(probabilities, labels):
-                score_lines.append("{}:{:.9f}".format(label, prob))
-            translated_dev_preds.append(" ".join(score_lines))
-
-        translated_test_preds = []
-        for probabilities, labels in zip(outs_test_proba, repeat(unique_labels)):
-            score_lines = []
-            for prob, label in zip(probabilities, labels):
-                score_lines.append("{}:{:.9f}".format(label, prob))
-            translated_test_preds.append(" ".join(score_lines))
-
-        # save predictions to csv file
-        logging.info('Saving predictions...')
+        logging.info("Saving probabilities to csv file...")
         with open("./data/dev/out.tsv", "w", encoding="utf8") as f:
-            for pred in translated_dev_preds:
-                f.write(pred + "\n")
+            for pred in dev_label_probs:
+                f.write(" ".join(pred) + "\n")
 
-        with open("./data/test/out.tsv", "w", encoding="utf8") as f:
-            for pred in translated_test_preds:
-                f.write(pred + "\n")
+        if use_test_data:
+            with open("./data/test/out.tsv", "w", encoding="utf8") as f:
+                for pred in test_label_probs:
+                    f.write(" ".join(pred) + "\n")
 
     logging.info('Done!')

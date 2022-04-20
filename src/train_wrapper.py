@@ -51,12 +51,12 @@ if __name__ == '__main__':
     if not config_path.exists():
         logging.info(f'No config file found at {config_path}. Creating one...')
         config = {
-            "xgboost": {
+            "fasttext": {
                 "seed": seed,
                 "threads": threads,
                 "outputs": "probabilities",
-                "n_estimators": 300,
-                "max_depth": 3,
+                "lr": 0.1,
+                "epochs": 25,
             },
             "datasetrewrite": {
                 "threads": threads
@@ -70,8 +70,8 @@ if __name__ == '__main__':
         logging.info(f'Loading config from {config_path.absolute()}')
 
         config = yaml.safe_load(open(config_path))
-        config["xgboost"]["seed"] = seed
-        config["xgboost"]["threads"] = threads
+        config["fasttext"]["seed"] = seed
+        config["fasttext"]["threads"] = threads
 
         logging.info(f'Saving config to {config_path.absolute()}')
         with open(config_path, "w") as f:

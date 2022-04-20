@@ -2,6 +2,7 @@ import json
 import logging
 import os
 import pickle
+import random
 
 import pandas as pd
 import yaml
@@ -12,12 +13,14 @@ import numpy as np
 
 from sklearn.metrics import accuracy_score, f1_score, precision_score, recall_score
 
+
 def labels2tensor(labels, label2idx):
     # print(labels)
     unique = set([label2idx[label.strip().lower()] for label in labels])
     if len(unique) == 0:
         return torch.zeros([len(label2idx)], dtype=torch.long).tolist()
     return torch.zeros([len(label2idx)]).index_fill_(0, torch.tensor(list(unique)), 1).tolist()
+
 
 if __name__ == '__main__':
     logging.basicConfig(
@@ -29,32 +32,31 @@ if __name__ == '__main__':
     logging.info("Loading config...")
     config = yaml.safe_load(open("./params.yaml"))['fasttext']
 
+    # set random state
+    np.random.seed(config['seed'])
+    random.seed(config['seed'])
+
     # Load the data
     logging.info('Loading data...')
-    data1 = pd.read_csv("./data/dev/processed.tsv", delimiter='\t', header=None, encoding="utf8", quoting=0)
-    data2 = pd.read_csv("./data/test/processed.tsv", delimiter='\t', header=None, encoding="utf8", quoting=0)
-    data3 = pd.read_csv("./data/train/processed.tsv", delimiter='\t', header=None, encoding="utf8", quoting=0)
-
-    labels1 = pd.read_csv("./data/dev/expected.tsv", delimiter='\t', header=None, encoding="utf8", quoting=0)
-    labels2 = pd.read_csv("./data/test/expected.tsv", delimiter='\t', header=None, encoding="utf8", quoting=0)
-    labels3 = pd.read_csv("./data/train/expected.tsv", delimiter='\t', header=None, encoding="utf8", quoting=0)
+    data_train = pd.read_csv("./data/train/processed.tsv", delimiter='\t', header=None, encoding="utf8", quoting=0)
+    labels_train = pd.read_csv("./data/train/expected.tsv", delimiter='\t', header=None, encoding="utf8", quoting=0)
 
     # Save data for fasttext
     logging.info('Saving data for fasttext...')
     with open("./data/train/fasttext.txt", "w", encoding="utf8") as f:
-        for inpt, labels in zip(data3[0], labels3[0]):
+        for inpt, labels in zip(data_train[0], labels_train[0]):
             new_labels = " ".join(["__label__" + label for label in labels.split(" ")])
 
             f.write(new_labels + " " + inpt + "\n")
 
-    # Make unique labels
-    logging.info('Making unique labels...')
-    labels = pd.concat([labels1, labels2, labels3])
-    unique_labels = set([label.strip().lower() for _, row in labels.iterrows() for label in row[0].split(" ")])
+        # Make unique labels
+        logging.info('Making unique labels...')
+        unique_labels_tsv = pd.read_csv("./data/labels.tsv", delimiter='\t', header=None, encoding="utf8", quoting=0)
+        unique_labels = unique_labels_tsv[0].tolist()
 
-    label2idx = {}
-    for label in unique_labels:
-        label2idx[label] = len(label2idx)
+        label2idx = {}
+        for label in unique_labels:
+            label2idx[label] = len(label2idx)
 
     # Train the model
     logging.info('Training the model...')

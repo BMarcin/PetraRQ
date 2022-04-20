@@ -1,8 +1,9 @@
 import argparse
 import logging
-import pickle
 import sys
 from itertools import repeat
+import fasttext
+import pandas as pd
 
 if __name__ == '__main__':
     logging.basicConfig(
@@ -16,32 +17,35 @@ if __name__ == '__main__':
     args = parser.parse_args()
     stdin_data = args.stdin.read()
 
-    # load saved sklearn model
-    with open("./models/xgboost/model.pkl", "rb") as f:
-        model = pickle.load(f)
+    # load saved model
+    model = fasttext.load_model("./models/fasttext/fasttext.bin")
 
-    with open("./models/xgboost/vectorizer.pkl", "rb") as f:
-        vectorizer = pickle.load(f)
+    # Make unique labels
+    logging.info('Making unique labels...')
+    unique_labels_tsv = pd.read_csv("./data/labels.tsv", delimiter='\t', header=None, encoding="utf8", quoting=0)
+    unique_labels = unique_labels_tsv[0].tolist()
 
-    with open("./models/xgboost/labels.pkl", "rb") as f:
-        labels = pickle.load(f)
+    label2idx = {}
+    for label in unique_labels:
+        label2idx[label] = len(label2idx)
 
     # delete empty lines
     stdin_data = stdin_data.strip()
 
-    # transform input data
-    input_data = vectorizer.transform(stdin_data.split('\n'))
+    pred_probes = []
+    for input_line in stdin_data.split('\n'):
+        prediction = model.predict(input_line, k=len(label2idx))
 
-    # predict
-    predictions = model.predict_proba(input_data)
-
-    # translate predictions to labels
-    translated_probabilities = []
-    for probabilities, labels in zip(predictions, repeat(labels)):
-        score_lines = []
-        for prob, label in zip(probabilities, labels):
-            score_lines.append("{}:{:.9f}".format(label, prob))
-        translated_probabilities.append(" ".join(score_lines))
+        true_labels = []
+        probes = []
+        for label_name, label_weight in zip(prediction[0], prediction[1]):
+            label_name = label_name.replace("__label__", "")
+            if label_weight >= 0.5:
+                true_labels.append(label_name)
+            if label_weight > 1:
+                label_weight = 1
+            probes.append("{}:{:.9f}".format(label_name, label_weight))
+        pred_probes.append(" ".join(probes))
 
     # print results
-    print("\n".join(translated_probabilities))
+    print("\n".join(pred_probes))
