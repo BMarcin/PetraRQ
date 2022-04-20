@@ -58,6 +58,7 @@ stages:
   eval_classifier:
     cmd: python ./src/eval.py
     deps:
+    - ./src/eval.py
     - ./models/naive_bayes/model.pkl
     - ./models/naive_bayes/vectorizer.pkl
     - ./models/naive_bayes/labels.pkl

@@ -148,6 +148,9 @@ stages:
     - path: ./models/naive_bayes/vectorizer.pkl
       md5: b973b7a845b1b4899640f2b1a53b4e6d
       size: 14041464
+    - path: ./src/eval.py
+      md5: 934c10f3a9ba0e30fe4cf59efb440fbd
+      size: 6665
     outs:
     - path: ./data/dev/out.tsv
       md5: fb343f27e5fcd0ac0049ebf17a017ceb
