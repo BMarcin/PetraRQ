@@ -150,6 +150,9 @@ stages:
     - path: ./models/random_forest/vectorizer.pkl
       md5: 4e7120085561942404be56a4b3ac12e7
       size: 14041464
+    - path: ./src/eval.py
+      md5: d145c00fe569e76c8c56f68772d4a7d9
+      size: 6673
     outs:
     - path: ./data/dev/out.tsv
       md5: bb6ae87fea0ba8ec57f693ee32e451da

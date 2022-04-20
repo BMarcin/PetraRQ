@@ -60,6 +60,7 @@ stages:
   eval_classifier:
     cmd: python ./src/eval.py
     deps:
+    - ./src/eval.py
     - ./models/random_forest/model.pkl
     - ./models/random_forest/vectorizer.pkl
     - ./models/random_forest/labels.pkl
