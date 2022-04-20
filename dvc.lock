@@ -114,30 +114,55 @@ stages:
       md5: 5928e0910854642a694527f5d062f636
       size: 2391144197
     - path: ./src/SKLearnDS/SKLearnDS.py
-      md5: 4d1063b5067b067968114bd06b7eb8be
-      size: 1268
+      md5: aa57d27be0bb7e74d34bf309a8e7ebb9
+      size: 1328
     - path: ./src/train_xgboost.py
-      md5: b85ee80c83ff138dc18d6f7065eebabf
-      size: 6179
+      md5: d98742e6c6bc70d4a0bad8143ce10789
+      size: 2033
     params:
       params.yaml:
         xgboost.max_depth: 3
         xgboost.n_estimators: 300
         xgboost.outputs: probabilities
+        xgboost.seed: 42
+    outs:
+    - path: ./models/xgboost/labels.pkl
+      md5: 87dc94ccdf95894e7f2a568303c4546b
+      size: 309
+      isexec: true
+    - path: ./models/xgboost/model.pkl
+      md5: 916790b1f2a4c62b8ac2ab73f82f150f
+      size: 6951036
+      isexec: true
+    - path: ./models/xgboost/vectorizer.pkl
+      md5: c7d51b07b1726fa29efe461e4c27a106
+      size: 14041464
+      isexec: true
+  eval_classifier:
+    cmd: python ./src/eval.py
+    deps:
+    - path: ./models/xgboost/labels.pkl
+      md5: 87dc94ccdf95894e7f2a568303c4546b
+      size: 309
+    - path: ./models/xgboost/model.pkl
+      md5: 916790b1f2a4c62b8ac2ab73f82f150f
+      size: 6951036
+    - path: ./models/xgboost/vectorizer.pkl
+      md5: c7d51b07b1726fa29efe461e4c27a106
+      size: 14041464
+    - path: ./src/eval.py
+      md5: 6ce6af49e4622a0a8cbae0c633ad8985
+      size: 6669
     outs:
     - path: ./data/dev/out.tsv
-      md5: 7a2d60d5b70a858f37bb1e4b6123b964
+      md5: 6ec74771d4b998a82b0d5b52ca7c2e9a
       size: 2416449
       isexec: true
     - path: ./data/test/out.tsv
-      md5: 26a843ec0330bb593bcc585ea9753b39
+      md5: 556aeea41f377ae0f58eb5fd1f038838
       size: 4835313
       isexec: true
-    - path: ./models/xgboost/model.pkl
-      md5: c017b4ee558bcea1cc9f443f59952dfa
-      size: 6951036
-      isexec: true
     - path: scores_classification.json
-      md5: f71ec4507bd33a138e7df6d10fd35a12
+      md5: 62c36869adcce1429141f400639cc0c4
       size: 139
       isexec: true

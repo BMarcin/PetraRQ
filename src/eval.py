@@ -11,10 +11,6 @@ from sklearn.metrics import accuracy_score, f1_score, precision_score, recall_sc
 
 from SKLearnDS import SKlearnDS
 
-def softmax(x):
-    """Compute softmax values for each sets of scores in x."""
-    e_x = np.exp(x - np.max(x))
-    return e_x / e_x.sum(axis=0)
 
 if __name__ == '__main__':
     logging.basicConfig(
@@ -24,7 +20,7 @@ if __name__ == '__main__':
 
     # Load config
     logging.info("Loading config...")
-    config = yaml.safe_load(open("./params.yaml"))['svm']
+    config = yaml.safe_load(open("./params.yaml"))['xgboost']
 
     # Check if we can use Test data
     use_test_data = False
@@ -55,13 +51,13 @@ if __name__ == '__main__':
 
     # Load models
     logging.info('Loading models...')
-    with open("./models/svm/model.pkl", "rb") as f:
+    with open("./models/xgboost/model.pkl", "rb") as f:
         model = pickle.load(f)
 
-    with open("./models/svm/vectorizer.pkl", "rb") as f:
+    with open("./models/xgboost/vectorizer.pkl", "rb") as f:
         vectorizer = pickle.load(f)
 
-    with open("./models/svm/labels.pkl", "rb") as f:
+    with open("./models/xgboost/labels.pkl", "rb") as f:
         labels = pickle.load(f)
 
     # Predict
@@ -131,8 +127,8 @@ if __name__ == '__main__':
     else:
         # Predict proba
         logging.info('Predicting probabilities...')
-        outs_dev_proba = model.decision_function(vectorizer.transform(data_dev[0])).astype(float)
-        outs_test_proba = model.decision_function(vectorizer.transform(data_test[0])).astype(float)
+        outs_dev_proba = model.predict_proba(vectorizer.transform(data_dev[0])).astype(float)
+        outs_test_proba = model.predict_proba(vectorizer.transform(data_test[0])).astype(float)
 
         # Translate predictions
         logging.info('Translate predictions...')

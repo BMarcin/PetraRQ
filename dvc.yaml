@@ -51,6 +51,7 @@ stages:
     - xgboost.outputs
     - xgboost.n_estimators
     - xgboost.max_depth
+    - xgboost.seed
     outs:
     - ./models/xgboost/model.pkl
     - ./models/xgboost/vectorizer.pkl
