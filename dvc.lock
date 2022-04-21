@@ -101,6 +101,9 @@ stages:
     - path: ./data/dev/processed.tsv
       md5: 3ded16b3953922cceaa90923883a7147
       size: 215738076
+    - path: ./data/labels.tsv
+      md5: e16bcdbc2b4c6c92d285156fd0cfd011
+      size: 272
     - path: ./data/test/expected.tsv
       md5: 91df714814cad93605ee6896113114cd
       size: 181433
@@ -135,12 +138,15 @@ stages:
       size: 7156469
       isexec: true
     - path: ./models/random_forest/vectorizer.pkl
-      md5: 4e7120085561942404be56a4b3ac12e7
+      md5: 9c8a89fa71f8d50878897fae0cc7c914
       size: 14041464
       isexec: true
   eval_classifier:
     cmd: python ./src/eval.py
     deps:
+    - path: ./data/labels.tsv
+      md5: e16bcdbc2b4c6c92d285156fd0cfd011
+      size: 272
     - path: ./models/random_forest/labels.pkl
       md5: 87dc94ccdf95894e7f2a568303c4546b
       size: 309
@@ -148,11 +154,11 @@ stages:
       md5: d4da33c5407ff40e87d5069407626812
       size: 7156469
     - path: ./models/random_forest/vectorizer.pkl
-      md5: 4e7120085561942404be56a4b3ac12e7
+      md5: 9c8a89fa71f8d50878897fae0cc7c914
       size: 14041464
     - path: ./src/eval.py
-      md5: d145c00fe569e76c8c56f68772d4a7d9
-      size: 6673
+      md5: 2008925b5f1ff7776aaa620836ed082b
+      size: 6739
     outs:
     - path: ./data/dev/out.tsv
       md5: bb6ae87fea0ba8ec57f693ee32e451da
@@ -163,6 +169,6 @@ stages:
       size: 4835313
       isexec: true
     - path: scores_classification.json
-      md5: 85840d64558af284190664d61fc9e5ca
-      size: 141
+      md5: 0595626a57865bc91e52f50da8df9a58
+      size: 143
       isexec: true
