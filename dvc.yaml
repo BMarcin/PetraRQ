@@ -47,6 +47,7 @@ stages:
     - ./data/test/processed.tsv
     - ./data/train/expected.tsv
     - ./data/train/processed.tsv
+    - ./data/labels.tsv
     params:
     - logistic_regression.solver
     - logistic_regression.outputs
@@ -63,6 +64,7 @@ stages:
     - ./models/logistic_regression/model.pkl
     - ./models/logistic_regression/vectorizer.pkl
     - ./models/logistic_regression/labels.pkl
+    - ./data/labels.tsv
     outs:
     - ./data/dev/out.tsv
     - ./data/test/out.tsv

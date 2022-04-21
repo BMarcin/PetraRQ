@@ -101,6 +101,9 @@ stages:
     - path: ./data/dev/processed.tsv
       md5: 3ded16b3953922cceaa90923883a7147
       size: 215738076
+    - path: ./data/labels.tsv
+      md5: e16bcdbc2b4c6c92d285156fd0cfd011
+      size: 272
     - path: ./data/test/expected.tsv
       md5: 91df714814cad93605ee6896113114cd
       size: 181433
@@ -130,38 +133,41 @@ stages:
       size: 309
       isexec: true
     - path: ./models/logistic_regression/model.pkl
-      md5: a2a1ef92c780741247d7f4e6cf25a0f7
+      md5: fd9d726d93ced55c17410861bd472ef4
       size: 126106565
       isexec: true
     - path: ./models/logistic_regression/vectorizer.pkl
-      md5: 8a9b682b3abc0a1c5822ae929af0ba62
+      md5: 3f1ec943156bc6db86bf14ea4711cf53
       size: 14041464
       isexec: true
   eval_classifier:
     cmd: python ./src/eval.py
     deps:
+    - path: ./data/labels.tsv
+      md5: e16bcdbc2b4c6c92d285156fd0cfd011
+      size: 272
     - path: ./models/logistic_regression/labels.pkl
       md5: 87dc94ccdf95894e7f2a568303c4546b
       size: 309
     - path: ./models/logistic_regression/model.pkl
-      md5: a2a1ef92c780741247d7f4e6cf25a0f7
+      md5: fd9d726d93ced55c17410861bd472ef4
       size: 126106565
     - path: ./models/logistic_regression/vectorizer.pkl
-      md5: 8a9b682b3abc0a1c5822ae929af0ba62
+      md5: 3f1ec943156bc6db86bf14ea4711cf53
       size: 14041464
     - path: ./src/eval.py
-      md5: a6075734c9b189a56032b7d224df9bb5
-      size: 6697
+      md5: 589a89cf5f965dd7781ebdafac42c126
+      size: 6763
     outs:
     - path: ./data/dev/out.tsv
-      md5: b27659e7b06e81efb0d0f0d3195dea9c
+      md5: eb2232b7fedefb9d26db42189d8450be
       size: 2416449
       isexec: true
     - path: ./data/test/out.tsv
-      md5: 4b6664b787f91548845e3cac20203a9b
+      md5: ad126b359a0cceca027df0e79f292b72
       size: 4835313
       isexec: true
     - path: scores_classification.json
-      md5: a5b9b2ec479f60dafbd638049876e7bf
-      size: 140
+      md5: 8c5a7c0a95e5c69e3faefd59eb9df380
+      size: 141
       isexec: true
