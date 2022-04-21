@@ -13,6 +13,8 @@ if __name__ == '__main__':
         format='%(asctime)s - %(message)s',
         datefmt='%Y-%m-%d %H:%M:%S')
 
+    #todo adjust
+
     # load config
     logging.info("Loading config...")
     config = yaml.safe_load(open("./params.yaml"))['classification_train']
@@ -21,8 +23,6 @@ if __name__ == '__main__':
 
     # setup datasets paths
     dev_ds = "./data/dev/"
-    test_ds = "./data/test/"
-    train_ds = "./data/train/"
 
     lm_model_path = "./models/roberta_lm"
     models_path = "./models/roberta_classifier"
@@ -41,22 +41,19 @@ if __name__ == '__main__':
         lm_model_path,
         use_fast=True)
 
-    # load datasets
-    logging.info("Loading datasets...")
-    data1 = pd.read_csv("./data/dev/processed.tsv", delimiter='\t', header=None, encoding="utf8", quoting=0)
-    data2 = pd.read_csv("./data/test/processed.tsv", delimiter='\t', header=None, encoding="utf8", quoting=0)
+    # Load the data
+    logging.info('Loading data...')
+    data_train = pd.read_csv("./data/train/processed.tsv", delimiter='\t', header=None, encoding="utf8", quoting=0)
+    labels_train = pd.read_csv("./data/train/expected.tsv", delimiter='\t', header=None, encoding="utf8", quoting=0)
 
-    labels1 = pd.read_csv("./data/dev/expected.tsv", delimiter='\t', header=None, encoding="utf8", quoting=0)
-    labels2 = pd.read_csv("./data/test/expected.tsv", delimiter='\t', header=None, encoding="utf8", quoting=0)
-    labels3 = pd.read_csv("./data/train/expected.tsv", delimiter='\t', header=None, encoding="utf8", quoting=0)
+    # Make unique labels
+    logging.info('Making unique labels...')
+    unique_labels_tsv = pd.read_csv("./data/labels.tsv", delimiter='\t', header=None, encoding="utf8", quoting=0)
+    unique_labels = unique_labels_tsv[0].tolist()
 
-    assert len(data1) == len(labels1), "Dev set size mismatch"
-    assert len(data2) == len(labels2), "Test set size mismatch"
-
-    # get unique labels
-    logging.info("Getting unique labels...")
-    labels = pd.concat([labels1, labels2, labels3])
-    unique_labels = set([label.strip().lower() for _, row in labels.iterrows() for label in row[0].split(" ")])
+    label2idx = {}
+    for label in unique_labels:
+        label2idx[label] = len(label2idx)
 
     # define model
     logging.info("Defining model...")
