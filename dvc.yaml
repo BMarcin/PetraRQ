@@ -47,6 +47,7 @@ stages:
     - ./data/test/processed.tsv
     - ./data/train/expected.tsv
     - ./data/train/processed.tsv
+    - ./data/labels.tsv
     params:
     - svm.outputs
     - svm.seed
@@ -62,6 +63,7 @@ stages:
     - ./models/svm/model.pkl
     - ./models/svm/vectorizer.pkl
     - ./models/svm/labels.pkl
+    - ./data/labels.tsv
     outs:
     - ./data/dev/out.tsv
     - ./data/test/out.tsv
