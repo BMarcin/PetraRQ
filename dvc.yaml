@@ -47,6 +47,7 @@ stages:
     - ./data/test/processed.tsv
     - ./data/train/expected.tsv
     - ./data/train/processed.tsv
+    - ./data/labels.tsv
     params:
     - fasttext.outputs
     - fasttext.epochs
@@ -61,6 +62,7 @@ stages:
     deps:
     - ./src/eval.py
     - ./models/fasttext/fasttext.bin
+    - ./data/labels.tsv
     outs:
     - ./data/dev/out.tsv
     - ./data/test/out.tsv
