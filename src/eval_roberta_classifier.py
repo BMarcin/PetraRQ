@@ -103,5 +103,3 @@ if __name__ == '__main__':
     with open("./data/test/out.tsv", "w") as f:
         for line in test_probabilities:
             f.write(line + "\n")
-
-
