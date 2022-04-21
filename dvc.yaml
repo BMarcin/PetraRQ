@@ -84,6 +84,7 @@ stages:
     - ./data/test/processed.tsv
     - ./data/train/expected.tsv
     - ./data/train/processed.tsv
+    - ./data/labels.tsv
     params:
     - classification_train.warmup_steps
     - classification_train.num_train_epochs
@@ -93,6 +94,7 @@ stages:
     - ./models/roberta_classifier/config.json
     - ./data/dev/out.tsv
     - ./data/test/out.tsv
+    - ./data/labels.tsv
     metrics:
       - scores_classification.json:
           cache: false

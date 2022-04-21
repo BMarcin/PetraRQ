@@ -31,7 +31,8 @@ if __name__ == '__main__':
 
     # Check if we can use Test data
     use_test_data = False
-    if Path("./data/test/excpected.tsv").exists():
+    if Path("./data/test/expected.tsv").exists():
+        logging.info("Found test data, using it for evaluation.")
         use_test_data = True
 
     # Load the data
@@ -181,6 +182,7 @@ if __name__ == '__main__':
                 f.write(" ".join(pred) + "\n")
 
         if use_test_data:
+            logging.info("Saving test probabilities to csv file...")
             with open("./data/test/out.tsv", "w", encoding="utf8") as f:
                 for pred in test_label_probs:
                     f.write(" ".join(pred) + "\n")
