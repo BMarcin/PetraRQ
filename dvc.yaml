@@ -47,6 +47,7 @@ stages:
     - ./data/test/processed.tsv
     - ./data/train/expected.tsv
     - ./data/train/processed.tsv
+    - ./data/labels.tsv
     params:
     - xgboost.outputs
     - xgboost.n_estimators
@@ -63,6 +64,7 @@ stages:
     - ./models/xgboost/model.pkl
     - ./models/xgboost/vectorizer.pkl
     - ./models/xgboost/labels.pkl
+    - ./data/labels.tsv
     outs:
     - ./data/dev/out.tsv
     - ./data/test/out.tsv

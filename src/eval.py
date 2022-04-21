@@ -24,7 +24,8 @@ if __name__ == '__main__':
 
     # Check if we can use Test data
     use_test_data = False
-    if Path("./data/test/excpected.tsv").exists():
+    if Path("./data/test/expected.tsv").exists():
+        logging.info("Found test data, using it for evaluation.")
         use_test_data = True
 
     # Load the data
