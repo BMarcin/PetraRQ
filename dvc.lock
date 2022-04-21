@@ -114,34 +114,45 @@ stages:
       md5: 5928e0910854642a694527f5d062f636
       size: 2391144197
     - path: ./src/SKLearnDS/SKLearnDS.py
-      md5: 4d1063b5067b067968114bd06b7eb8be
-      size: 1268
+      md5: aa57d27be0bb7e74d34bf309a8e7ebb9
+      size: 1328
     - path: ./src/train_fasttext.py
-      md5: 10f7f483cae7130e712df542f783b144
-      size: 7122
+      md5: 906f518e82db732affc415018247346a
+      size: 2361
     params:
       params.yaml:
         fasttext.epochs: 25
         fasttext.lr: 0.1
         fasttext.outputs: probabilities
+        fasttext.seed: 42
     outs:
-    - path: ./data/dev/out.tsv
-      md5: 4beaed442e7b5adff021941b192ab913
-      size: 2416449
-      isexec: true
-    - path: ./data/test/out.tsv
-      md5: db32a004e3c76e82108075ddad4eb5b8
-      size: 4835313
-      isexec: true
     - path: ./data/train/fasttext.txt
       md5: 704bead006a24f452616b58a7a12a1e8
       size: 2393995702
       isexec: true
     - path: ./models/fasttext/fasttext.bin
-      md5: 36a2fbc70eaec9e7034a6732495b7c28
+      md5: 648e4fb538879b629a0be42c1bb89fb8
       size: 619170033
       isexec: true
+  eval_classifier:
+    cmd: python ./src/eval.py
+    deps:
+    - path: ./models/fasttext/fasttext.bin
+      md5: 648e4fb538879b629a0be42c1bb89fb8
+      size: 619170033
+    - path: ./src/eval.py
+      md5: 576e712ef5a1536e579b801b7e4be6e2
+      size: 7435
+    outs:
+    - path: ./data/dev/out.tsv
+      md5: b0b90783d64d9d4b9f023ffc951cea36
+      size: 2416449
+      isexec: true
+    - path: ./data/test/out.tsv
+      md5: 73b4aaef39e7012c7f11e88069dd654f
+      size: 4835313
+      isexec: true
     - path: scores_classification.json
-      md5: df82f1fbfd63d6136e044132810ef51e
+      md5: 8cb29c15ffcc95a8bf30e20e6ec7eae6
       size: 139
       isexec: true
