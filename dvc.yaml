@@ -47,6 +47,7 @@ stages:
     - ./data/test/processed.tsv
     - ./data/train/expected.tsv
     - ./data/train/processed.tsv
+    - ./data/labels.tsv
     params:
     - naive_bayes.outputs
     - naive_bayes.seed
@@ -62,6 +63,7 @@ stages:
     - ./models/naive_bayes/model.pkl
     - ./models/naive_bayes/vectorizer.pkl
     - ./models/naive_bayes/labels.pkl
+    - ./data/labels.tsv
     outs:
     - ./data/dev/out.tsv
     - ./data/test/out.tsv
