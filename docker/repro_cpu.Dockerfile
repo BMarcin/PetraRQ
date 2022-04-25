@@ -30,7 +30,7 @@ RUN ./Miniconda3-latest-Linux-x86_64.sh -b
 RUN conda init bash
 RUN rm -f Miniconda3-latest-Linux-x86_64.sh
 #RUN conda update -n base -c defaults conda
-RUN conda update --all --yes
+RUN conda update conda
 RUN conda install -c conda-forge -y git-annex
 RUN conda create -n petrarq python=3.9
 SHELL ["conda", "run", "-n", "petrarq", "/bin/bash", "-c"]
