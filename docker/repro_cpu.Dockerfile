@@ -33,7 +33,7 @@ RUN rm -f Miniconda3-py39_4.10.3-Linux-x86_64.sh
 #RUN conda update -n base -c defaults conda
 #RUN conda install -c conda-forge pyarrow
 RUN conda install pycryptosat
-#RUN conda install -c conda-forge -y git-annex
+RUN conda install -c conda-forge -y git-annex
 RUN conda create -n petrarq python=3.9
 SHELL ["conda", "run", "-n", "petrarq", "/bin/bash", "-c"]
 ENV PATH /root/.conda/envs/petrarq/bin:$PATH
