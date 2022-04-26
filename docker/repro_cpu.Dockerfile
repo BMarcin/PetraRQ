@@ -18,10 +18,7 @@ RUN apt-get update && apt-get install -y \
     make \
     g++ \
     curl \
-    libatlas-base-dev \
-    libblas3 liblapack3 liblapack-dev libblas-dev \
-    gfortran \
-    && rm -rf /var/lib/apt/lists/*
+&& rm -rf /var/lib/apt/lists/*
 
 ENV PATH="/root/miniconda3/bin:${PATH}"
 ARG PATH="/root/miniconda3/bin:${PATH}"
@@ -34,7 +31,8 @@ RUN conda init bash
 RUN rm -f Miniconda3-py39_4.10.3-Linux-x86_64.sh
 #RUN conda update -n base -c defaults conda
 #RUN conda install -c conda-forge pyarrow
-RUN conda install -c conda-forge -y git-annex
+RUN conda install pycryptosat
+#RUN conda install -c conda-forge -y git-annex
 RUN conda create -n petrarq python=3.9
 SHELL ["conda", "run", "-n", "petrarq", "/bin/bash", "-c"]
 ENV PATH /root/.conda/envs/petrarq/bin:$PATH
