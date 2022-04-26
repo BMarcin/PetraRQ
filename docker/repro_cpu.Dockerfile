@@ -18,7 +18,8 @@ RUN apt-get update && apt-get install -y \
     make \
     g++ \
     curl \
-&& rm -rf /var/lib/apt/lists/*
+    libopenblas-dev\
+    && rm -rf /var/lib/apt/lists/*
 
 ENV PATH="/root/miniconda3/bin:${PATH}"
 ARG PATH="/root/miniconda3/bin:${PATH}"
