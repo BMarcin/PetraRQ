@@ -26,14 +26,13 @@ RUN apt-get update && apt-get install -y \
 ENV PATH="/root/miniconda3/bin:${PATH}"
 ARG PATH="/root/miniconda3/bin:${PATH}"
 
-RUN wget https://repo.anaconda.com/miniconda/Miniconda3-py39_4.10.3-Linux-x86_64.sh
+RUN wget https://repo.anaconda.com/miniconda/Miniconda3-py39_4.8.3-Linux-x86_64.sh
 RUN mkdir /root/.conda
-RUN chmod +x Miniconda3-py39_4.10.3-Linux-x86_64.sh
-RUN ./Miniconda3-py39_4.10.3-Linux-x86_64.sh -b
+RUN chmod +x Miniconda3-py39_4.8.3-Linux-x86_64.sh
+RUN ./Miniconda3-py39_4.8.3-Linux-x86_64.sh -b
 RUN conda init bash
-RUN rm -f Miniconda3-py39_4.10.3-Linux-x86_64.sh
-#RUN conda update -n base -c defaults conda
-RUN conda install -c conda-forge pyarrow
+RUN rm -f Miniconda3-py39_4.8.3-Linux-x86_64.sh
+RUN conda update -n base -c defaults conda
 RUN conda install -c conda-forge -y git-annex
 RUN conda create -n petrarq python=3.9
 SHELL ["conda", "run", "-n", "petrarq", "/bin/bash", "-c"]
