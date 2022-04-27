@@ -18,6 +18,7 @@ RUN apt-get update && apt-get install -y \
     make \
     g++ \
     curl \
+    gfortran\
     libopenblas-dev\
     && rm -rf /var/lib/apt/lists/*
 
