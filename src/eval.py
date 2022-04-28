@@ -93,10 +93,13 @@ if __name__ == '__main__':
     translated_test_preds = []
     test_label_probs = []
 
-    for item, lab in zip(data_test[0], labels_test[0]):
+    # for item, lab in zip(data_test[0], labels_test[0]):
+    for i in range(len(data_test[0])):
+        item = data_test[0][i]
+        if use_test_data:
+            lab = labels_test[0][i]
+
         preds = model.predict(item, k=len(label2idx))
-        # print(preds)
-        # pred_labels = preds[0]
 
         true_labels = []
         probes = []
@@ -113,10 +116,11 @@ if __name__ == '__main__':
         translated_test_preds.append(" ".join(pred_rewrited_labels))
 
         pred_tensor = labels2tensor(pred_rewrited_labels, label2idx)
-        gt_tensor = labels2tensor(lab.split(" "), label2idx)
+        if use_test_data:
+            gt_tensor = labels2tensor(lab.split(" "), label2idx)
+            test_gt.append(gt_tensor)
 
         test_preds.append(pred_tensor)
-        test_gt.append(gt_tensor)
 
     # Evaluate
     logging.info('Evaluating...')
