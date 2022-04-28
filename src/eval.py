@@ -87,36 +87,36 @@ if __name__ == '__main__':
         dev_preds.append(pred_tensor)
         dev_gt.append(gt_tensor)
 
-    if use_test_data:
-        test_preds = []
-        test_gt = []
-        translated_test_preds = []
-        test_label_probs = []
+    # if use_test_data:
+    test_preds = []
+    test_gt = []
+    translated_test_preds = []
+    test_label_probs = []
 
-        for item, lab in zip(data_test[0], labels_test[0]):
-            preds = model.predict(item, k=len(label2idx))
-            # print(preds)
-            # pred_labels = preds[0]
+    for item, lab in zip(data_test[0], labels_test[0]):
+        preds = model.predict(item, k=len(label2idx))
+        # print(preds)
+        # pred_labels = preds[0]
 
-            true_labels = []
-            probes = []
-            for label_name, label_weight in zip(preds[0], preds[1]):
-                label_name = label_name.replace("__label__", "")
-                if label_weight >= 0.5:
-                    true_labels.append(label_name)
-                if label_weight > 1:
-                    label_weight = 1
-                probes.append("{}:{:.9f}".format(label_name, label_weight))
-            test_label_probs.append(probes)
+        true_labels = []
+        probes = []
+        for label_name, label_weight in zip(preds[0], preds[1]):
+            label_name = label_name.replace("__label__", "")
+            if label_weight >= 0.5:
+                true_labels.append(label_name)
+            if label_weight > 1:
+                label_weight = 1
+            probes.append("{}:{:.9f}".format(label_name, label_weight))
+        test_label_probs.append(probes)
 
-            pred_rewrited_labels = [label.replace("__label__", "") for label in true_labels]
-            translated_test_preds.append(" ".join(pred_rewrited_labels))
+        pred_rewrited_labels = [label.replace("__label__", "") for label in true_labels]
+        translated_test_preds.append(" ".join(pred_rewrited_labels))
 
-            pred_tensor = labels2tensor(pred_rewrited_labels, label2idx)
-            gt_tensor = labels2tensor(lab.split(" "), label2idx)
+        pred_tensor = labels2tensor(pred_rewrited_labels, label2idx)
+        gt_tensor = labels2tensor(lab.split(" "), label2idx)
 
-            test_preds.append(pred_tensor)
-            test_gt.append(gt_tensor)
+        test_preds.append(pred_tensor)
+        test_gt.append(gt_tensor)
 
     # Evaluate
     logging.info('Evaluating...')
@@ -171,20 +171,20 @@ if __name__ == '__main__':
             for pred in translated_dev_preds:
                 f.write(pred + "\n")
 
-        if use_test_data:
-            with open("./data/test/out.tsv", "w", encoding="utf8") as f:
-                for pred in translated_test_preds:
-                    f.write(pred + "\n")
+        # if use_test_data:
+        with open("./data/test/out.tsv", "w", encoding="utf8") as f:
+            for pred in translated_test_preds:
+                f.write(pred + "\n")
     else:
         logging.info("Saving probabilities to csv file...")
         with open("./data/dev/out.tsv", "w", encoding="utf8") as f:
             for pred in dev_label_probs:
                 f.write(" ".join(pred) + "\n")
 
-        if use_test_data:
-            logging.info("Saving test probabilities to csv file...")
-            with open("./data/test/out.tsv", "w", encoding="utf8") as f:
-                for pred in test_label_probs:
-                    f.write(" ".join(pred) + "\n")
+        # if use_test_data:
+        logging.info("Saving test probabilities to csv file...")
+        with open("./data/test/out.tsv", "w", encoding="utf8") as f:
+            for pred in test_label_probs:
+                f.write(" ".join(pred) + "\n")
 
     logging.info('Done!')
