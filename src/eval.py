@@ -88,7 +88,11 @@ if __name__ == '__main__':
     dev_probabilities = []
     dev_predicted_labels = []
     dev_predictions = pipe(list(data_dev[0]), batch_size=config['per_device_eval_batch_size'])
-    for probe, gt_labels in tqdm(zip(dev_predictions, labels_dev[0]), desc="Predicting dev set"):
+    # for probe, gt_labels in tqdm(zip(dev_predictions, labels_dev[0]), desc="Predicting dev set"):
+    for i in tqdm(range(len(dev_predictions)), desc="Predicting dev set"):
+        probe = dev_predictions[i]
+        gt_labels = labels_dev[0][i]
+
         labels_probabilities = []
         text_labels = []
         for label, label_name in zip(probe, unique_labels):
