@@ -1,6 +1,8 @@
 import logging
 import os
+import random
 
+import numpy as np
 import pandas as pd
 import torch
 import yaml
@@ -19,10 +21,16 @@ if __name__ == '__main__':
     logging.info("Loading config...")
     config = yaml.safe_load(open("./params.yaml"))['classification_train']
     config_train = yaml.safe_load(open("./params.yaml"))['language_modeling_train']
-    # os.environ["CUDA_VISIBLE_DEVICES"] = ",".join([str(item) for item in config['cuda_visible_devices']])
+    os.environ["CUDA_VISIBLE_DEVICES"] = ",".join([str(item) for item in config['cuda_visible_devices']])
+
+    # set random state
+    np.random.seed(config['seed'])
+    random.seed(config['seed'])
+    torch.manual_seed(config['seed'])
 
     # setup datasets paths
     dev_ds = "./data/dev/"
+    test_ds = "./data/test/"
 
     lm_model_path = "./models/roberta_lm"
     models_path = "./models/roberta_classifier"
@@ -43,17 +51,15 @@ if __name__ == '__main__':
 
     # Load the data
     logging.info('Loading data...')
-    data_train = pd.read_csv("./data/train/processed.tsv", delimiter='\t', header=None, encoding="utf8", quoting=0)
-    labels_train = pd.read_csv("./data/train/expected.tsv", delimiter='\t', header=None, encoding="utf8", quoting=0)
+    data_test= pd.read_csv("./data/test/processed.tsv", delimiter='\t', header=None, encoding="utf8", quoting=0)
+    data_dev = pd.read_csv("./data/dev/processed.tsv", delimiter='\t', header=None, encoding="utf8", quoting=0)
+    labels_test = pd.read_csv("./data/test/expected.tsv", delimiter='\t', header=None, encoding="utf8", quoting=0)
+    labels_dev = pd.read_csv("./data/dev/expected.tsv", delimiter='\t', header=None, encoding="utf8", quoting=0)
 
     # Make unique labels
     logging.info('Making unique labels...')
     unique_labels_tsv = pd.read_csv("./data/labels.tsv", delimiter='\t', header=None, encoding="utf8", quoting=0)
     unique_labels = unique_labels_tsv[0].tolist()
-
-    label2idx = {}
-    for label in unique_labels:
-        label2idx[label] = len(label2idx)
 
     # define model
     logging.info("Defining model...")
@@ -69,7 +75,7 @@ if __name__ == '__main__':
     # predict dev set
     logging.info("Predicting dev set...")
     dev_probabilities = []
-    dev_predictions = pipe(list(data1[0]), batch_size=config['per_device_eval_batch_size'])
+    dev_predictions = pipe(list(data_dev[0]), batch_size=config['per_device_eval_batch_size'])
 
     # rewrite predictions
     logging.info("Rewriting predictions...")
@@ -88,7 +94,7 @@ if __name__ == '__main__':
     # predict test set
     logging.info("Predicting test set...")
     test_probabilities = []
-    test_predictions = pipe(list(data2[0]), batch_size=config['per_device_eval_batch_size'])
+    test_predictions = pipe(list(data_test[0]), batch_size=config['per_device_eval_batch_size'])
 
     # rewrite predictions
     logging.info("Rewriting predictions...")
