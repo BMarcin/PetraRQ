@@ -2,8 +2,10 @@ import argparse
 import logging
 import sys
 from itertools import repeat
-import fasttext
 import pandas as pd
+import yaml
+from tqdm.auto import tqdm
+from transformers import RobertaTokenizerFast, TextClassificationPipeline, RobertaForSequenceClassification
 
 if __name__ == '__main__':
     logging.basicConfig(
@@ -17,8 +19,36 @@ if __name__ == '__main__':
     args = parser.parse_args()
     stdin_data = args.stdin.read()
 
-    # load saved model
-    model = fasttext.load_model("./models/fasttext/fasttext.bin")
+    # Load config
+    logging.info("Loading config...")
+    config = yaml.safe_load(open("./params.yaml"))['classification_train']
+    config_train = yaml.safe_load(open("./params.yaml"))['language_modeling_train']
+
+    # Load models
+    logging.info('Loading models...')
+    lm_model_path = "./models/roberta_lm"
+    models_path = "./models/roberta_classifier"
+
+    logging.info("Defining special characters...")
+    special_tokens = [
+        '<url>',
+        '<email>',
+        '<number>',
+        '<date>',
+    ]
+
+    tokenizer = RobertaTokenizerFast.from_pretrained(
+        lm_model_path,
+        use_fast=True)
+
+    logging.info("Defining model...")
+    pipe = TextClassificationPipeline(
+        model=RobertaForSequenceClassification.from_pretrained(models_path, ),
+        tokenizer=tokenizer,
+        return_all_scores=True,
+        max_length=config_train['max_seq_length'],
+        truncation=True,
+    )
 
     # Make unique labels
     logging.info('Making unique labels...')
@@ -31,6 +61,16 @@ if __name__ == '__main__':
 
     # delete empty lines
     stdin_data = stdin_data.strip()
+
+    predictions = pipe(stdin_data.split('\n'), batch_size=config['per_device_eval_batch_size'])
+    for i in tqdm(range(len(predictions)), desc="Predicting dev set"):
+        probe = predictions[i]
+
+        for label, label_name in zip(probe, unique_labels):
+            labels_probabilities.append("{}:{:.9f}".format(label_name, label['score']))
+            if label['score'] >= 0.5:
+                text_labels.append(label_name)
+
 
     pred_probes = []
     for input_line in stdin_data.split('\n'):

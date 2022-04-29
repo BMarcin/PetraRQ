@@ -100,8 +100,9 @@ if __name__ == '__main__':
         text_labels = []
         preds = []
         for label, label_name in zip(probe, unique_labels):
-            labels_probabilities.append("{}:{:.9f}".format(label_name, label['score']))
-            preds.append("{:.9f}".format(label['score']))
+            score = label['score'] if label['score'] <= 1.0 else 1.0
+            labels_probabilities.append("{}:{:.9f}".format(label_name, score))
+            preds.append("{:.9f}".format(score))
             if label['score'] >= 0.5:
                 text_labels.append(label_name)
         dev_preds.append(preds)
@@ -128,8 +129,9 @@ if __name__ == '__main__':
         text_labels = []
         preds = []
         for label, label_name in zip(probe, unique_labels):
-            labels_probabilities.append("{}:{:.9f}".format(label_name, label['score']))
-            preds.append("{:.9f}".format(label['score']))
+            score = label['score'] if label['score'] <= 1.0 else 1.0
+            labels_probabilities.append("{}:{:.9f}".format(label_name, score))
+            preds.append("{:.9f}".format(score))
             if label['score'] >= 0.5:
                 text_labels.append(label_name)
         test_probabilities.append(" ".join(labels_probabilities))

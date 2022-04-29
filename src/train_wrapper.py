@@ -23,40 +23,122 @@ if __name__ == '__main__':
     )
 
     parser.add_argument(
+        '--threads',
+        type=int,
+        default=os.environ.get("THREADS"),
+        help='Number of threads'
+    )
+
+    parser.add_argument(
         '--gpus',
         type=int,
         default=os.environ.get("GPUS"),
         help='Number of threads to use'
     )
 
+    parser.add_argument(
+        '--lm_batch_size',
+        type=int,
+        default=os.environ.get("LM_BATCH_SIZE"),
+        help='Batch size for language model'
+    )
+
+    parser.add_argument(
+        '--lm_epochs',
+        type=int,
+        default=os.environ.get("LM_EPOCHS"),
+        help='Number of epochs for language model'
+    )
+
+    parser.add_argument(
+        '--classifier_batch_size',
+        type=int,
+        default=os.environ.get("CLASSIFIER_BATCH_SIZE"),
+        help='Batch size for classifier'
+    )
+
+    parser.add_argument(
+        '--classifier_epochs',
+        type=int,
+        default=os.environ.get("CLASSIFIER_EPOCHS"),
+        help='Number of epochs for classifier'
+    )
+
     args = parser.parse_args()
 
     seed = args.seed
     gpus = args.gpus
+    threads = args.threads
+    lm_batch_size = args.lm_batch_size
+    lm_epochs = args.lm_epochs
+    classifier_batch_size = args.classifier_batch_size
+    classifier_epochs = args.classifier_epochs
 
     # check if seed is set
     if not seed:
         parser.print_usage()
         sys.exit(1)
 
-    # check if threads is set
+    # check if gpus is set
     if not gpus:
         parser.print_usage()
         sys.exit(1)
 
-    logging.info(f'Using seed {seed} and {gpus} gpus')
+    # check if threads is set
+    if not threads:
+        parser.print_usage()
+        sys.exit(1)
+
+    # check if lm_batch_size is set
+    if not lm_batch_size:
+        parser.print_usage()
+        sys.exit(1)
+
+    # check if lm_epochs is set
+    if not lm_epochs:
+        parser.print_usage()
+        sys.exit(1)
+
+    # check if classifier_batch_size is set
+    if not classifier_batch_size:
+        parser.print_usage()
+        sys.exit(1)
+
+    # check if classifier_epochs is set
+    if not classifier_epochs:
+        parser.print_usage()
+        sys.exit(1)
+
+    logging.info(f'Using seed {seed}, {gpus} gpus and {threads} threads')
 
     config_path = Path("./params.yaml")
 
     if not config_path.exists():
         logging.info(f'No config file found at {config_path}. Creating one...')
         config = {
-            "fasttext": {
+            "language_modeling_train": {
+                "cuda_visible_devices": ",".split(gpus),
+                "vocab_size": 16000,
+                "tokenizer_min_frequency": 2,
+                "max_seq_length": 512,
+                "mlm_probability": 0.15,
+                "num_attention_heads": 12,
+                "num_hidden_layers": 12,
+                "hidden_size": 768,
+                "hidden_dropout_prob": 0.1,
+                "epochs": lm_epochs,
+                "per_device_train_batch_size": lm_batch_size,
+                "per_device_eval_batch_size": int(lm_batch_size * 1.5),
                 "seed": seed,
-                "threads": threads,
-                "outputs": "probabilities",
-                "lr": 0.1,
-                "epochs": 25,
+            },
+            "classification_train": {
+                "cuda_visible_devices": ",".split(gpus),
+                "warmup_steps": 500,
+                "num_train_epochs": classifier_epochs,
+                "per_device_train_batch_size": classifier_batch_size,
+                "per_device_eval_batch_size": int(classifier_batch_size * 1.5),
+                "seed": seed,
+                "output": "probabilities"
             },
             "datasetrewrite": {
                 "threads": threads
@@ -70,8 +152,17 @@ if __name__ == '__main__':
         logging.info(f'Loading config from {config_path.absolute()}')
 
         config = yaml.safe_load(open(config_path))
-        config["fasttext"]["seed"] = seed
-        config["fasttext"]["threads"] = threads
+        config['language_modeling_train']['seed'] = seed
+        config['classification_train']['seed'] = seed
+        config["language_modeling_train"]["cuda_visible_devices"] = ",".split(gpus)
+        config["classification_train"]["cuda_visible_devices"] = ",".split(gpus)
+        config["datasetrewrite"]["threads"] = threads
+        config["language_modeling_train"]["epochs"] = lm_epochs
+        config["language_modeling_train"]["per_device_train_batch_size"] = lm_batch_size
+        config["language_modeling_train"]["per_device_eval_batch_size"] = int(lm_batch_size * 1.5)
+        config["classification_train"]["num_train_epochs"] = classifier_epochs
+        config["classification_train"]["per_device_train_batch_size"] = classifier_batch_size
+        config["classification_train"]["per_device_eval_batch_size"] = int(classifier_batch_size * 1.5)
 
         logging.info(f'Saving config to {config_path.absolute()}')
         with open(config_path, "w") as f:
