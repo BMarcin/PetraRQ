@@ -40,6 +40,7 @@ if __name__ == '__main__':
     for probabilities, labels in zip(predictions, repeat(labels)):
         score_lines = []
         for prob, label in zip(probabilities, labels):
+            prob = prob if prob <= 1 else 1
             score_lines.append("{}:{:.9f}".format(label, prob))
         translated_probabilities.append(" ".join(score_lines))
 
