@@ -1,6 +1,9 @@
 #!/bin/bash
 set -euo pipefail
 
+which python
+which python3
+
 cd /app
 
 echo "Repro"
