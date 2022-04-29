@@ -63,29 +63,15 @@ if __name__ == '__main__':
     stdin_data = stdin_data.strip()
 
     predictions = pipe(stdin_data.split('\n'), batch_size=config['per_device_eval_batch_size'])
+
+    probabilities = []
     for i in tqdm(range(len(predictions)), desc="Predicting dev set"):
         probe = predictions[i]
 
+        labels_probabilities = []
         for label, label_name in zip(probe, unique_labels):
-            labels_probabilities.append("{}:{:.9f}".format(label_name, label['score']))
-            if label['score'] >= 0.5:
-                text_labels.append(label_name)
+            score = label['score'] if label['score'] <= 1.0 else 1.0
+            labels_probabilities.append("{}:{:.9f}".format(label_name, score))
+        probabilities.append(" ".join(labels_probabilities))
 
-
-    pred_probes = []
-    for input_line in stdin_data.split('\n'):
-        prediction = model.predict(input_line, k=len(label2idx))
-
-        true_labels = []
-        probes = []
-        for label_name, label_weight in zip(prediction[0], prediction[1]):
-            label_name = label_name.replace("__label__", "")
-            if label_weight >= 0.5:
-                true_labels.append(label_name)
-            if label_weight > 1:
-                label_weight = 1
-            probes.append("{}:{:.9f}".format(label_name, label_weight))
-        pred_probes.append(" ".join(probes))
-
-    # print results
-    print("\n".join(pred_probes))
+    print("\n".join(probabilities))

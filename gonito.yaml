@@ -1,6 +1,7 @@
 description: Fast text classifier
 tags:
-  - fasttext
+  - roberta
+  - neural-network
 param-files:
   - "params.yaml"
 links:
