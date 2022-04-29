@@ -23,16 +23,16 @@ if __name__ == '__main__':
     )
 
     parser.add_argument(
-        '--threads',
+        '--gpus',
         type=int,
-        default=os.environ.get("THREADS"),
+        default=os.environ.get("GPUS"),
         help='Number of threads to use'
     )
 
     args = parser.parse_args()
 
     seed = args.seed
-    threads = args.threads
+    gpus = args.gpus
 
     # check if seed is set
     if not seed:
@@ -40,11 +40,11 @@ if __name__ == '__main__':
         sys.exit(1)
 
     # check if threads is set
-    if not threads:
+    if not gpus:
         parser.print_usage()
         sys.exit(1)
 
-    logging.info(f'Using seed {seed} and {threads} threads')
+    logging.info(f'Using seed {seed} and {gpus} gpus')
 
     config_path = Path("./params.yaml")
 

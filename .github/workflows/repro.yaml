@@ -38,7 +38,7 @@ jobs:
           context: .
           push: true
           tags: ghcr.io/bmarcin/petrarq:${{ env.BRANCH }}
-          cache-from: type=registry,ref=ghcr.io/bmarcin/petrarq:xgboost
+          cache-from: type=registry,ref=ghcr.io/bmarcin/petrarq:${{ env.BRANCH }}
           cache-to: type=inline
           build-args: |
             BRANCH=${{ env.BRANCH }}
@@ -48,7 +48,7 @@ jobs:
     needs:
       - DockerBuildPush
     container:
-      image: ghcr.io/bmarcin/petrarq:fasttext
+      image: ghcr.io/bmarcin/petrarq:roberta
       credentials:
        username: ${{ github.actor }}
        password: ${{ secrets.DOCKER_TOKEN }}
