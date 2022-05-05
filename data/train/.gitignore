@@ -1,3 +1,5 @@
 /in.tsv
 /expected.tsv
 /lm.txt
+/processed.tsv
+/fasttext.txt

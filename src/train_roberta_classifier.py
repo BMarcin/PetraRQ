@@ -1,8 +1,11 @@
 import json
 import logging
 import os
+import random
 
+import numpy as np
 import pandas as pd
+import torch
 import wandb
 import yaml
 from sklearn.metrics import accuracy_score, f1_score, precision_score, recall_score
@@ -42,6 +45,12 @@ if __name__ == '__main__':
     config = yaml.safe_load(open("./params.yaml"))['classification_train']
     config_train = yaml.safe_load(open("./params.yaml"))['language_modeling_train']
     os.environ["CUDA_VISIBLE_DEVICES"] = ",".join([str(item) for item in config['cuda_visible_devices']])
+    os.environ["WANDB_PROJECT"] = 'PetraRQ-Classifier'
+
+    # set random state
+    np.random.seed(config['seed'])
+    random.seed(config['seed'])
+    torch.manual_seed(config['seed'])
 
     # log to wandb
     logging.info("Logging to wandb...")
@@ -49,7 +58,6 @@ if __name__ == '__main__':
 
     # setup datasets paths
     dev_ds = "./data/dev/"
-    test_ds = "./data/test/"
     train_ds = "./data/train/"
 
     # set models path
@@ -75,30 +83,22 @@ if __name__ == '__main__':
         'additional_special_tokens': special_tokens
     })
 
-    # load datasets
-    logging.info("Loading datasets...")
-    data1 = pd.read_csv("./data/dev/in.tsv", delimiter='\t', header=None, encoding="utf8", quoting=0)
-    data2 = pd.read_csv("./data/test/in.tsv", delimiter='\t', header=None, encoding="utf8")
-    data3 = pd.read_csv("./data/train/in.tsv", delimiter='\t', header=None, encoding="utf8")
+    # Load the data
+    logging.info('Loading data...')
+    data_train = pd.read_csv("./data/train/processed.tsv", delimiter='\t', header=None, encoding="utf8", quoting=0)
+    data_dev = pd.read_csv("./data/dev/processed.tsv", delimiter='\t', header=None, encoding="utf8", quoting=0)
+    labels_train = pd.read_csv("./data/train/expected.tsv", delimiter='\t', header=None, encoding="utf8", quoting=0)
+    labels_dev = pd.read_csv("./data/dev/expected.tsv", delimiter='\t', header=None, encoding="utf8", quoting=0)
 
-    labels1 = pd.read_csv("./data/dev/expected.tsv", delimiter='\t', header=None, encoding="utf8", quoting=0)
-    labels2 = pd.read_csv("./data/test/expected.tsv", delimiter='\t', header=None, encoding="utf8")
-    labels3 = pd.read_csv("./data/train/expected.tsv", delimiter='\t', header=None, encoding="utf8")
-
-    assert len(data1) == len(labels1), "Dev set size mismatch"
-    assert len(data2) == len(labels2), "Test set size mismatch"
-    assert len(data3) == len(labels3), "Train set size mismatch"
-
-    # get unique labels
-    logging.info("Getting unique labels...")
-    labels = pd.concat([labels1, labels2, labels3])
-    unique_labels = set([label.strip().lower() for _, row in labels.iterrows() for label in row[0].split(" ")])
+    # Make unique labels
+    logging.info('Making unique labels...')
+    unique_labels_tsv = pd.read_csv("./data/labels.tsv", delimiter='\t', header=None, encoding="utf8", quoting=0)
+    unique_labels = unique_labels_tsv[0].tolist()
 
     # create datasets
     logging.info("Creating datasets...")
-    dev_ds = ClassificationDataset(data1, labels1, unique_labels, tokenizer)
-    test_ds = ClassificationDataset(data2, labels2, unique_labels, tokenizer)
-    train_ds = ClassificationDataset(data3, labels3, unique_labels, tokenizer)
+    dev_ds = ClassificationDataset(data_dev, labels_dev, unique_labels, tokenizer)
+    train_ds = ClassificationDataset(data_train, labels_train, unique_labels, tokenizer)
 
     num_labels = len(unique_labels)
 
@@ -142,7 +142,7 @@ if __name__ == '__main__':
 
     # evaluate model
     logging.info("Evaluating model...")
-    eval_scores = trainer.evaluate(test_ds)
+    eval_scores = trainer.evaluate(dev_ds)
 
     scores = {
         'f1': eval_scores['eval_f1'],
@@ -151,33 +151,35 @@ if __name__ == '__main__':
         'recall': eval_scores['eval_recall'],
         'loss': eval_scores['eval_loss']
     }
-
-    # predict dev set
-    logging.info("Predicting dev set...")
-    dev_preds = trainer.predict(dev_ds).predictions
-    test_preds = trainer.predict(test_ds).predictions
-
-    translated_dev_preds = [" ".join(dev_ds.tensor2labels(model_outputs)) for model_outputs in (dev_preds >= 0.5).astype(int)]
-    translated_test_preds = [" ".join(test_ds.tensor2labels(model_outputs)) for model_outputs in (test_preds >= 0.5).astype(int)]
-
-    # save predictions to csv file
-    logging.info("Saving predictions to csv file...")
-    with open("./data/dev/out.tsv", "w", encoding="utf8") as f:
-        for pred in translated_dev_preds:
-            f.write(pred + "\n")
-
-    with open("./data/test/out.tsv", "w", encoding="utf8") as f:
-        for pred in translated_test_preds:
-            f.write(pred + "\n")
-
-    # save predictions
-    logging.info("Saving predictions...")
-
-    # save model
-    logging.info("Saving model")
+    #
+    # # predict dev set
+    # logging.info("Predicting dev set...")
+    # dev_preds = trainer.predict(dev_ds).predictions
+    # test_preds = trainer.predict(test_ds).predictions
+    #
+    # translated_dev_preds = [" ".join(dev_ds.tensor2labels(model_outputs)) for model_outputs in (dev_preds >= 0.5).astype(int)]
+    # translated_test_preds = [" ".join(test_ds.tensor2labels(model_outputs)) for model_outputs in (test_preds >= 0.5).astype(int)]
+    #
+    # # save predictions to csv file
+    # logging.info("Saving predictions to csv file...")
+    # with open("./data/dev/out.tsv", "w", encoding="utf8") as f:
+    #     for pred in translated_dev_preds:
+    #         f.write(pred + "\n")
+    #
+    # with open("./data/test/out.tsv", "w", encoding="utf8") as f:
+    #     for pred in translated_test_preds:
+    #         f.write(pred + "\n")
+    #
+    # # save predictions
+    # logging.info("Saving predictions...")
+    #
+    # # save model
+    # logging.info("Saving model")
     trainer.save_model()
 
     # log results
     logging.info("Logging results...")
     with open("./scores_classification.json", "w", encoding="utf8") as f:
         json.dump(scores, f, indent=4)
+
+    # wandb.finish()

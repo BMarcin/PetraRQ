@@ -1,7 +1,7 @@
-description: RoBERTa classifier
+description: Fast text classifier
 tags:
+  - roberta
   - neural-network
-  - roberta-base
 param-files:
   - "params.yaml"
 links:

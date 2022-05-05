@@ -10,182 +10,225 @@ stages:
       md5: 757889307369887028c89db5646b73de
       size: 7
     - path: ./data/parsed-pdfs.json
-      md5: f57356c5feba6526f5a0e12cd2c5becf
-      size: 1513810345
+      md5: e9b60861734ddc93be6318db98c155e2
+      size: 3407420087
     - path: ./src/DatasetSplitter/DatasetSplitter.py
-      md5: 4fbd8efb8d2c18b9e9dc86939c0d8240
-      size: 2184
+      md5: 74decfd061dccc1e8e9f604ede9ea119
+      size: 2315
     - path: ./src/split_dataset.py
-      md5: 69b54a4b151f527a0b66802053833f0c
-      size: 3713
+      md5: 23feb175f5dfb8fbb9d606608b14e4e2
+      size: 4295
     params:
       params.yaml:
-        datasetsplit.dev: 0.1
-        datasetsplit.test: 0.2
-        datasetsplit.train: 0.7
+        datasetsplit.dev: 0.05
+        datasetsplit.sort_by: date
+        datasetsplit.test: 0.1
+        datasetsplit.train: 0.85
     outs:
     - path: ./data/dev/expected.tsv
-      md5: 2590ff715296f0ca99866ed6647124aa
-      size: 45210
+      md5: ede893922b331adf870dad11b67be295
+      size: 94971
+      isexec: true
     - path: ./data/dev/in.tsv
-      md5: 20dcd46dccbc20bc94f23c17ffa2b632
-      size: 159776929
+      md5: dafa7c488580f29a63431ce149d6416d
+      size: 239789657
+      isexec: true
     - path: ./data/test/expected.tsv
-      md5: ff06d7ae8b514250f3d0f254e6d356e6
-      size: 103162
+      md5: 91df714814cad93605ee6896113114cd
+      size: 181433
+      isexec: true
     - path: ./data/test/in.tsv
-      md5: e73d96c6603c73d8aa901a3fc2ca8d83
-      size: 293070725
+      md5: 965f5c51903a86b4627d19a578eaa5b4
+      size: 388966317
+      isexec: true
     - path: ./data/train/expected.tsv
-      md5: 33b4c760cea866d05cfae92a914f9a5d
-      size: 360429
+      md5: 16d9ea238addf0b5afed8fd7ec17200c
+      size: 1559312
+      isexec: true
     - path: ./data/train/in.tsv
-      md5: aa3f8337c621bb39bea515b9b37d1f72
-      size: 1016771132
+      md5: a2d8dfd76ceed3e0278f714429cd1fd1
+      size: 2621612493
+      isexec: true
   rewrite_dataset_to_lm_texts:
     cmd: python ./src/rewrite_dataset.py
     deps:
     - path: ./data/dev/in.tsv
-      md5: 20dcd46dccbc20bc94f23c17ffa2b632
-      size: 159776929
+      md5: dafa7c488580f29a63431ce149d6416d
+      size: 239789657
     - path: ./data/test/in.tsv
-      md5: e73d96c6603c73d8aa901a3fc2ca8d83
-      size: 293070725
+      md5: 965f5c51903a86b4627d19a578eaa5b4
+      size: 388966317
     - path: ./data/train/in.tsv
-      md5: aa3f8337c621bb39bea515b9b37d1f72
-      size: 1016771132
+      md5: a2d8dfd76ceed3e0278f714429cd1fd1
+      size: 2621612493
     - path: ./src/DatasetRewriter/LanguageModelingRewriter.py
-      md5: 5d13bfdc57a9585405851c795d7caf93
-      size: 1956
+      md5: da1e1d32ff54803854ca0fbb0b7054b4
+      size: 1532
     - path: ./src/rewrite_dataset.py
-      md5: c9e7e62c9755dc97a0b874044226562a
-      size: 1081
+      md5: 2feb4ef0cb9eaec8bf89af21690d4ffb
+      size: 2006
     outs:
     - path: ./data/dev/lm.txt
-      md5: 5c8d925e2e8441d3d0a3e906553c76c1
-      size: 162942254
+      md5: 3ded16b3953922cceaa90923883a7147
+      size: 215738076
+      isexec: true
+    - path: ./data/dev/processed.tsv
+      md5: 3ded16b3953922cceaa90923883a7147
+      size: 215738076
+      isexec: true
     - path: ./data/test/lm.txt
-      md5: 252febebedec3fa04869a7e685d65324
-      size: 298319163
+      md5: 61ed2915525aa2acd50189a964ddc46a
+      size: 348233057
+      isexec: true
+    - path: ./data/test/processed.tsv
+      md5: 61ed2915525aa2acd50189a964ddc46a
+      size: 348233057
+      isexec: true
     - path: ./data/train/lm.txt
-      md5: dcb961c85dc491aa295479169665554b
-      size: 1027574174
+      md5: 5928e0910854642a694527f5d062f636
+      size: 2391144197
+      isexec: true
+    - path: ./data/train/processed.tsv
+      md5: 5928e0910854642a694527f5d062f636
+      size: 2391144197
+      isexec: true
   train_lm:
     cmd: python ./src/train_roberta_lm.py
     deps:
     - path: ./data/dev/lm.txt
-      md5: 5c8d925e2e8441d3d0a3e906553c76c1
-      size: 162942254
+      md5: 3ded16b3953922cceaa90923883a7147
+      size: 215738076
+    - path: ./data/labels.tsv
+      md5: e16bcdbc2b4c6c92d285156fd0cfd011
+      size: 254
     - path: ./data/test/lm.txt
-      md5: 252febebedec3fa04869a7e685d65324
-      size: 298319163
+      md5: 61ed2915525aa2acd50189a964ddc46a
+      size: 348233057
     - path: ./data/train/lm.txt
-      md5: dcb961c85dc491aa295479169665554b
-      size: 1027574174
+      md5: 5928e0910854642a694527f5d062f636
+      size: 2391144197
     - path: ./src/train_roberta_lm.py
-      md5: 71be43e16f1088159a7cc29b0f9bf139
-      size: 4802
+      md5: bf9791f613267cfe36918ea14d9b798a
+      size: 5095
     params:
       params.yaml:
-        language_modeling_train.epochs: 90
+        language_modeling_train.epochs: 50
         language_modeling_train.hidden_dropout_prob: 0.1
         language_modeling_train.hidden_size: 768
         language_modeling_train.max_seq_length: 512
         language_modeling_train.mlm_probability: 0.15
         language_modeling_train.num_attention_heads: 12
         language_modeling_train.num_hidden_layers: 12
+        language_modeling_train.seed: 42
         language_modeling_train.tokenizer_min_frequency: 2
         language_modeling_train.vocab_size: 16000
     outs:
     - path: ./models/roberta_lm/config.json
-      md5: c3f8213d2122603dbc99a3fea1df705a
+      md5: fb932332aa81d1ad848d0889dabb64ec
       size: 637
     - path: ./models/roberta_lm/merges.txt
-      md5: de20758353ea6b39314eedf0c3ebce89
-      size: 147004
+      md5: cec421c01956b7d8ae22cc754331a35f
+      size: 145988
     - path: ./models/roberta_lm/pytorch_model.bin
-      md5: 2f2e4970d0cc71346ba94d6a0c6def2d
+      md5: f8eb6780329af2ff0eeb840640beb227
       size: 393462571
     - path: ./models/roberta_lm/special_tokens_map.json
       md5: 30d0b45671f60afbb09abb28d04fcfa4
       size: 845
     - path: ./models/roberta_lm/tokenizer.json
-      md5: d86e1d01f16558bee41d01003f99f77c
-      size: 428940
+      md5: 36a6b371b5cb0b13f1337eebb01814da
+      size: 665741
     - path: ./models/roberta_lm/tokenizer_config.json
-      md5: 328be10604b380d16b8bf095a1bead5f
-      size: 1133
+      md5: a22d94c14d5cc34c59e5b4ad42506208
+      size: 1155
     - path: ./models/roberta_lm/vocab.json
-      md5: 90037cf9a66c5481b18293cd72c41064
-      size: 248842
+      md5: c089e0d5dd42b586b543d468552b5430
+      size: 247826
     - path: scores.json
-      md5: 1ff5692886a7e9797d577e14665f78c2
+      md5: fe7929d0d6635f7c354cb599ea92ac50
       size: 76
   train_classifier:
     cmd: python ./src/train_roberta_classifier.py
     deps:
     - path: ./data/dev/expected.tsv
-      md5: 2590ff715296f0ca99866ed6647124aa
-      size: 45210
-    - path: ./data/dev/in.tsv
-      md5: 20dcd46dccbc20bc94f23c17ffa2b632
-      size: 159776929
-    - path: ./data/test/expected.tsv
-      md5: ff06d7ae8b514250f3d0f254e6d356e6
-      size: 103162
-    - path: ./data/test/in.tsv
-      md5: e73d96c6603c73d8aa901a3fc2ca8d83
-      size: 293070725
+      md5: ede893922b331adf870dad11b67be295
+      size: 94971
+    - path: ./data/dev/processed.tsv
+      md5: 3ded16b3953922cceaa90923883a7147
+      size: 215738076
+    - path: ./data/labels.tsv
+      md5: e16bcdbc2b4c6c92d285156fd0cfd011
+      size: 254
+    - path: ./data/test/processed.tsv
+      md5: 61ed2915525aa2acd50189a964ddc46a
+      size: 348233057
     - path: ./data/train/expected.tsv
-      md5: 33b4c760cea866d05cfae92a914f9a5d
-      size: 360429
-    - path: ./data/train/in.tsv
-      md5: aa3f8337c621bb39bea515b9b37d1f72
-      size: 1016771132
+      md5: 16d9ea238addf0b5afed8fd7ec17200c
+      size: 1559312
+    - path: ./data/train/processed.tsv
+      md5: 5928e0910854642a694527f5d062f636
+      size: 2391144197
     - path: ./models/roberta_lm/config.json
-      md5: c3f8213d2122603dbc99a3fea1df705a
+      md5: fb932332aa81d1ad848d0889dabb64ec
       size: 637
     - path: ./models/roberta_lm/merges.txt
-      md5: de20758353ea6b39314eedf0c3ebce89
-      size: 147004
+      md5: cec421c01956b7d8ae22cc754331a35f
+      size: 145988
     - path: ./models/roberta_lm/pytorch_model.bin
-      md5: 2f2e4970d0cc71346ba94d6a0c6def2d
+      md5: f8eb6780329af2ff0eeb840640beb227
       size: 393462571
     - path: ./models/roberta_lm/special_tokens_map.json
       md5: 30d0b45671f60afbb09abb28d04fcfa4
       size: 845
     - path: ./models/roberta_lm/tokenizer.json
-      md5: d86e1d01f16558bee41d01003f99f77c
-      size: 428940
+      md5: 36a6b371b5cb0b13f1337eebb01814da
+      size: 665741
     - path: ./models/roberta_lm/tokenizer_config.json
-      md5: 328be10604b380d16b8bf095a1bead5f
-      size: 1133
+      md5: a22d94c14d5cc34c59e5b4ad42506208
+      size: 1155
     - path: ./models/roberta_lm/vocab.json
-      md5: 90037cf9a66c5481b18293cd72c41064
-      size: 248842
+      md5: c089e0d5dd42b586b543d468552b5430
+      size: 247826
     - path: ./src/ClassificationDataset/ClassificationDataset.py
-      md5: 6691c64224d22030224d57cba8bb6055
-      size: 1385
+      md5: 1fcb0427fc78b90816d7689b023e6049
+      size: 1813
     - path: ./src/train_roberta_classifier.py
-      md5: 9c4f5e2174135fbf6abd4476875e3c25
-      size: 6237
+      md5: 53a6a2e656c57890bb8959d6a3ae9212
+      size: 6125
+    - path: ./src/train_roberta_classifier.py
+      md5: 53a6a2e656c57890bb8959d6a3ae9212
+      size: 6125
     params:
       params.yaml:
-        classification_train.num_train_epochs: 20
+        classification_train.num_train_epochs: 10
+        classification_train.seed: 42
         classification_train.warmup_steps: 500
     outs:
-    - path: ./data/dev/out.tsv
-      md5: 90b52e8c1a40d3de6ec77fd1b622575a
-      size: 44532
-    - path: ./data/test/out.tsv
-      md5: 50752396414ef7cb68ed77672e404bec
-      size: 100144
     - path: ./models/roberta_classifier/config.json
-      md5: d3d3ef84a7aa01f9668532958558edd2
-      size: 1413
+      md5: ca135cd1e0629cc6be91dce9834c7f64
+      size: 1539
     - path: ./models/roberta_classifier/pytorch_model.bin
-      md5: 267dd951700a5f90235857bdca0d7af0
-      size: 393455085
+      md5: e45ccd9d4d5842c9a04626082da4f538
+      size: 393450541
+  evaluate_classifier:
+    cmd: python ./src/eval.py
+    deps:
+    - path: ./models/roberta_classifier/config.json
+      md5: ca135cd1e0629cc6be91dce9834c7f64
+      size: 1539
+    - path: ./models/roberta_classifier/pytorch_model.bin
+      md5: e45ccd9d4d5842c9a04626082da4f538
+      size: 393450541
+    - path: ./src/eval.py
+      md5: 77bd4f97b565fd4d53082eb835a71a72
+      size: 8554
+    outs:
+    - path: ./data/dev/out.tsv
+      md5: ba392b40743151afee770e9807626d06
+      size: 1140684
+    - path: ./data/test/out.tsv
+      md5: 3355510d73a8f6b064db43eabe30f3e3
+      size: 2282508
     - path: scores_classification.json
-      md5: 18a9a9eb6ba70487d721caca6b71f6fb
-      size: 172
+      md5: 14fbc5304793f5c1f5f575888980d331
+      size: 139

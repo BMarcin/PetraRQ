@@ -7,24 +7,38 @@ Assign one, more than one or none labels to each doc.
 
 Documents were downloaded from [European Commision's website](https://eur-lex.europa.eu/browse/institutions/eu-commission.html).
 
+## Dockerfile
+Repository has got already builded docker image. To use it just pull it from ghcr.io:
+```bash
+docker pull ghcr.io/BMarcin/PetraRQ:<branch tag>
+```
+
+For example to pull docker image for branch "models/logistic_regression" (on github) or "logistic_regression" (on gonito.net) run:
+```bash
+docker pull ghcr.io/BMarcin/PetraRQ:logistic_regression
+```
+
 Dataset labels
 -------------------
 - agriculture
-- work_and_employment
-- education
-- taxes
-- industry
-- european_union
-- law
-- state_public_authorities
 - economy
+- education
+- energy
 - environment
+- european_union
 - foreign_policy
-- science_research_and_technology
 - health
+- industry
+- internal_security
+- law
+- media_informations
+- politics_political_parties
+- research_science_and_technology
+- social_life
 - sports
-- social_policy
-- transport
+- taxes
+- transportation
+- work_and_employment
 
 Repository source code
 -------------------

@@ -2,7 +2,7 @@ SHELL=/bin/bash
 
 all: ./data/in-header.tsv ./data/out-header.tsv
 	dvc pull
-	dvc repro --pull
+	dvc repro
 
 ./data/in-header.tsv ./data/out-header.tsv: ./data/parsed-pdfs.json
 	echo "InText	Time" >> ./data/in-header.tsv
@@ -21,3 +21,6 @@ clean:
 	rm -f ./data/dev/lm.txt
 	rm -f ./data/test/lm.txt
 	rm -f ./data/train/lm.txt
+	rm -f ./data/dev/processed.tsv
+	rm -f ./data/test/processed.tsv
+	rm -f ./data/train/processed.tsv

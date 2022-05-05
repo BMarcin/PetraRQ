@@ -1,8 +1,13 @@
 import json
 import logging
 
-import wandb
+# import wandb
 import os
+import random
+
+import numpy as np
+import torch
+import wandb
 import yaml
 from tokenizers import ByteLevelBPETokenizer
 from transformers import RobertaConfig, RobertaTokenizerFast
@@ -13,6 +18,7 @@ from transformers import Trainer, TrainingArguments
 import math
 
 os.environ['TOKENIZERS_PARALLELISM'] = 'true'
+# os.environ["WANDB_DISABLED"] = "true"
 
 
 def encode(examples):
@@ -33,6 +39,12 @@ if __name__ == '__main__':
     logging.info("Loading config...")
     config = yaml.safe_load(open("./params.yaml"))['language_modeling_train']
     os.environ["CUDA_VISIBLE_DEVICES"] = ",".join([str(item) for item in config['cuda_visible_devices']])
+    os.environ["WANDB_PROJECT"] = 'PetraRQ'
+
+    # set random state
+    np.random.seed(config['seed'])
+    random.seed(config['seed'])
+    torch.manual_seed(config['seed'])
 
     # log to wandb
     logging.info("Logging to wandb...")
@@ -169,4 +181,4 @@ if __name__ == '__main__':
     with open("scores.json", "w", encoding="utf-8") as f:
         json.dump(scores, f, ensure_ascii=False, indent=4)
 
-
+    wandb.finish()

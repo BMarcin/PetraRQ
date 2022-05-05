@@ -1,102 +1,120 @@
 #!/bin/bash
+set -euo pipefail
 
-mkdir -p /home/runner/work/PetraRQ/main_repo/
+cd /app
+
+echo "Repro"
+mkdir -p /app/.dvc/tmp
+echo $BMARCINAI_GOOGLE_CREDENTIALS > ./.dvc/tmp/gdrive-user-credentials.json
+make
+
 echo "Created main repo"
 
-sudo curl -L https://gonito.net/get/bin/geval -o /usr/local/bin/geval
-sudo chmod +x /usr/local/bin/geval
+curl -L https://gonito.net/get/bin/geval -o ./geval
+chmod +x ./geval
 
-cd /home/runner/work/PetraRQ/main_repo/
+git clone ssh://gitolite@gonito.net/marcinb/eur-lex-documents eur-lex-documents-marcinb
+git clone ssh://gitolite@gonito.net/eur-lex-documents eur-lex-documents-base
+cd eur-lex-documents-base
 
-git config --global pack.windowMemory "100m"
-git config --global pack.SizeLimit "100m"
-git config --global pack.threads "1"
-git config --global pack.window "0"
+# use git annex
+git-annex init
+git-annex add ./train/in.tsv.xz
+git-annex enableremote gonito-https
+git-annex sync --content
 
-git clone ssh://gitolite@gonito.net/eur-lex-documents
-cd eur-lex-documents
+cd ../eur-lex-documents-marcinb
 
 git switch -c "$BRANCH_NAME"
-#git branch --set-upstream-to=origin/"$BRANCH_NAME" "$BRANCH_NAME"
+git pull origin "$BRANCH_NAME" || true
 
-cp /home/runner/work/PetraRQ/PetraRQ/README.md .
-cp /home/runner/work/PetraRQ/PetraRQ/config.txt .
-cp /home/runner/work/PetraRQ/PetraRQ/.gitignore .
+# use git annex
+git-annex init
+git-annex add ./train/in.tsv.xz
+git-annex enableremote gonito-https
+git-annex sync --content
 
-mkdir -p ./train
-mkdir -p ./dev-0
-mkdir -p ./test-A
+rm -r ./src || true
+rm -r ./docker || true
 
-if [ -f "./train/in.tsv.gz" ]; then
-  rm ./train/in.tsv.gz
+mkdir -p ./src
+mkdir -p ./docker
+
+cp /app/README.md .
+cp /app/config.txt .
+cp /app/.gitignore .
+cp /app/gonito.yaml .
+cp /app/scripts/train.sh .
+cp /app/scripts/predict.sh .
+cp -r /app/src/* ./src/
+cp -r /app/docker/* ./docker/
+cp /app/requirements.txt .
+cp /app/data/labels.tsv .
+
+chmod +x ./train.sh
+chmod +x ./predict.sh
+
+
+if [ -f "./train/in.tsv.xz" ]; then
+  rm ./train/in.tsv.xz
 fi
 
-if [ -f "./train/expected.tsv.gz" ]; then
-  rm ./train/expected.tsv.gz
+if [ -f "./train/expected.tsv" ]; then
+  rm ./train/expected.tsv
 fi
 
-if [ -f "./dev-0/in.tsv.gz" ]; then
-  rm ./dev-0/in.tsv.gz
+if [ -f "./dev-0/in.tsv.xz" ]; then
+  rm ./dev-0/in.tsv.xz
 fi
 
-if [ -f "./dev-0/expected.tsv.gz" ]; then
-  rm ./dev-0/expected.tsv.gz
+if [ -f "./dev-0/expected.tsv" ]; then
+  rm ./dev-0/expected.tsv
 fi
 
 if [ -f "./dev-0/out.tsv.gz" ]; then
   rm ./dev-0/out.tsv.gz
 fi
 
-if [ -f "./test-A/in.tsv.gz" ]; then
-  rm ./test-A/in.tsv.gz
+if [ -f "./test-A/in.tsv.xz" ]; then
+  rm ./test-A/in.tsv.xz
 fi
 
-if [ -f "./test-A/expected.tsv.gz" ]; then
-  rm ./test-A/expected.tsv.gz
+if [ -f "./test-A/expected.tsv" ]; then
+  rm ./test-A/expected.tsv
 fi
 
-if [ -f "./test-A/out.tsv.gz" ]; then
-  rm ./test-A/out.tsv.gz
+if [ -f "./test-A/out.tsv" ]; then
+  rm ./test-A/out.tsv
 fi
 
-#cp /home/runner/work/PetraRQ/PetraRQ/data/dev/* ./dev-0/
-#cp /home/runner/work/PetraRQ/PetraRQ/data/test/* ./test-A/
-#cp /home/runner/work/PetraRQ/PetraRQ/data/train/* ./train/
-tr -d '\015' </home/runner/work/PetraRQ/PetraRQ/data/dev/in.tsv >./dev-0/in.tsv
-tr -d '\015' </home/runner/work/PetraRQ/PetraRQ/data/dev/expected.tsv >./dev-0/expected.tsv
-tr -d '\015' </home/runner/work/PetraRQ/PetraRQ/data/dev/out.tsv >./dev-0/out.tsv
+#tr -d '\015' </app/data/dev/in.tsv >./dev-0/in.tsv
+#tr -d '\015' </app/data/dev/expected.tsv >./dev-0/expected.tsv
+#tr -d '\015' </app/data/test/in.tsv >./test-A/in.tsv
+#tr -d '\015' </app/data/train/in.tsv >./train/in.tsv
+#tr -d '\015' </app/data/train/expected.tsv >./train/expected.tsv
 
-tr -d '\015' </home/runner/work/PetraRQ/PetraRQ/data/test/in.tsv >./test-A/in.tsv
-tr -d '\015' </home/runner/work/PetraRQ/PetraRQ/data/test/expected.tsv >./test-A/expected.tsv
-tr -d '\015' </home/runner/work/PetraRQ/PetraRQ/data/test/out.tsv >./test-A/out.tsv
+cp -r ../eur-lex-documents-base/dev-0/* ./dev-0
+cp -r ../eur-lex-documents-base/test-A/* ./test-A
+cp -r ../eur-lex-documents-base/train/* ./train
 
-tr -d '\015' </home/runner/work/PetraRQ/PetraRQ/data/train/in.tsv >./train/in.tsv
-tr -d '\015' </home/runner/work/PetraRQ/PetraRQ/data/train/expected.tsv >./train/expected.tsv
+tr -d '\015' </app/data/test/out.tsv >./test-A/out.tsv
+tr -d '\015' </app/data/dev/out.tsv >./dev-0/out.tsv
 
+cp /app/data/in-header.tsv ./
+cp /app/data/out-header.tsv ./
 
-mv /home/runner/work/PetraRQ/PetraRQ/data/in-header.tsv ./
-mv /home/runner/work/PetraRQ/PetraRQ/data/out-header.tsv ./
+#xz ./train/in.tsv
+#xz ./test-A/in.tsv
+#xz ./dev-0/in.tsv
+#/app/geval --validate --expected-directory .
 
-gzip ./train/in.tsv
-gzip ./train/expected.tsv
-gzip ./test-A/in.tsv
-gzip ./test-A/expected.tsv
-gzip ./test-A/out.tsv
-gzip ./dev-0/in.tsv
-gzip ./dev-0/expected.tsv
-gzip ./dev-0/out.tsv
-
-geval --validate --expected-directory .
-
-mv ./test-A/expected.tsv.gz ../expected.tsv.gz
-
-tree
-
-git remote rm origin
-git remote add origin ssh://gitolite@gonito.net/marcinb/eur-lex-documents
-
+git-annex add ./train/in.tsv.xz
 git add .
 git status
+echo "before commit"
 git commit -m "$COMMIT_MESSAGE"
-git push origin -f "$BRANCH_NAME"
-
+echo "after commit"
+git push -f origin "$BRANCH_NAME"
+echo "after push"
+git-annex sync --no-content --no-pull --push --all
+echo "after sync"
