@@ -89,6 +89,7 @@ if __name__ == '__main__':
     dev_predicted_labels = []
     dev_gt = []
     dev_preds = []
+    dev_raw_preds = []
 
     dev_predictions = pipe(list(data_dev[0]), batch_size=config['per_device_eval_batch_size'])
     # for probe, gt_labels in tqdm(zip(dev_predictions, labels_dev[0]), desc="Predicting dev set"):
@@ -99,23 +100,31 @@ if __name__ == '__main__':
         labels_probabilities = []
         text_labels = []
         preds = []
+        raw_preds = []
         for label, label_name in zip(probe, unique_labels):
             score = label['score'] if label['score'] <= 1.0 else 1.0
             labels_probabilities.append("{}:{:.9f}".format(label_name, score))
-            preds.append("{:.9f}".format(score))
+            raw_preds.append("{:.9f}".format(score))
             if label['score'] >= 0.5:
                 text_labels.append(label_name)
+                preds.append(1)
+            else:
+                preds.append(0)
         dev_preds.append(preds)
+        dev_raw_preds.append(raw_preds)
         dev_probabilities.append(" ".join(labels_probabilities))
         dev_predicted_labels.append(" ".join(text_labels))
         gt_tensor = labels2tensor(gt_labels.split(" "), label2idx)
         dev_gt.append(gt_tensor)
-
+        #print(gt_tensor.shape)
+#    print(gt_tensor)
+#    print(dev_gt[0])
 
     test_probabilities = []
     test_predicted_labels = []
     test_gt = []
     test_preds = []
+    test_raw_preds = []
 
     test_predictions = pipe(list(data_test[0]), batch_size=config['per_device_eval_batch_size'])
 
@@ -128,16 +137,23 @@ if __name__ == '__main__':
         labels_probabilities = []
         text_labels = []
         preds = []
+        raw_preds = []
         for label, label_name in zip(probe, unique_labels):
             score = label['score'] if label['score'] <= 1.0 else 1.0
             labels_probabilities.append("{}:{:.9f}".format(label_name, score))
-            preds.append("{:.9f}".format(score))
+            raw_preds.append("{:.9f}".format(score))
             if label['score'] >= 0.5:
                 text_labels.append(label_name)
+                preds.append(1)
+            else:
+                preds.append(0)
         test_probabilities.append(" ".join(labels_probabilities))
         test_predicted_labels.append(" ".join(text_labels))
+        test_preds.append(preds)
+        test_raw_preds.append(raw_preds)
         if use_test_data:
             gt_tensor = labels2tensor(gt_labels.split(" "), label2idx)
+            test_gt.append(gt_tensor)
 
     # Evaluate
     logging.info('Evaluating...')
@@ -183,28 +199,28 @@ if __name__ == '__main__':
                 "recall": recall_dev
             }, f, indent=4)
 
-        # Save ds predictions outputs
-        if config['outputs'] == 'labels':
-            # save predictions to csv file
-            logging.info("Saving predictions to csv file...")
-            with open("./data/dev/out.tsv", "w", encoding="utf8") as f:
-                for pred in dev_probabilities:
-                    f.write(pred + "\n")
+    # Save ds predictions outputs
+    if config['outputs'] == 'labels':
+        # save predictions to csv file
+        logging.info("Saving predictions to csv file...")
+        with open("./data/dev/out.tsv", "w", encoding="utf8") as f:
+            for pred in dev_probabilities:
+                f.write(pred + "\n")
 
-            # if use_test_data:
-            with open("./data/test/out.tsv", "w", encoding="utf8") as f:
-                for pred in test_probabilities:
-                    f.write(pred + "\n")
-        else:
-            logging.info("Saving probabilities to csv file...")
-            with open("./data/dev/out.tsv", "w", encoding="utf8") as f:
-                for pred in dev_preds:
-                    f.write(" ".join(pred) + "\n")
+        # if use_test_data:
+        with open("./data/test/out.tsv", "w", encoding="utf8") as f:
+            for pred in test_probabilities:
+                f.write(pred + "\n")
+    else:
+        logging.info("Saving probabilities to csv file...")
+        with open("./data/dev/out.tsv", "w", encoding="utf8") as f:
+            for pred in dev_raw_preds:
+                f.write(" ".join(pred) + "\n")
 
-            # if use_test_data:
-            logging.info("Saving test probabilities to csv file...")
-            with open("./data/test/out.tsv", "w", encoding="utf8") as f:
-                for pred in test_preds:
-                    f.write(" ".join(pred) + "\n")
+        # if use_test_data:
+        logging.info("Saving test probabilities to csv file...")
+        with open("./data/test/out.tsv", "w", encoding="utf8") as f:
+            for pred in test_raw_preds:
+                f.write(" ".join(pred) + "\n")
 
-        logging.info('Done!')
+    logging.info('Done!')

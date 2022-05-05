@@ -82,7 +82,6 @@ stages:
     - ./models/roberta_lm/tokenizer_config.json
     - ./data/dev/expected.tsv
     - ./data/dev/processed.tsv
-    - ./data/test/expected.tsv
     - ./data/test/processed.tsv
     - ./data/train/expected.tsv
     - ./data/train/processed.tsv
@@ -94,8 +93,17 @@ stages:
     outs:
     - ./models/roberta_classifier/pytorch_model.bin
     - ./models/roberta_classifier/config.json
+    
+  evaluate_classifier:
+    cmd: python ./src/eval.py
+    deps:
+    - ./models/roberta_classifier/pytorch_model.bin
+    - ./models/roberta_classifier/config.json
+    - ./src/eval.py
+    outs:
     - ./data/dev/out.tsv
     - ./data/test/out.tsv
     metrics:
       - scores_classification.json:
           cache: false
+
