@@ -33,7 +33,7 @@ git pull origin "$BRANCH_NAME" || true
 
 # use git annex
 git-annex init
-git-annex add ./train/in.tsv.xz
+git-annex add ./train/in.tsv.xz || true
 git-annex enableremote gonito-https
 git-annex sync --content
 
