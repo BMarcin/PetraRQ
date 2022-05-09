@@ -37,8 +37,9 @@ if [ -f "./train/in.tsv.xz" ]; then
   git-annex add ./train/in.tsv.xz || true
 fi
 git-annex enableremote gonito-https
-git-annex sync --content
-
+if [ -f "./train/in.tsv.xz" ]; then
+  git-annex sync --content
+fi
 
 rm -r ./src || true
 rm -r ./docker || true
