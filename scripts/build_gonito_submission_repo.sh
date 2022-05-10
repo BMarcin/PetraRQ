@@ -41,8 +41,13 @@ if [ -f "./train/in.tsv.xz" ]; then
   git-annex sync --content
 fi
 
-rm -r ./src || true
-rm -r ./docker || true
+if [ -d "./src " ]; then
+  rm -r ./src
+fi
+
+id [ -d "./docker"]; then
+  rm -r ./docker
+fi
 
 mkdir -p ./src
 mkdir -p ./docker
