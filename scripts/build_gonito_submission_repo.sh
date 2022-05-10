@@ -45,7 +45,7 @@ if [ -d "./src" ]; then
   rm -r ./src
 fi
 
-if [ -d "./docker"]; then
+if [ -d "./docker" ]; then
   rm -r ./docker
 fi
 
@@ -104,6 +104,10 @@ fi
 #tr -d '\015' </app/data/test/in.tsv >./test-A/in.tsv
 #tr -d '\015' </app/data/train/in.tsv >./train/in.tsv
 #tr -d '\015' </app/data/train/expected.tsv >./train/expected.tsv
+
+mkdir -p ./dev-0
+mkdir -p ./test-A
+mkdir -p ./train
 
 cp -r ../eur-lex-documents-base/dev-0/* ./dev-0
 cp -r ../eur-lex-documents-base/test-A/* ./test-A
