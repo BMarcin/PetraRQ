@@ -124,8 +124,8 @@ cp /app/data/out-header.tsv ./
 #xz ./dev-0/in.tsv
 #/app/geval --validate --expected-directory .
 
-git add .
 git-annex add ./train/in.tsv.xz
+git add .
 git status
 echo "before commit"
 git commit -m "$COMMIT_MESSAGE"
