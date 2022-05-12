@@ -111,7 +111,7 @@ mkdir -p ./train
 
 cp -r ../eur-lex-documents-base/dev-0/* ./dev-0
 cp -r ../eur-lex-documents-base/test-A/* ./test-A
-cp ../eur-lex-documents-base/train/out.tsv ./train/out.tsv
+cp ../eur-lex-documents-base/train/expected.tsv ./train/expected.tsv
 tr -d '\015' <../eur-lex-documents-base/train/in.tsv >./train/in.tsv
 
 tr -d '\015' </app/data/test/out.tsv >./test-A/out.tsv
