@@ -124,6 +124,7 @@ cp /app/data/out-header.tsv ./
 #xz ./test-A/in.tsv
 #xz ./dev-0/in.tsv
 #/app/geval --validate --expected-directory .
+head -10 ./test-A/out.tsv
 
 git-annex add ./train/in.tsv.xz
 git add .
