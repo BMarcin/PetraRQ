@@ -193,14 +193,15 @@ stages:
       md5: 1fcb0427fc78b90816d7689b023e6049
       size: 1813
     - path: ./src/train_roberta_classifier.py
-      md5: 53a6a2e656c57890bb8959d6a3ae9212
-      size: 6125
+      md5: 3384e6a9fd5ec5586c06708e60998eec
+      size: 6633
     - path: ./src/train_roberta_classifier.py
-      md5: 53a6a2e656c57890bb8959d6a3ae9212
-      size: 6125
+      md5: 3384e6a9fd5ec5586c06708e60998eec
+      size: 6633
     params:
       params.yaml:
         classification_train.num_train_epochs: 20
+        classification_train.num_training_samples: -1
         classification_train.seed: 42
         classification_train.warmup_steps: 500
     outs:
