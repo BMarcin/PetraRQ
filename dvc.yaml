@@ -90,6 +90,7 @@ stages:
     - classification_train.warmup_steps
     - classification_train.num_train_epochs
     - classification_train.seed
+    - classification_train.num_training_samples
     outs:
     - ./models/roberta_classifier/pytorch_model.bin
     - ./models/roberta_classifier/config.json
