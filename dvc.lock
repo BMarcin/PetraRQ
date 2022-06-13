@@ -120,8 +120,8 @@ stages:
       md5: aa57d27be0bb7e74d34bf309a8e7ebb9
       size: 1328
     - path: ./src/train_naive_bayes.py
-      md5: 537de0a5dcf10b527c57e39329da05c6
-      size: 2042
+      md5: 0a0326f034dd65a1b3e4586977239679
+      size: 2563
     params:
       params.yaml:
         naive_bayes.outputs: probabilities
@@ -136,7 +136,7 @@ stages:
       size: 504397474
       isexec: true
     - path: ./models/naive_bayes/vectorizer.pkl
-      md5: dd77bbff6c8ebdf90630fa3dc5f2f254
+      md5: 5e6c009093eef363bf1fdb992e7493e4
       size: 14041464
       isexec: true
   eval_classifier:
@@ -152,11 +152,11 @@ stages:
       md5: 67e33a5315e27bcd2f39d43b217f350e
       size: 504397474
     - path: ./models/naive_bayes/vectorizer.pkl
-      md5: dd77bbff6c8ebdf90630fa3dc5f2f254
+      md5: 5e6c009093eef363bf1fdb992e7493e4
       size: 14041464
     - path: ./src/eval.py
-      md5: 1cf23131ca34100e1d40518b1711389b
-      size: 6731
+      md5: ce784617908ac26cc5872aa50ac28507
+      size: 6829
     outs:
     - path: ./data/dev/out.tsv
       md5: fb343f27e5fcd0ac0049ebf17a017ceb
