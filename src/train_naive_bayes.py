@@ -31,6 +31,19 @@ if __name__ == '__main__':
     data_train = pd.read_csv("./data/train/processed.tsv", delimiter='\t', header=None, encoding="utf8", quoting=0)
     labels_train = pd.read_csv("./data/train/expected.tsv", delimiter='\t', header=None, encoding="utf8", quoting=0)
 
+    # using config You can adjust how many random samples are used in training
+    if config['num_training_samples'] > 0:
+        items_ids = []
+
+        total_items = list(range(len(data_train)))
+        for i in range(config["num_training_samples"]):
+            items_ids.append(random.choice(total_items))
+            item_index = total_items.index(items_ids[-1])
+            del total_items[item_index]
+
+        data_train = data_train.loc[items_ids]
+        labels_train = labels_train.loc[items_ids]
+
     # Make unique labels
     logging.info('Making unique labels...')
     unique_labels_tsv = pd.read_csv("./data/labels.tsv", delimiter='\t', header=None, encoding="utf8", quoting=0)
