@@ -53,6 +53,7 @@ stages:
     - fasttext.epochs
     - fasttext.lr
     - fasttext.seed
+    - fasttext.num_training_samples
     outs:
     - ./models/fasttext/fasttext.bin
     - ./data/train/fasttext.txt
