@@ -136,7 +136,8 @@ if __name__ == '__main__':
         for probabilities, labels in zip(outs_dev_proba, repeat(unique_labels)):
             score_lines = []
             for prob, label in zip(probabilities, labels):
-                prob = prob if prob <= 1 else 1
+                # adjust for loglikelihood metric
+                prob = prob if prob <= 0.950 else 0.950
                 score_lines.append("{}:{:.9f}".format(label, prob))
             translated_dev_preds.append(" ".join(score_lines))
 
@@ -144,7 +145,8 @@ if __name__ == '__main__':
         for probabilities, labels in zip(outs_test_proba, repeat(unique_labels)):
             score_lines = []
             for prob, label in zip(probabilities, labels):
-                prob = prob if prob <= 1 else 1
+                # adjust for loglikelihood metric
+                prob = prob if prob <= 0.950 else 0.950
                 score_lines.append("{}:{:.9f}".format(label, prob))
             translated_test_preds.append(" ".join(score_lines))
 

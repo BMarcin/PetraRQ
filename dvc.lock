@@ -120,8 +120,8 @@ stages:
       md5: aa57d27be0bb7e74d34bf309a8e7ebb9
       size: 1328
     - path: ./src/train_logistic_regression.py
-      md5: bb6947e4c28d94d81f3d414ecfeffadf
-      size: 2671
+      md5: 89e7eb122635d8f360c50dc8d1ae32cf
+      size: 4404
     params:
       params.yaml:
         logistic_regression.outputs: probabilities
@@ -133,11 +133,11 @@ stages:
       size: 309
       isexec: true
     - path: ./models/logistic_regression/model.pkl
-      md5: f290d0bc5fd55b751967a951c203efbe
+      md5: 465d5c7c529afe2ec4e53d94be129f66
       size: 126106565
       isexec: true
     - path: ./models/logistic_regression/vectorizer.pkl
-      md5: a4f1d014b8e93f6e4e5af57ef1398ab9
+      md5: 89af899454bf1f8b41d4b7b235d071d6
       size: 14041464
       isexec: true
   eval_classifier:
@@ -150,24 +150,24 @@ stages:
       md5: 87dc94ccdf95894e7f2a568303c4546b
       size: 309
     - path: ./models/logistic_regression/model.pkl
-      md5: f290d0bc5fd55b751967a951c203efbe
+      md5: 465d5c7c529afe2ec4e53d94be129f66
       size: 126106565
     - path: ./models/logistic_regression/vectorizer.pkl
-      md5: a4f1d014b8e93f6e4e5af57ef1398ab9
+      md5: 89af899454bf1f8b41d4b7b235d071d6
       size: 14041464
     - path: ./src/eval.py
-      md5: bdc10b5b69d6f015cf8826701de553fa
-      size: 6861
+      md5: 915fb52e023a5a474d5d5a2bba3c8f77
+      size: 6979
     outs:
     - path: ./data/dev/out.tsv
-      md5: 66f73173a6dfff2be280e1902720ef4f
+      md5: f391512e80797de73076e64b10b315ca
       size: 2416449
       isexec: true
     - path: ./data/test/out.tsv
-      md5: 3b23d5d2bc952259115c50cee00274d9
+      md5: 22c71eeba20a3465589d90de9fb0bf13
       size: 4835313
       isexec: true
     - path: scores_classification.json
-      md5: 7939f166ac94a1607fa316cb48985ec2
-      size: 141
+      md5: cb9ff5673f626a2e23cfa24a8cfcaf43
+      size: 139
       isexec: true
