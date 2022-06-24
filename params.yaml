@@ -14,4 +14,4 @@ logistic_regression:
   seed: 42
   threads: 8
   num_training_samples: -1
-  epsilon: 0.000001
+  epsilon: 1e-3

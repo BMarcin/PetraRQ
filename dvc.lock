@@ -160,14 +160,14 @@ stages:
       size: 7277
     params:
       params.yaml:
-        logistic_regression.epsilon: 1e-06
+        logistic_regression.epsilon: 0.001
     outs:
     - path: ./data/dev/out.tsv
-      md5: 814ee8e9101601d8057b291134374a57
+      md5: 6957bf2f93b5e48d5caa2f65cb8947aa
       size: 2416449
       isexec: true
     - path: ./data/test/out.tsv
-      md5: febe6928d27ad854905c586cf8f5c422
+      md5: 8fb07c1b3b26fcf2f8203e9ebc2b8ae7
       size: 4835313
       isexec: true
     - path: scores_classification.json
