@@ -65,7 +65,7 @@ stages:
     - ./models/fasttext/fasttext.bin
     - ./data/labels.tsv
     params:
-    - xgboost.epsilon
+    - fasttext.epsilon
     outs:
     - ./data/dev/out.tsv
     - ./data/test/out.tsv

@@ -148,15 +148,18 @@ stages:
       md5: a968e32f860277ee959a5c06238e39a5
       size: 619170033
     - path: ./src/eval.py
-      md5: 895464d6a5f3c5007d33540eca9e02ac
-      size: 7434
+      md5: 6a8817eaa835a7c448c3052c284b1e8e
+      size: 7962
+    params:
+      params.yaml:
+        fasttext.epsilon: 0.0006
     outs:
     - path: ./data/dev/out.tsv
-      md5: d7a8a7924f3cf1e66debf2c45445d29b
+      md5: 22841d9f0ccfd12bb6d2fb025784e23f
       size: 2416449
       isexec: true
     - path: ./data/test/out.tsv
-      md5: ef5738d9575c685ef1c68fdcb2b48cf6
+      md5: ed16eb37fa11fd4be8be8c0f7ea972ad
       size: 4835313
       isexec: true
     - path: scores_classification.json

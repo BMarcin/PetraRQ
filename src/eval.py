@@ -75,6 +75,10 @@ if __name__ == '__main__':
                 true_labels.append(label_name)
             if label_weight > 1:
                 label_weight = 1
+            label_weight = label_weight if label_weight <= 1 - float(config['epsilon']) else 1 - float(
+                config['epsilon'])
+            label_weight = label_weight if label_weight >= 0 + float(config['epsilon']) else 0 + float(
+                config['epsilon'])
             probes.append("{}:{:.9f}".format(label_name, label_weight))
         dev_label_probs.append(probes)
 
@@ -109,6 +113,8 @@ if __name__ == '__main__':
                 true_labels.append(label_name)
             if label_weight > 1:
                 label_weight = 1
+            label_weight = label_weight if label_weight <= 1 - float(config['epsilon']) else 1 - float(config['epsilon'])
+            label_weight = label_weight if label_weight >= 0 + float(config['epsilon']) else 0 + float(config['epsilon'])
             probes.append("{}:{:.9f}".format(label_name, label_weight))
         test_label_probs.append(probes)
 
