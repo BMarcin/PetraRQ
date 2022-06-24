@@ -132,15 +132,12 @@ stages:
     - path: ./models/logistic_regression/labels.pkl
       md5: 87dc94ccdf95894e7f2a568303c4546b
       size: 309
-      isexec: true
     - path: ./models/logistic_regression/model.pkl
       md5: e9d4d88fdb149f6e7f9a598245794b7b
       size: 8194311
-      isexec: true
     - path: ./models/logistic_regression/vectorizer.pkl
       md5: 30d5f7f28d1bba0200db7d4819282fee
       size: 756151
-      isexec: true
   eval_classifier:
     cmd: python ./src/eval.py
     deps:
@@ -166,12 +163,9 @@ stages:
     - path: ./data/dev/out.tsv
       md5: c4c84e4ddfd7d73c6ce615bbd63c5905
       size: 2416449
-      isexec: true
     - path: ./data/test/out.tsv
       md5: f2d4fc1974719e14944c772946950937
       size: 4835313
-      isexec: true
     - path: scores_classification.json
       md5: 3cfcdf5a7cad61b9314537004064e3f8
       size: 125
-      isexec: true
