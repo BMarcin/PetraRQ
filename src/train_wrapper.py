@@ -57,7 +57,7 @@ if __name__ == '__main__':
                 "solver": "sag",
                 "outputs": "probabilities",
                 "num_training_samples": -1,
-                "epsilon": 1e-5
+                "epsilon": 1e-3
             },
             "datasetrewrite": {
                 "threads": threads
