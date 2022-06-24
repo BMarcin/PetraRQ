@@ -137,7 +137,8 @@ if __name__ == '__main__':
             score_lines = []
             for prob, label in zip(probabilities, labels):
                 # adjust for loglikelihood metric
-                prob = prob if prob <= 0.950 else 0.950
+                prob = prob if prob <= 1 - float(config['epsilon']) else 1 - float(config['epsilon'])
+                prob = prob if prob >= 0 + float(config['epsilon']) else 0 + float(config['epsilon'])
                 score_lines.append("{}:{:.9f}".format(label, prob))
             translated_dev_preds.append(" ".join(score_lines))
 
@@ -146,7 +147,8 @@ if __name__ == '__main__':
             score_lines = []
             for prob, label in zip(probabilities, labels):
                 # adjust for loglikelihood metric
-                prob = prob if prob <= 0.950 else 0.950
+                prob = prob if prob <= 1 - float(config['epsilon']) else 1 - float(config['epsilon'])
+                prob = prob if prob >= 0 + float(config['epsilon']) else 0 + float(config['epsilon'])
                 score_lines.append("{}:{:.9f}".format(label, prob))
             translated_test_preds.append(" ".join(score_lines))
 

@@ -156,15 +156,18 @@ stages:
       md5: 89af899454bf1f8b41d4b7b235d071d6
       size: 14041464
     - path: ./src/eval.py
-      md5: 915fb52e023a5a474d5d5a2bba3c8f77
-      size: 6979
+      md5: b798574dd67842e4eb0ee63f869f75ca
+      size: 7277
+    params:
+      params.yaml:
+        logistic_regression.epsilon: 1e-06
     outs:
     - path: ./data/dev/out.tsv
-      md5: f391512e80797de73076e64b10b315ca
+      md5: 814ee8e9101601d8057b291134374a57
       size: 2416449
       isexec: true
     - path: ./data/test/out.tsv
-      md5: 22c71eeba20a3465589d90de9fb0bf13
+      md5: febe6928d27ad854905c586cf8f5c422
       size: 4835313
       isexec: true
     - path: scores_classification.json

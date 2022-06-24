@@ -59,6 +59,8 @@ stages:
 
   eval_classifier:
     cmd: python ./src/eval.py
+    params:
+    - logistic_regression.epsilon
     deps:
     - ./src/eval.py
     - ./models/logistic_regression/model.pkl
