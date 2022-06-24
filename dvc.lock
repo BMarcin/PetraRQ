@@ -160,14 +160,14 @@ stages:
       size: 7245
     params:
       params.yaml:
-        naive_bayes.epsilon: 0.01
+        naive_bayes.epsilon: 0.1
     outs:
     - path: ./data/dev/out.tsv
-      md5: 5ef9cbe004ee1cb99f5d93d107c07070
+      md5: d501350de76d6c16731a5f7d9565578b
       size: 2416449
       isexec: true
     - path: ./data/test/out.tsv
-      md5: 3ae0899fed2ace80069a1b5e1f54d157
+      md5: f7daf8259c5facd3706221bcf0e0b6b8
       size: 4835313
       isexec: true
     - path: scores_classification.json
