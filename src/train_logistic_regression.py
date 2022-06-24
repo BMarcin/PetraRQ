@@ -62,28 +62,16 @@ if __name__ == '__main__':
                 if len(items_ids) >= config['num_training_samples']:
                     break
 
-                doc_id = combined[category_id[label][curr_id][0]][0]
-                if doc_id in used_ids:
-                    pass
-
                 try:
+                    doc_id = category_id[label][curr_id][0]
+                    if doc_id in used_ids:
+                        pass
+
                     items_ids.append(doc_id)
                     used_ids.add(doc_id)
                 except:
                     continue
             curr_id += 1
-
-
-
-        # items_ids = []
-        #
-        # total_items = list(range(len(data_train)))
-        # while len(items_ids) < config['num_training_samples']:
-        #     items_ids.append(random.choice(total_items))
-        #     item_index = total_items.index(items_ids[-1])
-        #     del total_items[item_index]
-        #
-        # print(items_ids)
 
         data_train = data_train.loc[items_ids]
         labels_train = labels_train.loc[items_ids]
