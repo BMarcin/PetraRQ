@@ -52,6 +52,7 @@ stages:
     - logistic_regression.solver
     - logistic_regression.outputs
     - logistic_regression.seed
+    - logistic_regression.num_training_samples
     outs:
     - ./models/logistic_regression/model.pkl
     - ./models/logistic_regression/vectorizer.pkl
