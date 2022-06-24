@@ -124,7 +124,7 @@ stages:
       size: 4037
     params:
       params.yaml:
-        logistic_regression.num_training_samples: -1
+        logistic_regression.num_training_samples: 100
         logistic_regression.outputs: probabilities
         logistic_regression.seed: 42
         logistic_regression.solver: sag
@@ -134,12 +134,12 @@ stages:
       size: 309
       isexec: true
     - path: ./models/logistic_regression/model.pkl
-      md5: efb951980036c6f5cb36de10ad1e8481
-      size: 126106565
+      md5: 27491f0d0af412a99de56fcfe105e41c
+      size: 1449159
       isexec: true
     - path: ./models/logistic_regression/vectorizer.pkl
-      md5: 44fe5ee7710ca13bc5be6ae66e449baf
-      size: 14041464
+      md5: 16955a6e9b78560539ea50da00f6a24b
+      size: 130753
       isexec: true
   eval_classifier:
     cmd: python ./src/eval.py
@@ -151,27 +151,27 @@ stages:
       md5: 87dc94ccdf95894e7f2a568303c4546b
       size: 309
     - path: ./models/logistic_regression/model.pkl
-      md5: efb951980036c6f5cb36de10ad1e8481
-      size: 126106565
+      md5: 27491f0d0af412a99de56fcfe105e41c
+      size: 1449159
     - path: ./models/logistic_regression/vectorizer.pkl
-      md5: 44fe5ee7710ca13bc5be6ae66e449baf
-      size: 14041464
+      md5: 16955a6e9b78560539ea50da00f6a24b
+      size: 130753
     - path: ./src/eval.py
       md5: b798574dd67842e4eb0ee63f869f75ca
       size: 7277
     params:
       params.yaml:
-        logistic_regression.epsilon: 1e-05
+        logistic_regression.epsilon: 0.001
     outs:
     - path: ./data/dev/out.tsv
-      md5: e32ff6a67e614cd1fc10539aa063a5b0
+      md5: 8095d764f788b4be83d89995ee252af9
       size: 2416449
       isexec: true
     - path: ./data/test/out.tsv
-      md5: d3fc0f465e9f18d7ee7571aa76185b4a
+      md5: 968feb34a406bb3612d461a17ca732bf
       size: 4835313
       isexec: true
     - path: scores_classification.json
-      md5: 5f0920146362d2520947f6be29d7933c
-      size: 140
+      md5: a8eb99e1a176c5d02d8db660c85c3bf9
+      size: 125
       isexec: true
