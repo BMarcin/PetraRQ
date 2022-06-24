@@ -165,12 +165,9 @@ stages:
     - path: ./data/dev/out.tsv
       md5: d501350de76d6c16731a5f7d9565578b
       size: 2416449
-      isexec: true
     - path: ./data/test/out.tsv
       md5: f7daf8259c5facd3706221bcf0e0b6b8
       size: 4835313
-      isexec: true
     - path: scores_classification.json
       md5: faabd80e924c14eb5ec20380fac9ce01
       size: 141
-      isexec: true
