@@ -55,7 +55,7 @@ if __name__ == '__main__':
                 "seed": seed,
                 "threads": threads,
                 "outputs": "probabilities",
-                "num_training_samples": -1,
+                "num_training_samples": 100,
                 "epsilon": 1e-1
             },
             "datasetrewrite": {

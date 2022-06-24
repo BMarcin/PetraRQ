@@ -30,6 +30,7 @@ if __name__ == '__main__':
     logging.info('Loading data...')
     data_train = pd.read_csv("./data/train/processed.tsv", delimiter='\t', header=None, encoding="utf8", quoting=0)
     labels_train = pd.read_csv("./data/train/expected.tsv", delimiter='\t', header=None, encoding="utf8", quoting=0)
+    unique_labels = pd.read_csv("./data/labels.tsv", delimiter='\t', header=None, encoding="utf8", quoting=0)
 
     # using config You can adjust how many random samples are used in training
     if config['num_training_samples'] > 0:
