@@ -157,15 +157,21 @@ stages:
       md5: c8d6d32d46d6d3df3ffff5f5f4f72c3f
       size: 14041464
     - path: ./src/eval.py
-      md5: aad959ce6ee324b5c3e4c6b652657d18
-      size: 6833
+      md5: 55884cffe644e67f5cd075b554ec92ae
+      size: 7147
+    params:
+      params.yaml:
+        xgboost.epsilon: 0.11
     outs:
     - path: ./data/dev/out.tsv
-      md5: 6ec74771d4b998a82b0d5b52ca7c2e9a
+      md5: 7ae13b69ae6bd09723f033f7b3c6055e
       size: 2416449
+      isexec: true
     - path: ./data/test/out.tsv
-      md5: 556aeea41f377ae0f58eb5fd1f038838
+      md5: 1f7f7192f1177c52a1d7a25d5c672479
       size: 4835313
+      isexec: true
     - path: scores_classification.json
       md5: f71ec4507bd33a138e7df6d10fd35a12
       size: 139
+      isexec: true

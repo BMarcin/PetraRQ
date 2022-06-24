@@ -65,6 +65,8 @@ stages:
     - ./models/xgboost/vectorizer.pkl
     - ./models/xgboost/labels.pkl
     - ./data/labels.tsv
+    params:
+    - xgboost.epsilon
     outs:
     - ./data/dev/out.tsv
     - ./data/test/out.tsv
