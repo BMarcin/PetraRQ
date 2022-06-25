@@ -175,7 +175,7 @@ stages:
       size: 3844
     params:
       params.yaml:
-        svm.num_training_samples: 1000
+        svm.num_training_samples: 10000
         svm.outputs: probabilities
         svm.seed: 42
     outs:
@@ -184,12 +184,12 @@ stages:
       size: 309
       isexec: true
     - path: ./models/svm/model.pkl
-      md5: b708c0715294727efa0539884fa7b4f9
-      size: 8191000
+      md5: fd13d529f87f927cf04c6041956fc327
+      size: 32530382
       isexec: true
     - path: ./models/svm/vectorizer.pkl
-      md5: ef2b46b5e60abfdefc652cec8351d1f5
-      size: 756151
+      md5: 8d30a8bdc4140f33b9f08f01b1426821
+      size: 3458627
       isexec: true
   eval_classifier:
     cmd: python ./src/eval.py
@@ -201,11 +201,11 @@ stages:
       md5: 87dc94ccdf95894e7f2a568303c4546b
       size: 309
     - path: ./models/svm/model.pkl
-      md5: b708c0715294727efa0539884fa7b4f9
-      size: 8191000
+      md5: fd13d529f87f927cf04c6041956fc327
+      size: 32530382
     - path: ./models/svm/vectorizer.pkl
-      md5: ef2b46b5e60abfdefc652cec8351d1f5
-      size: 756151
+      md5: 8d30a8bdc4140f33b9f08f01b1426821
+      size: 3458627
     - path: ./src/eval.py
       md5: 5922d53e9d83114556b564c78f553438
       size: 7389
@@ -214,14 +214,14 @@ stages:
         svm.epsilon: 0.01
     outs:
     - path: ./data/dev/out.tsv
-      md5: 55a0e9ebb14f71a853d9052012e822d2
+      md5: 1c50d387657f7817485d4895a68df716
       size: 2416449
       isexec: true
     - path: ./data/test/out.tsv
-      md5: 566b22589db6fbfc5e37f7d8f3f3bcb2
+      md5: ddf36f0692a074adc4ac4dd19b312634
       size: 4835313
       isexec: true
     - path: scores_classification.json
-      md5: 7756f64d66ad721be9be88dcb2376dc2
+      md5: cbcf491bff2ca30ffbb88829c8abb3ad
       size: 126
       isexec: true
