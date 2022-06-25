@@ -211,17 +211,14 @@ stages:
       size: 7389
     params:
       params.yaml:
-        svm.epsilon: 0.006
+        svm.epsilon: 0.01
     outs:
     - path: ./data/dev/out.tsv
-      md5: d24fb6a255ba9852da80746247f6863a
+      md5: 6d35965fba07877ed885606ee7d05156
       size: 2416449
-      isexec: true
     - path: ./data/test/out.tsv
-      md5: 94460e410903f25694e13c757ad7b985
+      md5: 214e3051fe5e84e506f4cbc281c494eb
       size: 4835313
-      isexec: true
     - path: scores_classification.json
       md5: ef8e332527b48e1b8b3da067adf97dce
       size: 122
-      isexec: true

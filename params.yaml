@@ -13,4 +13,4 @@ svm:
   seed: 42
   threads: 8
   num_training_samples: -1
-  epsilon: 6e-3
+  epsilon: 1e-2
