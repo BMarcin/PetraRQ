@@ -162,14 +162,14 @@ stages:
       size: 7253
     params:
       params.yaml:
-        random_forest.epsilon: 0.01
+        random_forest.epsilon: 0.006
     outs:
     - path: ./data/dev/out.tsv
-      md5: cca535ccc375fd1287a8247d34b5137e
+      md5: c692a231460f4b2b9d4dba3a6c1e45b3
       size: 2416449
       isexec: true
     - path: ./data/test/out.tsv
-      md5: 13cc006a75f0c71600ebd22c74191f9c
+      md5: d3fcd84991714ef32f670d58dac2173c
       size: 4835313
       isexec: true
     - path: scores_classification.json

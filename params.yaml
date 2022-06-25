@@ -15,4 +15,4 @@ random_forest:
   n_estimators: 300
   max_depth: 3
   num_training_samples: -1
-  epsilon: 1e-2
+  epsilon: 6e-3
