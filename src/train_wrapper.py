@@ -54,7 +54,8 @@ if __name__ == '__main__':
             "svm": {
                 "seed": seed,
                 "threads": threads,
-                "outputs": "probabilities"
+                "outputs": "probabilities",
+                "epsilon": 6e-3
             },
             "datasetrewrite": {
                 "threads": threads

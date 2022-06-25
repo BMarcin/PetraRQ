@@ -51,6 +51,7 @@ stages:
     params:
     - svm.outputs
     - svm.seed
+    - svm.num_training_samples
     outs:
     - ./models/svm/model.pkl
     - ./models/svm/vectorizer.pkl
@@ -64,10 +65,11 @@ stages:
     - ./models/svm/vectorizer.pkl
     - ./models/svm/labels.pkl
     - ./data/labels.tsv
+    params:
+    - svm.epsilon
     outs:
     - ./data/dev/out.tsv
     - ./data/test/out.tsv
     metrics:
     - scores_classification.json:
         cache: false
-
