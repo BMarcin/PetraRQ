@@ -57,7 +57,7 @@ if __name__ == '__main__':
                 "outputs": "probabilities",
                 "n_estimators": 300,
                 "max_depth": 3,
-                "num_training_samples": 100,
+                "num_training_samples": 1000,
                 "epsilon": 6e-3
             },
             "datasetrewrite": {
