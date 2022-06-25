@@ -14,5 +14,5 @@ random_forest:
   threads: 8
   n_estimators: 300
   max_depth: 3
-  num_training_samples: -1
+  num_training_samples: 100
   epsilon: 6e-3
