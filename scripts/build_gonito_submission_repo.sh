@@ -28,17 +28,26 @@ git-annex sync --content
 
 cd ../eur-lex-documents-marcinb
 
-git switch -c "$BRANCH_NAME"
-git pull origin "$BRANCH_NAME" || true
+git switch -c roberta-nn
+git pull origin roberta-nn || true
 
 # use git annex
 git-annex init
-git-annex add ./train/in.tsv.xz
+if [ -f "./train/in.tsv.xz" ]; then
+  git-annex add ./train/in.tsv.xz || true
+fi
 git-annex enableremote gonito-https
-git-annex sync --content
+if [ -f "./train/in.tsv.xz" ]; then
+  git-annex sync --content
+fi
 
-rm -r ./src || true
-rm -r ./docker || true
+if [ -d "./src" ]; then
+  rm -r ./src
+fi
+
+if [ -d "./docker" ]; then
+  rm -r ./docker
+fi
 
 mkdir -p ./src
 mkdir -p ./docker
@@ -96,9 +105,15 @@ fi
 #tr -d '\015' </app/data/train/in.tsv >./train/in.tsv
 #tr -d '\015' </app/data/train/expected.tsv >./train/expected.tsv
 
+mkdir -p ./dev-0
+mkdir -p ./test-A
+mkdir -p ./train
+
 cp -r ../eur-lex-documents-base/dev-0/* ./dev-0
 cp -r ../eur-lex-documents-base/test-A/* ./test-A
 cp -r ../eur-lex-documents-base/train/* ./train
+#cp ../eur-lex-documents-base/train/expected.tsv ./train/expected.tsv
+#tr -d '\015' <../eur-lex-documents-base/train/in.tsv >./train/in.tsv
 
 tr -d '\015' </app/data/test/out.tsv >./test-A/out.tsv
 tr -d '\015' </app/data/dev/out.tsv >./dev-0/out.tsv
@@ -110,6 +125,7 @@ cp /app/data/out-header.tsv ./
 #xz ./test-A/in.tsv
 #xz ./dev-0/in.tsv
 #/app/geval --validate --expected-directory .
+head -10 ./test-A/out.tsv
 
 git-annex add ./train/in.tsv.xz
 git add .
@@ -117,7 +133,7 @@ git status
 echo "before commit"
 git commit -m "$COMMIT_MESSAGE"
 echo "after commit"
-git push -f origin "$BRANCH_NAME"
+git push -f origin roberta-nn
 echo "after push"
 git-annex sync --no-content --no-pull --push --all
 echo "after sync"
