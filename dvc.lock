@@ -133,15 +133,12 @@ stages:
     - path: ./models/random_forest/labels.pkl
       md5: 87dc94ccdf95894e7f2a568303c4546b
       size: 309
-      isexec: true
     - path: ./models/random_forest/model.pkl
       md5: d4da33c5407ff40e87d5069407626812
       size: 7156469
-      isexec: true
     - path: ./models/random_forest/vectorizer.pkl
       md5: fb1f1674a608b042114f444ffa8f59bc
       size: 14041464
-      isexec: true
   eval_classifier:
     cmd: python ./src/eval.py
     deps:
@@ -167,12 +164,9 @@ stages:
     - path: ./data/dev/out.tsv
       md5: c692a231460f4b2b9d4dba3a6c1e45b3
       size: 2416449
-      isexec: true
     - path: ./data/test/out.tsv
       md5: d3fcd84991714ef32f670d58dac2173c
       size: 4835313
-      isexec: true
     - path: scores_classification.json
       md5: 0595626a57865bc91e52f50da8df9a58
       size: 143
-      isexec: true
