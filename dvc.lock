@@ -126,7 +126,7 @@ stages:
       params.yaml:
         random_forest.max_depth: 3
         random_forest.n_estimators: 300
-        random_forest.num_training_samples: 1000
+        random_forest.num_training_samples: 10000
         random_forest.outputs: probabilities
         random_forest.seed: 42
     outs:
@@ -135,12 +135,12 @@ stages:
       size: 309
       isexec: true
     - path: ./models/random_forest/model.pkl
-      md5: aeb2c4b05905a0d9cca182fb1c8253b1
-      size: 6391693
+      md5: 22ac0e566e4b626cecb279d315b45e8f
+      size: 7124501
       isexec: true
     - path: ./models/random_forest/vectorizer.pkl
-      md5: 160ff6fecbbcdf64edf05eef1b0dd5cf
-      size: 756151
+      md5: c8f6537413bdff73c7bda04a08a3881a
+      size: 3458627
       isexec: true
   eval_classifier:
     cmd: python ./src/eval.py
@@ -152,11 +152,11 @@ stages:
       md5: 87dc94ccdf95894e7f2a568303c4546b
       size: 309
     - path: ./models/random_forest/model.pkl
-      md5: aeb2c4b05905a0d9cca182fb1c8253b1
-      size: 6391693
+      md5: 22ac0e566e4b626cecb279d315b45e8f
+      size: 7124501
     - path: ./models/random_forest/vectorizer.pkl
-      md5: 160ff6fecbbcdf64edf05eef1b0dd5cf
-      size: 756151
+      md5: c8f6537413bdff73c7bda04a08a3881a
+      size: 3458627
     - path: ./src/eval.py
       md5: d024152ef985c0cb22165d283ef0d615
       size: 7253
@@ -165,14 +165,14 @@ stages:
         random_forest.epsilon: 0.006
     outs:
     - path: ./data/dev/out.tsv
-      md5: 68b7a978dd44b816503c24dc5781eecc
+      md5: 581f575e5eb5d8002e361d71b970013b
       size: 2416449
       isexec: true
     - path: ./data/test/out.tsv
-      md5: 1004927d2c1f3e4c0fe50d99cb22fb8f
+      md5: 0071abc34c912684467c8378994d45b0
       size: 4835313
       isexec: true
     - path: scores_classification.json
-      md5: 1619766646e3a8766c119a43ae66a5bf
-      size: 142
+      md5: 890ffc86efb0701d0bf783628365c405
+      size: 141
       isexec: true
