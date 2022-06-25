@@ -53,6 +53,7 @@ stages:
     - random_forest.seed
     - random_forest.n_estimators
     - random_forest.max_depth
+    - random_forest.num_training_samples
     outs:
     - ./models/random_forest/model.pkl
     - ./models/random_forest/vectorizer.pkl
@@ -66,6 +67,8 @@ stages:
     - ./models/random_forest/vectorizer.pkl
     - ./models/random_forest/labels.pkl
     - ./data/labels.tsv
+    params:
+    - random_forest.epsilon
     outs:
     - ./data/dev/out.tsv
     - ./data/test/out.tsv
