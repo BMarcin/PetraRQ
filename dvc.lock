@@ -126,7 +126,7 @@ stages:
       params.yaml:
         xgboost.max_depth: 3
         xgboost.n_estimators: 300
-        xgboost.num_training_samples: 100
+        xgboost.num_training_samples: 1000
         xgboost.outputs: probabilities
         xgboost.seed: 42
     outs:
@@ -135,12 +135,12 @@ stages:
       size: 309
       isexec: true
     - path: ./models/xgboost/model.pkl
-      md5: 2a33265b01fc6e6612ab5214d97f575e
-      size: 973692
+      md5: 4b95b2539090f078a77ff53109da8cb8
+      size: 1780365
       isexec: true
     - path: ./models/xgboost/vectorizer.pkl
-      md5: ee29d859500533500b2d1c6b7768abd4
-      size: 130753
+      md5: 22ebafd47d676e71b11f377d11bf88f6
+      size: 756151
       isexec: true
   eval_classifier:
     cmd: python ./src/eval.py
@@ -152,11 +152,11 @@ stages:
       md5: 87dc94ccdf95894e7f2a568303c4546b
       size: 309
     - path: ./models/xgboost/model.pkl
-      md5: 2a33265b01fc6e6612ab5214d97f575e
-      size: 973692
+      md5: 4b95b2539090f078a77ff53109da8cb8
+      size: 1780365
     - path: ./models/xgboost/vectorizer.pkl
-      md5: ee29d859500533500b2d1c6b7768abd4
-      size: 130753
+      md5: 22ebafd47d676e71b11f377d11bf88f6
+      size: 756151
     - path: ./src/eval.py
       md5: fef0879f6f86ff33df75f41c651f0241
       size: 7249
@@ -165,14 +165,14 @@ stages:
         xgboost.epsilon: 0.1
     outs:
     - path: ./data/dev/out.tsv
-      md5: 847147c7b2abbf26c23729c91ea8431b
+      md5: ad2b9e8acac919a9316bdf20afa1be22
       size: 2416449
       isexec: true
     - path: ./data/test/out.tsv
-      md5: 3694d4f5c3971c872efc56633fc2e4e3
+      md5: e7eb7097425173968fe3b019b88fca26
       size: 4835313
       isexec: true
     - path: scores_classification.json
-      md5: ca6c030c63a726699380b779276bf3ab
-      size: 125
+      md5: 71d31f61a0a75b71f57b575bff911b40
+      size: 142
       isexec: true
