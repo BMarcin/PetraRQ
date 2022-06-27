@@ -31,6 +31,7 @@ if __name__ == '__main__':
     logging.info("Loading config...")
     config = yaml.safe_load(open("./params.yaml"))['classification_train']
     config_train = yaml.safe_load(open("./params.yaml"))['language_modeling_train']
+    config_eval = yaml.safe_load(open("./params.yaml"))['classification_eval']
     os.environ["CUDA_VISIBLE_DEVICES"] = ",".join([str(item) for item in config['cuda_visible_devices']])
 
     # Check if we can use Test data
@@ -104,8 +105,8 @@ if __name__ == '__main__':
         for label, label_name in zip(probe, unique_labels):
             score = label['score'] if label['score'] <= 1.0 else 1.0
 
-            score = score if score <= 1 - float(config['epsilon']) else 1 - float(config['epsilon'])
-            score = score if score >= 0 + float(config['epsilon']) else 0 + float(config['epsilon'])
+            score = score if score <= 1 - float(config_eval['epsilon']) else 1 - float(config_eval['epsilon'])
+            score = score if score >= 0 + float(config_eval['epsilon']) else 0 + float(config_eval['epsilon'])
 
             labels_probabilities.append(label_name)
             raw_preds.append("{}:{:.9f}".format(label_name, score))
@@ -145,8 +146,8 @@ if __name__ == '__main__':
         for label, label_name in zip(probe, unique_labels):
             score = label['score'] if label['score'] <= 1.0 else 1.0
 
-            score = score if score <= 1 - float(config['epsilon']) else 1 - float(config['epsilon'])
-            score = score if score >= 0 + float(config['epsilon']) else 0 + float(config['epsilon'])
+            score = score if score <= 1 - float(config_eval['epsilon']) else 1 - float(config_eval['epsilon'])
+            score = score if score >= 0 + float(config_eval['epsilon']) else 0 + float(config_eval['epsilon'])
 
             labels_probabilities.append(label_name)
             # labels_probabilities.append("{}:{:.9f}".format(label_name, score))

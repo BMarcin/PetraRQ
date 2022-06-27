@@ -103,7 +103,7 @@ stages:
     - ./models/roberta_classifier/config.json
     - ./src/eval.py
     params:
-    - evaluate_classifier.epsilon
+    - classification_eval.epsilon
     outs:
     - ./data/dev/out.tsv
     - ./data/test/out.tsv
