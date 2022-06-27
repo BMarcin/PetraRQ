@@ -103,6 +103,10 @@ if __name__ == '__main__':
         raw_preds = []
         for label, label_name in zip(probe, unique_labels):
             score = label['score'] if label['score'] <= 1.0 else 1.0
+
+            score = score if score <= 1 - float(config['epsilon']) else 1 - float(config['epsilon'])
+            score = score if score >= 0 + float(config['epsilon']) else 0 + float(config['epsilon'])
+
             labels_probabilities.append(label_name)
             raw_preds.append("{}:{:.9f}".format(label_name, score))
             if label['score'] >= 0.5:
@@ -140,6 +144,10 @@ if __name__ == '__main__':
         raw_preds = []
         for label, label_name in zip(probe, unique_labels):
             score = label['score'] if label['score'] <= 1.0 else 1.0
+
+            score = score if score <= 1 - float(config['epsilon']) else 1 - float(config['epsilon'])
+            score = score if score >= 0 + float(config['epsilon']) else 0 + float(config['epsilon'])
+
             labels_probabilities.append(label_name)
             # labels_probabilities.append("{}:{:.9f}".format(label_name, score))
             raw_preds.append("{}:{:.9f}".format(label_name, score))
@@ -226,4 +234,3 @@ if __name__ == '__main__':
                 f.write(" ".join(pred) + "\n")
 
     logging.info('Done!')
-

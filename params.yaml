@@ -39,3 +39,6 @@ classification_train:
 
   outputs: probabilities #labels or probabilities
   seed: 42
+
+classification_eval:
+  epsilon: 1e-4
