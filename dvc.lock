@@ -126,17 +126,17 @@ stages:
       params.yaml:
         fasttext.epochs: 25
         fasttext.lr: 0.1
-        fasttext.num_training_samples: 100
+        fasttext.num_training_samples: 1000
         fasttext.outputs: probabilities
         fasttext.seed: 42
     outs:
     - path: ./data/train/fasttext.txt
-      md5: c3a0e040e3dcd38347f217cc3072eb42
-      size: 2270055
+      md5: 6940a55bc9d9f8dffbd61c24e5caa5e3
+      size: 29279371
       isexec: true
     - path: ./models/fasttext/fasttext.bin
-      md5: 787b5badaec265bb2970e03464de50d5
-      size: 7439171
+      md5: 47243aebb91fe52383f97782f3165e9f
+      size: 51775009
       isexec: true
   eval_classifier:
     cmd: python ./src/eval.py
@@ -145,8 +145,8 @@ stages:
       md5: e16bcdbc2b4c6c92d285156fd0cfd011
       size: 272
     - path: ./models/fasttext/fasttext.bin
-      md5: 787b5badaec265bb2970e03464de50d5
-      size: 7439171
+      md5: 47243aebb91fe52383f97782f3165e9f
+      size: 51775009
     - path: ./src/eval.py
       md5: 61aa9105c743d09247742a1243546494
       size: 7957
@@ -155,14 +155,14 @@ stages:
         fasttext.epsilon: 0.0001
     outs:
     - path: ./data/dev/out.tsv
-      md5: 4b565f25274c1052b5459102579cc14a
-      size: 5003
+      md5: 38f4abac8edf7189bca20dacbdeadb24
+      size: 20865
       isexec: true
     - path: ./data/test/out.tsv
-      md5: cda24b75fecb7459c63ba1d4ca23a432
-      size: 3543894
+      md5: 1fc7bb0256ba8c7d62047304f2a7c264
+      size: 4254675
       isexec: true
     - path: scores_classification.json
-      md5: 56c4ef92ec0c03e511fd5683f751d598
-      size: 79
+      md5: 26f8b1d7effa48c7a44e0b0fe5b0c462
+      size: 144
       isexec: true
