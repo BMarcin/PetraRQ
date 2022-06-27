@@ -58,7 +58,7 @@ if __name__ == '__main__':
                 "lr": 0.1,
                 "epochs": 25,
                 "epsilon": 1e-4,
-                "num_training_samples": -1
+                "num_training_samples": 100
             },
             "datasetrewrite": {
                 "threads": threads
