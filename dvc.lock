@@ -112,7 +112,7 @@ stages:
       size: 5095
     params:
       params.yaml:
-        language_modeling_train.epochs: 80
+        language_modeling_train.epochs: 200
         language_modeling_train.hidden_dropout_prob: 0.1
         language_modeling_train.hidden_size: 768
         language_modeling_train.max_seq_length: 512
@@ -130,7 +130,7 @@ stages:
       md5: cec421c01956b7d8ae22cc754331a35f
       size: 145988
     - path: ./models/roberta_lm/pytorch_model.bin
-      md5: dc8bbb21d29987d989d185e66e726a04
+      md5: f4e4219fa51a2ea7c3e199878ab9cb3d
       size: 393462571
     - path: ./models/roberta_lm/special_tokens_map.json
       md5: 30d0b45671f60afbb09abb28d04fcfa4
@@ -145,8 +145,8 @@ stages:
       md5: c089e0d5dd42b586b543d468552b5430
       size: 247826
     - path: scores.json
-      md5: 46a140ae15a35c3e5f5db9e1234d8600
-      size: 76
+      md5: 0cb723a1d2ee842704be485dbe90f5a3
+      size: 74
   train_classifier:
     cmd: python ./src/train_roberta_classifier.py
     deps:
@@ -175,7 +175,7 @@ stages:
       md5: cec421c01956b7d8ae22cc754331a35f
       size: 145988
     - path: ./models/roberta_lm/pytorch_model.bin
-      md5: dc8bbb21d29987d989d185e66e726a04
+      md5: f4e4219fa51a2ea7c3e199878ab9cb3d
       size: 393462571
     - path: ./models/roberta_lm/special_tokens_map.json
       md5: 30d0b45671f60afbb09abb28d04fcfa4
@@ -209,7 +209,7 @@ stages:
       md5: ca135cd1e0629cc6be91dce9834c7f64
       size: 1539
     - path: ./models/roberta_classifier/pytorch_model.bin
-      md5: 327e052966a4187f1444873aee5e79d6
+      md5: c3ab6f93887de1e62e801b0e9e4a8427
       size: 393450541
   evaluate_classifier:
     cmd: python ./src/eval.py
@@ -218,18 +218,18 @@ stages:
       md5: ca135cd1e0629cc6be91dce9834c7f64
       size: 1539
     - path: ./models/roberta_classifier/pytorch_model.bin
-      md5: 327e052966a4187f1444873aee5e79d6
+      md5: c3ab6f93887de1e62e801b0e9e4a8427
       size: 393450541
     - path: ./src/eval.py
       md5: 931a3d7862e41ff3501f8aec2ee0bd8d
       size: 8667
     outs:
     - path: ./data/dev/out.tsv
-      md5: 23fac932e32b45646f6c94db2b71c15a
+      md5: 6b98d82f0bce0d2e6c7d341ff949866f
       size: 2416449
     - path: ./data/test/out.tsv
-      md5: 64b71518a65d114666f4a05a4519e619
+      md5: eb404355b3cd721a6e3eda27f2193dea
       size: 4835313
     - path: scores_classification.json
-      md5: ecd3f8f1c90d39d290a7a8126fb73065
+      md5: 02ec2b966f1f2c77efbf1bdaf0df2b69
       size: 138
