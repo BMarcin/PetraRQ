@@ -188,8 +188,8 @@ if __name__ == '__main__':
     else:
         logging.info("Saving probabilities to csv file...")
         with open("./data/dev/out.tsv", "w", encoding="utf8") as f:
-            for pred in dev_label_probs:
-                f.write(" ".join(pred) + "\n")
+            for pred in translated_dev_preds:
+                f.write(pred + "\n")
 
         # if use_test_data:
         logging.info("Saving test probabilities to csv file...")
