@@ -159,6 +159,9 @@ stages:
     - path: ./data/labels.tsv
       md5: e16bcdbc2b4c6c92d285156fd0cfd011
       size: 254
+    - path: ./data/test/expected.tsv
+      md5: 91df714814cad93605ee6896113114cd
+      size: 181433
     - path: ./data/test/processed.tsv
       md5: 61ed2915525aa2acd50189a964ddc46a
       size: 348233057
@@ -221,14 +224,17 @@ stages:
       md5: c3ab6f93887de1e62e801b0e9e4a8427
       size: 393450541
     - path: ./src/eval.py
-      md5: 931a3d7862e41ff3501f8aec2ee0bd8d
-      size: 8667
+      md5: 34716e24e9e367f98a25bc05efbb5292
+      size: 9193
+    params:
+      params.yaml:
+        classification_eval.epsilon: 0.0001
     outs:
     - path: ./data/dev/out.tsv
-      md5: 6b98d82f0bce0d2e6c7d341ff949866f
+      md5: 30ebdbd34aef455c3615d2d5901f1135
       size: 2416449
     - path: ./data/test/out.tsv
-      md5: eb404355b3cd721a6e3eda27f2193dea
+      md5: 6768692f8036b19f7ebd72714ac010e0
       size: 4835313
     - path: scores_classification.json
       md5: 02ec2b966f1f2c77efbf1bdaf0df2b69
