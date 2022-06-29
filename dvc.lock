@@ -225,17 +225,17 @@ stages:
       size: 393450541
     - path: ./src/eval.py
       md5: 34716e24e9e367f98a25bc05efbb5292
-      size: 9193
+      size: 9430
     params:
       params.yaml:
-        classification_eval.epsilon: 0.0001
+        classification_eval.epsilon: 0.01
     outs:
     - path: ./data/dev/out.tsv
-      md5: 30ebdbd34aef455c3615d2d5901f1135
-      size: 2416449
+      md5: 6e10a460b46aeb9207b125d6a3ba3e5a
+      size: 2421452
     - path: ./data/test/out.tsv
-      md5: 6768692f8036b19f7ebd72714ac010e0
-      size: 4835313
+      md5: afd72ff76d3941fc12b2583c91509783
+      size: 4845324
     - path: scores_classification.json
       md5: 02ec2b966f1f2c77efbf1bdaf0df2b69
-      size: 138
+      size: 143

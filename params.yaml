@@ -41,4 +41,4 @@ classification_train:
   seed: 42
 
 classification_eval:
-  epsilon: 1e-4
+  epsilon: 1e-2
