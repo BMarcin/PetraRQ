@@ -204,7 +204,7 @@ stages:
     params:
       params.yaml:
         classification_train.num_train_epochs: 20
-        classification_train.num_training_samples: -1
+        classification_train.num_training_samples: 100
         classification_train.seed: 42
         classification_train.warmup_steps: 500
     outs:
@@ -212,7 +212,7 @@ stages:
       md5: ca135cd1e0629cc6be91dce9834c7f64
       size: 1539
     - path: ./models/roberta_classifier/pytorch_model.bin
-      md5: c3ab6f93887de1e62e801b0e9e4a8427
+      md5: 69bed5a34152c9cc4996aef100764eda
       size: 393450541
   evaluate_classifier:
     cmd: python ./src/eval.py
@@ -221,21 +221,21 @@ stages:
       md5: ca135cd1e0629cc6be91dce9834c7f64
       size: 1539
     - path: ./models/roberta_classifier/pytorch_model.bin
-      md5: c3ab6f93887de1e62e801b0e9e4a8427
+      md5: 69bed5a34152c9cc4996aef100764eda
       size: 393450541
     - path: ./src/eval.py
       md5: 34716e24e9e367f98a25bc05efbb5292
-      size: 9430
+      size: 9193
     params:
       params.yaml:
         classification_eval.epsilon: 0.01
     outs:
     - path: ./data/dev/out.tsv
-      md5: 6e10a460b46aeb9207b125d6a3ba3e5a
-      size: 2421452
+      md5: 99ac7b7834897038bec12a00dfa8ee19
+      size: 2416449
     - path: ./data/test/out.tsv
-      md5: afd72ff76d3941fc12b2583c91509783
-      size: 4845324
+      md5: df42e9575a275eb72e94fd7847e37be4
+      size: 4835313
     - path: scores_classification.json
-      md5: 02ec2b966f1f2c77efbf1bdaf0df2b69
-      size: 143
+      md5: d2ea7b7bcc8de0c5285e6f8a2297ff2d
+      size: 125
