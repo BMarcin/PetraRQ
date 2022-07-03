@@ -3,6 +3,8 @@ import logging
 import os
 import random
 
+os.environ["CUDA_VISIBLE_DEVICES"] = "0,1,2"
+
 import numpy as np
 import pandas as pd
 import torch
@@ -15,6 +17,7 @@ from transformers import RobertaConfig, RobertaTokenizerFast, RobertaForSequence
 
 from ClassificationDataset import ClassificationDataset
 
+os.environ["WANDB_DISABLED"] = "true"
 
 def compute_metrics(pred):
     labels = pred.label_ids
@@ -170,7 +173,7 @@ if __name__ == '__main__':
         logging_steps=700,
         eval_steps=700,
         evaluation_strategy='steps',
-        report_to="wandb",
+        #report_to="wandb",
         run_name="petrarq-roberta-classification"
     )
 

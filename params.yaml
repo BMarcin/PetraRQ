@@ -9,7 +9,7 @@ datasetrewrite:
   threads: 64
 
 language_modeling_train:
-  cuda_visible_devices: [0, 1, 2, 3]
+  cuda_visible_devices: [0, 1, 2]
 
   vocab_size: 16000
   tokenizer_min_frequency: 2
@@ -28,14 +28,14 @@ language_modeling_train:
   seed: 42
 
 classification_train:
-  cuda_visible_devices: [0, 1, 2, 3]
+  cuda_visible_devices: [0, 1, 2]
 
   warmup_steps: 500
   num_train_epochs: 20
   num_training_samples: -1
 
-  per_device_train_batch_size: 30
-  per_device_eval_batch_size: 40
+  per_device_train_batch_size: 15
+  per_device_eval_batch_size: 20
 
   outputs: probabilities #labels or probabilities
   seed: 42
