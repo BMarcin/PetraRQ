@@ -1,4 +1,4 @@
-description: Naive bayes classifier
+description: Naive bayes classifier - 10k samples
 tags:
   - naive-bayes
 param-files:
