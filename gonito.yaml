@@ -1,4 +1,4 @@
-description: XGBoost classifier
+description: XGBoost classifier - full dataset
 tags:
   - xgboost
 param-files:
