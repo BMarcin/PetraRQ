@@ -140,6 +140,8 @@ if __name__ == '__main__':
                 "seed": seed,
                 "output": "probabilities",
                 "num_training_samples": -1,
+            },
+            "classification_eval": {
                 "epsilon": 1e-2
             },
             "datasetrewrite": {
