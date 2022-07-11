@@ -1,4 +1,4 @@
-description: Logistic regression classifier
+description: Logistic regression classifier - 1k samples
 tags:
   - logistic-regression
 param-files:
