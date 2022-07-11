@@ -1,4 +1,4 @@
-description: SVM classifier
+description: SVM classifier - 100 samples
 tags:
   - svm
 param-files:
