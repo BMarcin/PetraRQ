@@ -1,4 +1,4 @@
-description: XGBoost classifier
+description: XGBoost classifier - 100 samples
 tags:
   - xgboost
 param-files:
