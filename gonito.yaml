@@ -1,4 +1,4 @@
-description: Naive bayes classifier
+description: Naive bayes classifier - full dataset
 tags:
   - naive-bayes
 param-files:
