@@ -1,4 +1,4 @@
-description: Fast text classifier
+description: Roberta classifier - 10k samples
 tags:
   - roberta
   - neural-network
