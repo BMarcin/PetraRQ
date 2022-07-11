@@ -1,4 +1,4 @@
-description: Fast text classifier
+description: Fast text classifier - 100 samples
 tags:
   - fasttext
 param-files:
