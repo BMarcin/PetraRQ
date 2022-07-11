@@ -139,7 +139,9 @@ if __name__ == '__main__':
                 "per_device_eval_batch_size": int(classifier_batch_size * 1.5),
                 "seed": seed,
                 "output": "probabilities",
-                "num_training_samples": -1,
+                "num_training_samples": 10000,
+            },
+            "classification_eval": {
                 "epsilon": 1e-2
             },
             "datasetrewrite": {
