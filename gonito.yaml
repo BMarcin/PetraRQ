@@ -1,4 +1,4 @@
-description: Fast text classifier
+description: Fast text classifier - full dataset
 tags:
   - fasttext
 param-files:
