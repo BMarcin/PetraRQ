@@ -1,6 +1,6 @@
-description: Naive bayes classifier
+description: Random forest classifier - full dataset
 tags:
-  - naive-bayes
+  - random-forest
 param-files:
   - "params.yaml"
 links:
