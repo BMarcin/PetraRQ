@@ -1,4 +1,4 @@
-description: SVM classifier
+description: SVM classifier - full dataset
 tags:
   - svm
 param-files:
