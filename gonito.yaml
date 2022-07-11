@@ -1,4 +1,4 @@
-description: Fast text classifier
+description: Roberta classifier - full dataset
 tags:
   - roberta
   - neural-network
