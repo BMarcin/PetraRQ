@@ -182,15 +182,12 @@ stages:
     - path: ./models/svm/labels.pkl
       md5: 87dc94ccdf95894e7f2a568303c4546b
       size: 309
-      isexec: true
     - path: ./models/svm/model.pkl
       md5: 9cb3876e878d42929c9f536657cb599c
       size: 126103254
-      isexec: true
     - path: ./models/svm/vectorizer.pkl
       md5: 745992de11cb80988f759d7a77e4f6b5
       size: 14041464
-      isexec: true
   eval_classifier:
     cmd: python ./src/eval.py
     deps:
