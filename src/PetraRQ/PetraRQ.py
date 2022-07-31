@@ -183,6 +183,8 @@ class PetraRQ(pl.LightningModule):
             share_kv=True,
             dropout=0.1,
             steps=1000,
+            lr_min=5e-5,
+            lr_max=1e-3
     ):
         super(PetraRQ, self).__init__()
 
@@ -197,6 +199,8 @@ class PetraRQ(pl.LightningModule):
         self.share_kv = share_kv
         self.dropout = dropout
         self.steps = steps
+        self.lr_min = lr_min
+        self.lr_max = lr_max
 
         self.embeddings = RelativeLogitPositionalEncoding(
             d_model=d_model,
@@ -243,7 +247,7 @@ class PetraRQ(pl.LightningModule):
     def configure_optimizers(self):
         optimizer = torch.optim.Adagrad(
             self.parameters(),
-            lr=5e-4,
+            lr=self.lr_min,
             weight_decay=0.01,
             # betas=(0.9, 0.999)
         )
@@ -256,7 +260,7 @@ class PetraRQ(pl.LightningModule):
 
         lr_scheduler = OneCycleLR(
             optimizer,
-            max_lr=1e-3,
+            max_lr=self.lr_max,
             total_steps=self.steps,
             cycle_momentum=False,
         )
