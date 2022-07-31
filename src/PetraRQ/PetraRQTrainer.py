@@ -1,4 +1,7 @@
 import os
+
+import torch
+
 os.environ['CUDA_VISIBLE_DEVICES'] = '0'
 
 from pytorch_lightning.callbacks import ModelCheckpoint, EarlyStopping, LearningRateMonitor
@@ -18,6 +21,8 @@ if __name__ == '__main__':
         level=logging.INFO
     )
 
+    torch.manual_seed(1)
+
     with open("../../data/train/lm.txt", "r", encoding="utf-8") as f:
         train_data = f.readlines()
 
@@ -28,7 +33,7 @@ if __name__ == '__main__':
         dev_data = f.readlines()
 
     lm_ds = LanguageModellingDataset(
-        train_data=dev_data,
+        train_data=train_data,
         test_data=dev_data,
         dev_data=dev_data,
         vocab_size=16000,
@@ -37,21 +42,21 @@ if __name__ == '__main__':
 
     train_data_loader = DataLoader(
         lm_ds.train_dataset,
-        batch_size=32,
-        shuffle=False,
+        batch_size=28,
+        shuffle=True,
         num_workers=6,
         pin_memory=True
     )
 
     dev_data_loader = DataLoader(
         lm_ds.dev_dataset,
-        batch_size=32,
+        batch_size=16,
         shuffle=False,
         num_workers=6,
         pin_memory=True
     )
 
-    steps = 120000
+    steps = 40000
 
     petra = PetraRQ(
         d_model=512,
@@ -78,18 +83,19 @@ if __name__ == '__main__':
         max_steps=steps,
         log_every_n_steps=10,
         accelerator='gpu',
-        accumulate_grad_batches=3,
-        val_check_interval=150,
+        accumulate_grad_batches=10,
+        val_check_interval=1.0,
         # val_check_interval=300,
         default_root_dir='./PetraRQmodel',
+        enable_checkpointing=False,
         callbacks=[
-            ModelCheckpoint(
-                dirpath='./PetraRQmodel/checkpoints',
-                save_top_k=3,
-                monitor='eval/loss',
-                mode='min',
-                filename='petrarq-{epoch}-{val_loss:.2f}.ckpt'
-            ),
+            # ModelCheckpoint(
+            #     dirpath='./PetraRQmodel/checkpoints',
+            #     save_top_k=3,
+            #     monitor='eval/loss',
+            #     mode='min',
+            #     filename='petrarq-{epoch}-{val_loss:.2f}.ckpt'
+            # ),
             EarlyStopping(
                 monitor='eval/loss',
                 mode='min',
@@ -102,20 +108,21 @@ if __name__ == '__main__':
     )
     wandb_logger.watch(petra, log='all')
 
-    wandb_logger.experiment.config['batch_size'] = 32
+    wandb_logger.experiment.config['batch_size'] = 28
     wandb_logger.experiment.config['steps'] = steps
     wandb_logger.experiment.config['d_model'] = 512
     wandb_logger.experiment.config['num_tokens'] = 16000
     wandb_logger.experiment.config['seq_length'] = 512
-    wandb_logger.experiment.config['depth'] = 8
+    wandb_logger.experiment.config['depth'] = 10
     wandb_logger.experiment.config['k'] = 768
     wandb_logger.experiment.config['heads'] = 8
     wandb_logger.experiment.config['dim_head'] = None
     wandb_logger.experiment.config['one_kv_head'] = False
     wandb_logger.experiment.config['share_kv'] = True
     wandb_logger.experiment.config['dropout'] = 0.1
-    wandb_logger.experiment.config['train_file'] = '../../data/dev/lm.txt'
+    wandb_logger.experiment.config['train_file'] = '../../data/dev/train.txt'
     # wandb_logger.experiment.config['test_file'] = '../../data/dev/lm.txt'
     wandb_logger.experiment.config['dev_file'] = '../../data/dev/lm.txt'
+    wandb_logger.experiment.config['optimizer'] = 'adagrad'
 
     trainer.fit(petra, train_data_loader, dev_data_loader)

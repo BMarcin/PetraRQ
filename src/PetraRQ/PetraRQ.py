@@ -10,7 +10,8 @@ from torch import nn
 
 import pytorch_lightning as pl
 import torch.nn.functional as F
-from torch.optim.lr_scheduler import OneCycleLR
+from torch.optim.lr_scheduler import OneCycleLR, CyclicLR
+
 
 # from src.PetraRQ.PetraRQReversible import ReversibleSequence
 
@@ -242,9 +243,16 @@ class PetraRQ(pl.LightningModule):
     def configure_optimizers(self):
         optimizer = torch.optim.Adagrad(
             self.parameters(),
-            lr=1e-6,
+            lr=5e-4,
             weight_decay=0.01,
+            # betas=(0.9, 0.999)
         )
+        # optimizer = torch.optim.AdamW(
+        #     self.parameters(),
+        #     lr=1e-6,
+        #     weight_decay=0.01,
+        #     betas=(0.9, 0.999)
+        # )
 
         lr_scheduler = OneCycleLR(
             optimizer,
@@ -252,17 +260,27 @@ class PetraRQ(pl.LightningModule):
             total_steps=self.steps,
             cycle_momentum=False,
         )
+        # lr_scheduler = CyclicLR(
+        #     optimizer,
+        #     base_lr=1e-6,
+        #     max_lr=1e-4,
+        #     # total_steps=self.steps,
+        #     cycle_momentum=False,
+        # )
 
         return [optimizer], [{'scheduler': lr_scheduler, 'interval': 'step'}]
 
     def training_step(self, batch, batch_idx):
-        x, y, token_pos = batch
+        # x, y, token_pos = batch
+        x, y = batch
         x = self.forward(x)
         # print('x shape', x.shape)
         # print('y shape', y.shape)
         # print(token_pos)
         # print('output shape', x[:, -1, :].shape)
-        loss = F.cross_entropy(x[range(x.shape[0]), token_pos, :], y)
+
+        # loss = F.cross_entropy(x[range(x.shape[0]), token_pos, :], y)
+        loss = F.cross_entropy(x.view(-1, self.num_tokens), y.long().view(-1))
         self.log('train/loss', loss, prog_bar=True)
         wandb.log({'train/loss': loss})
 
@@ -275,9 +293,11 @@ class PetraRQ(pl.LightningModule):
         return {'loss': loss, 'perplexity': perplexity}
 
     def validation_step(self, batch, batch_idx):
-        x, y, token_pos = batch
+        # x, y, token_pos = batch
+        x, y = batch
         x = self.forward(x)
-        loss = F.cross_entropy(x[range(x.shape[0]), token_pos, :], y)
+        # loss = F.cross_entropy(x[range(x.shape[0]), token_pos, :], y)
+        loss = F.cross_entropy(x.view(-1, self.num_tokens), y.long().view(-1))
         perplexity = torch.exp(loss)
         self.log('eval/loss', loss, prog_bar=True)
         wandb.log({'eval/loss': loss})
