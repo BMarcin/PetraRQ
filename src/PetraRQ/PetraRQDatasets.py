@@ -27,7 +27,10 @@ class LMDS(Dataset):
             other_token_probability: float = 0.1,
             unchanged_token_probability: float = 0.1,
             masked_tokens: float = 0.10,
+            duplicate_dataset_ratio: int = 1
     ):
+        assert duplicate_dataset_ratio >= 1, "duplicate_dataset_ratio must be >= 1"
+
         self.texts = texts
         self.tokenizer = tokenizer
         self.max_len = max_len
@@ -36,6 +39,7 @@ class LMDS(Dataset):
         self.other_token_probability = other_token_probability
         self.unchanged_token_probability = unchanged_token_probability
         self.masked_tokens = masked_tokens
+        self.duplicate_dataset_ratio = duplicate_dataset_ratio
 
         self.mask_token_id = self.tokenizer.token_to_id("[MASK]")
         self.pad_token_id = self.tokenizer.token_to_id("[PAD]")
@@ -52,11 +56,11 @@ class LMDS(Dataset):
 
     def __len__(self):
         # return len(self.texts)
-        return len(self.texts) * 5
+        return len(self.texts) * self.duplicate_dataset_ratio
 
     def __getitem__(self, index):
         # tokenized_text = np.array(self.tokenizer.encode(self.texts[index]).ids[:self.max_len])
-        tokenized_text = np.array(self.tokenizer.encode(self.texts[int(index / 5)]).ids[:self.max_len])
+        tokenized_text = np.array(self.tokenizer.encode(self.texts[int(index / self.duplicate_dataset_ratio)]).ids[:self.max_len])
         non_zero_np = (tokenized_text == self.pad_token_id).nonzero()
         if len(non_zero_np) > 0 and non_zero_np[0].size > 0:
             item_padding_start_index = non_zero_np[0][0]
@@ -169,7 +173,8 @@ class LanguageModellingDataset:
             masked_token_probability=0.8,
             other_token_probability=0.1,
             unchanged_token_probability=0.1,
-            masking_token_parts=0.1
+            masking_token_parts=0.1,
+            duplicate_dataset_ratio=1
     ):
         self.train_data = train_data
         self.test_data = test_data
@@ -181,6 +186,7 @@ class LanguageModellingDataset:
         self.other_token_probability = other_token_probability
         self.token_unchanged_probability = unchanged_token_probability
         self.masking_token_parts = masking_token_parts
+        self.duplicate_dataset_ratio = duplicate_dataset_ratio
 
         self.tokenizer = Tokenizer(BPE(unk_token="[UNK]"))
 
@@ -214,7 +220,8 @@ class LanguageModellingDataset:
             masked_token_probability=self.masked_token_probability,
             other_token_probability=self.other_token_probability,
             unchanged_token_probability=self.token_unchanged_probability,
-            masked_tokens=self.masking_token_parts
+            masked_tokens=self.masking_token_parts,
+            duplicate_dataset_ratio=self.duplicate_dataset_ratio
         )
         logging.info(f"LMDS dev_dataset: {len(self.dev_dataset)}")
 
@@ -226,7 +233,8 @@ class LanguageModellingDataset:
                 masked_token_probability=1,
                 other_token_probability=0,
                 unchanged_token_probability=0,
-                masked_tokens=self.masking_token_parts
+                masked_tokens=self.masking_token_parts,
+                duplicate_dataset_ratio=self.duplicate_dataset_ratio
             )
             logging.info(f"LMDS test_dataset: {len(self.test_dataset)}")
 
@@ -237,7 +245,8 @@ class LanguageModellingDataset:
             masked_token_probability=1,
             other_token_probability=0,
             unchanged_token_probability=0,
-            masked_tokens=self.masking_token_parts
+            masked_tokens=self.masking_token_parts,
+            duplicate_dataset_ratio=self.duplicate_dataset_ratio
         )
         logging.info(f"LMDS train_dataset: {len(self.train_dataset)}")
 
