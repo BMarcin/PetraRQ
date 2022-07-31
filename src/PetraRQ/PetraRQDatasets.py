@@ -169,6 +169,7 @@ class LanguageModellingDataset:
             masked_token_probability=0.8,
             other_token_probability=0.1,
             unchanged_token_probability=0.1,
+            masking_token_parts=0.1
     ):
         self.train_data = train_data
         self.test_data = test_data
@@ -179,6 +180,7 @@ class LanguageModellingDataset:
         self.masked_token_probability = masked_token_probability
         self.other_token_probability = other_token_probability
         self.token_unchanged_probability = unchanged_token_probability
+        self.masking_token_parts = masking_token_parts
 
         self.tokenizer = Tokenizer(BPE(unk_token="[UNK]"))
 
@@ -211,19 +213,22 @@ class LanguageModellingDataset:
             max_len=self.max_len,
             masked_token_probability=self.masked_token_probability,
             other_token_probability=self.other_token_probability,
-            unchanged_token_probability=self.token_unchanged_probability
+            unchanged_token_probability=self.token_unchanged_probability,
+            masked_tokens=self.masking_token_parts
         )
         logging.info(f"LMDS dev_dataset: {len(self.dev_dataset)}")
 
-        self.test_dataset = LMDS(
-            texts=self.test_data,
-            tokenizer=self.tokenizer,
-            max_len=self.max_len,
-            masked_token_probability=1,
-            other_token_probability=0,
-            unchanged_token_probability=0
-        )
-        logging.info(f"LMDS test_dataset: {len(self.test_dataset)}")
+        if self.test_data is not None:
+            self.test_dataset = LMDS(
+                texts=self.test_data,
+                tokenizer=self.tokenizer,
+                max_len=self.max_len,
+                masked_token_probability=1,
+                other_token_probability=0,
+                unchanged_token_probability=0,
+                masked_tokens=self.masking_token_parts
+            )
+            logging.info(f"LMDS test_dataset: {len(self.test_dataset)}")
 
         self.train_dataset = LMDS(
             texts=self.train_data,
@@ -231,7 +236,8 @@ class LanguageModellingDataset:
             max_len=self.max_len,
             masked_token_probability=1,
             other_token_probability=0,
-            unchanged_token_probability=0
+            unchanged_token_probability=0,
+            masked_tokens=self.masking_token_parts
         )
         logging.info(f"LMDS train_dataset: {len(self.train_dataset)}")
 
