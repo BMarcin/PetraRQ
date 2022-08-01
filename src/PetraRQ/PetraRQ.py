@@ -203,6 +203,8 @@ class PetraRQ(pl.LightningModule):
         self.lr_min = lr_min
         self.lr_max = lr_max
         self.optim = optim
+        self.activation = GELU()
+        self.out_norm = nn.LayerNorm(num_tokens)
 
         assert (self.optim == 'adam' or self.optim == 'adagrad'), 'Optim must be set to "adam" or "adagrad"'
 
@@ -246,8 +248,8 @@ class PetraRQ(pl.LightningModule):
         x = self.embeddings(x)
         x = self.net(x)
         x = self.outs(x)
-        x = GELU(x)
-        x = nn.LayerNorm(x)
+        x = self.activation(x)
+        x = self.out_norm(x)
         return x
 
     def configure_optimizers(self):
