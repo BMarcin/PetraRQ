@@ -184,7 +184,8 @@ class PetraRQ(pl.LightningModule):
             dropout=0.1,
             steps=1000,
             lr_min=5e-5,
-            lr_max=1e-3
+            lr_max=1e-3,
+            optim="adagrad"
     ):
         super(PetraRQ, self).__init__()
 
@@ -201,6 +202,9 @@ class PetraRQ(pl.LightningModule):
         self.steps = steps
         self.lr_min = lr_min
         self.lr_max = lr_max
+        self.optim = optim
+
+        assert (self.optim == 'adam' or self.optim == 'adagrad'), 'Optim must be set to "adam" or "adagrad"'
 
         self.embeddings = RelativeLogitPositionalEncoding(
             d_model=d_model,
@@ -247,18 +251,19 @@ class PetraRQ(pl.LightningModule):
         return x
 
     def configure_optimizers(self):
-        optimizer = torch.optim.Adagrad(
-            self.parameters(),
-            lr=self.lr_min,
-            weight_decay=0.01,
-            # betas=(0.9, 0.999)
-        )
-        # optimizer = torch.optim.AdamW(
-        #     self.parameters(),
-        #     lr=1e-6,
-        #     weight_decay=0.01,
-        #     betas=(0.9, 0.999)
-        # )
+        if self.optim == 'adagrad':
+            optimizer = torch.optim.Adagrad(
+                self.parameters(),
+                lr=self.lr_min,
+                weight_decay=0.01
+            )
+        elif self.optim == 'adam':
+            optimizer = torch.optim.AdamW(
+                self.parameters(),
+                lr=self.lr_min,
+                weight_decay=0.01,
+                betas=(0.9, 0.999)
+            )
 
         lr_scheduler = OneCycleLR(
             optimizer,
@@ -266,13 +271,6 @@ class PetraRQ(pl.LightningModule):
             total_steps=self.steps,
             cycle_momentum=False,
         )
-        # lr_scheduler = CyclicLR(
-        #     optimizer,
-        #     base_lr=1e-6,
-        #     max_lr=1e-4,
-        #     # total_steps=self.steps,
-        #     cycle_momentum=False,
-        # )
 
         return [optimizer], [{'scheduler': lr_scheduler, 'interval': 'step'}]
 
