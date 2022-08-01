@@ -243,6 +243,7 @@ class PetraRQ(pl.LightningModule):
         x = self.net(x)
         x = self.outs(x)
         x = GELU(x)
+        x = nn.LayerNorm(x)
         return x
 
     def configure_optimizers(self):
