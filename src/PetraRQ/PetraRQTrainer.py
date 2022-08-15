@@ -23,26 +23,35 @@ if __name__ == '__main__':
 
     torch.manual_seed(1)
 
-    with open("../../data/train/lm.txt", "r", encoding="utf-8") as f:
-        train_data = f.readlines()
+    # with open("../../data/train/lm.txt", "r", encoding="utf-8") as f:
+    #     train_data = f.readlines()
 
     # with open("../../data/test/lm.txt", "r", encoding="utf-8") as f:
     #     test_data = f.readlines()
 
     with open("../../data/dev/lm.txt", "r", encoding="utf-8") as f:
-        dev_data = f.readlines()
+        dev_data = f.readlines()[:1000]
 
     lm_ds = LanguageModellingDataset(
-        train_data=train_data,
+        train_data=dev_data,
         test_data=dev_data,
         dev_data=dev_data,
         vocab_size=16000,
-        max_len=512
+        max_len=512,
+        masked_token_probability=0.8,
+        unchanged_token_probability=0.1,
+        other_token_probability=0.1,
+        masking_token_parts=0.1,
+        use_incremental_samples=True,
+        incremental_samples_min=5,
+        incremental_samples_step=5,
+        duplicate_dataset_ratio=5,
+        increment_every_x_steps=200
     )
 
     train_data_loader = DataLoader(
         lm_ds.train_dataset,
-        batch_size=28,
+        batch_size=16,
         shuffle=True,
         num_workers=6,
         pin_memory=True
@@ -63,27 +72,30 @@ if __name__ == '__main__':
         num_tokens=16000,
         seq_length=512,
         depth=12,
-        k=768,
+        k=256,
         heads=8,
         dim_head=None,
         one_kv_head=False,
         share_kv=True,
         dropout=0.1,
         steps=steps,
+        lr_min=3e-4,
+        lr_max=1e-2,
+        optim='adagrad'
     )
 
     wandb_logger = WandbLogger(
         project="PetraRQ",
-        name="PetraRQ_v1_dev",
+        name="PetraRQ_v1_sanity",
         log_model="all"
     )
 
     trainer = pl.Trainer(
         devices=1,
         max_steps=steps,
-        log_every_n_steps=10,
+        log_every_n_steps=1,
         accelerator='gpu',
-        accumulate_grad_batches=10,
+        accumulate_grad_batches=12,
         val_check_interval=1.0,
         # val_check_interval=300,
         default_root_dir='./PetraRQmodel',
@@ -97,7 +109,7 @@ if __name__ == '__main__':
             #     filename='petrarq-{epoch}-{val_loss:.2f}.ckpt'
             # ),
             EarlyStopping(
-                monitor='eval/loss',
+                monitor='train/loss',
                 mode='min',
                 patience=10,
                 check_finite=True,
@@ -120,9 +132,9 @@ if __name__ == '__main__':
     wandb_logger.experiment.config['one_kv_head'] = False
     wandb_logger.experiment.config['share_kv'] = True
     wandb_logger.experiment.config['dropout'] = 0.1
-    wandb_logger.experiment.config['train_file'] = '../../data/dev/train.txt'
+    # wandb_logger.experiment.config['train_file'] = '../../data/dev/train.txt'
     # wandb_logger.experiment.config['test_file'] = '../../data/dev/lm.txt'
-    wandb_logger.experiment.config['dev_file'] = '../../data/dev/lm.txt'
+    # wandb_logger.experiment.config['dev_file'] = '../../data/dev/lm.txt'
     wandb_logger.experiment.config['optimizer'] = 'adagrad'
 
-    trainer.fit(petra, train_data_loader, dev_data_loader)
+    trainer.fit(petra, train_data_loader)

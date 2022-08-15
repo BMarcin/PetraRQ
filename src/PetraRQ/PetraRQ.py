@@ -4,7 +4,7 @@ from operator import itemgetter
 
 import torch
 import wandb
-from linformer.linformer import GELU
+from linformer.linformer import GELU, Linformer
 from linformer.reversible import ReversibleSequence
 from torch import nn
 
@@ -208,49 +208,59 @@ class PetraRQ(pl.LightningModule):
 
         assert (self.optim == 'adam' or self.optim == 'adagrad'), 'Optim must be set to "adam" or "adagrad"'
 
-        self.embeddings = RelativeLogitPositionalEncoding(
-            d_model=d_model,
-            num_embeddings=num_tokens,
-            seq_length=seq_length,
-        )
+        self.token_emb = nn.Embedding(num_tokens, d_model)
+        self.pos_emb = nn.Embedding(seq_length, d_model)
+        self.linformer = Linformer(d_model, seq_length, depth, k=k, heads=heads, dim_head=dim_head,
+                                   one_kv_head=one_kv_head, share_kv=share_kv, reversible=True, dropout=dropout)
+        self.to_logits = nn.Linear(d_model, num_tokens)
 
-        self.petrarq_layers = nn.ModuleList()
-        for _ in range(depth):
-            attention = PetraRQSelfAttention(
-                d_model,
-                seq_len=seq_length,
-                k=k,
-                heads=heads,
-                dim_head=dim_head,
-                one_kv_head=one_kv_head,
-                share_kv=share_kv,
-                dropout=dropout,
-            )
-
-            ff = PetraRQFeedForward(
-                d_model,
-                dropout=dropout,
-                glu=True,
-            )
-
-            self.petrarq_layers.append(
-                nn.ModuleList([
-                    NormOverLayer(d_model, attention),
-                    NormOverLayer(d_model, ff),
-                ])
-            )
-
-            self.net = ReversibleSequence(self.petrarq_layers)
-            self.outs = nn.Linear(d_model, num_tokens)
+        # self.embeddings = RelativeLogitPositionalEncoding(
+        #     d_model=d_model,
+        #     num_embeddings=num_tokens,
+        #     seq_length=seq_length,
+        # )
+        #
+        # self.petrarq_layers = nn.ModuleList()
+        # for _ in range(depth):
+        #     attention = PetraRQSelfAttention(
+        #         d_model,
+        #         seq_len=seq_length,
+        #         k=k,
+        #         heads=heads,
+        #         dim_head=dim_head,
+        #         one_kv_head=one_kv_head,
+        #         share_kv=share_kv,
+        #         dropout=dropout,
+        #     )
+        #
+        #     ff = PetraRQFeedForward(
+        #         d_model,
+        #         dropout=dropout,
+        #         glu=True,
+        #     )
+        #
+        #     self.petrarq_layers.append(
+        #         nn.ModuleList([
+        #             NormOverLayer(d_model, attention),
+        #             NormOverLayer(d_model, ff),
+        #         ])
+        #     )
+        #
+        #     self.net = ReversibleSequence(self.petrarq_layers)
+        #     self.outs = nn.Linear(d_model, num_tokens)
 
     def forward(self, x, **kwargs):
         # x, position_encodings = self.embeddings(x)
-        x = self.embeddings(x)
-        x = self.net(x)
-        x = self.outs(x)
-        x = self.activation(x)
-        x = self.out_norm(x)
-        return x
+        # x = self.embeddings(x)
+        # x = self.net(x)
+        # x = self.outs(x)
+        # x = self.activation(x)
+        # x = self.out_norm(x)
+        x = self.token_emb(x)
+        x = self.pos_emb(torch.arange(x.shape[1], device=x.device)) + x
+        x = self.linformer(x)
+        out = self.to_logits(x)
+        return out
 
     def configure_optimizers(self):
         if self.optim == 'adagrad':
@@ -267,14 +277,15 @@ class PetraRQ(pl.LightningModule):
                 betas=(0.9, 0.999)
             )
 
-        lr_scheduler = OneCycleLR(
-            optimizer,
-            max_lr=self.lr_max,
-            total_steps=self.steps,
-            cycle_momentum=False,
-        )
+        # lr_scheduler = OneCycleLR(
+        #     optimizer,
+        #     max_lr=self.lr_max,
+        #     total_steps=self.steps,
+        #     cycle_momentum=False,
+        # )
 
-        return [optimizer], [{'scheduler': lr_scheduler, 'interval': 'step'}]
+        # return [optimizer], [{'scheduler': lr_scheduler, 'interval': 'step'}]
+        return optimizer
 
     def training_step(self, batch, batch_idx):
         # x, y, token_pos = batch
@@ -283,7 +294,10 @@ class PetraRQ(pl.LightningModule):
         # print('x shape', x.shape)
         # print('y shape', y.shape)
         # print(token_pos)
-        # print('output shape', x[:, -1, :].shape)
+        # print('output shape', x.shape)
+        # print('target shape', y.shape)
+        # print('cross entropy x', x.view(-1, self.num_tokens).shape)
+        # print('cross entropy y', y.long().view(-1).shape)
 
         # loss = F.cross_entropy(x[range(x.shape[0]), token_pos, :], y)
         loss = F.cross_entropy(x.view(-1, self.num_tokens), y.long().view(-1))
