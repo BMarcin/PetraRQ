@@ -1,6 +1,7 @@
 description: Logistic regression classifier - 1k samples
 tags:
   - logistic-regression
+  - scikit-learn
 param-files:
   - "params.yaml"
 links:

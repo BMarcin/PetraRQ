@@ -48,7 +48,7 @@ jobs:
     needs:
       - DockerBuildPush
     container:
-      image: ghcr.io/bmarcin/petrarq:logistic_regression
+      image: ghcr.io/bmarcin/petrarq:logistic_regression-1k
 #       volumes:
 #         - /mnt/e/actions-runner/data/petrarq-logistic_regression/:/app2/
       credentials:
