@@ -1,6 +1,7 @@
 description: SVM classifier - 1k samples
 tags:
   - svm
+  - scikit-learn
 param-files:
   - "params.yaml"
 links:
