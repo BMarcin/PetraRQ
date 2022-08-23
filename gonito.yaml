@@ -1,6 +1,7 @@
 description: Random forest classifier - full dataset
 tags:
   - random-forest
+  - scikit-learn
 param-files:
   - "params.yaml"
 links:
