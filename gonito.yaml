@@ -1,6 +1,7 @@
 description: Naive bayes classifier - 1k samples
 tags:
   - naive-bayes
+  - scikit-learn
 param-files:
   - "params.yaml"
 links:
