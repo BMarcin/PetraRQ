@@ -48,7 +48,7 @@ jobs:
     needs:
       - DockerBuildPush
     container:
-      image: ghcr.io/bmarcin/petrarq:svm
+      image: ghcr.io/bmarcin/petrarq:svm-100
       credentials:
        username: ${{ github.actor }}
        password: ${{ secrets.DOCKER_TOKEN }}
