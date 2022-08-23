@@ -1,6 +1,7 @@
 description: SVM classifier - full dataset
 tags:
   - svm
+  - scikit-learn
 param-files:
   - "params.yaml"
 links:
