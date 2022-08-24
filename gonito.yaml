@@ -1,6 +1,7 @@
 description: XGBoost classifier - full dataset
 tags:
   - xgboost
+  - scikit-learn
 param-files:
   - "params.yaml"
 links:
