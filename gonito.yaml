@@ -1,6 +1,7 @@
 description: XGBoost classifier - 1k samples
 tags:
   - xgboost
+  - scikit-learn
 param-files:
   - "params.yaml"
 links:
