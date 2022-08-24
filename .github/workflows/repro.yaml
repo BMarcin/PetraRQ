@@ -48,7 +48,7 @@ jobs:
     needs:
       - DockerBuildPush
     container:
-      image: ghcr.io/bmarcin/petrarq:fasttext
+      image: ghcr.io/bmarcin/petrarq:fasttext-100
       credentials:
        username: ${{ github.actor }}
        password: ${{ secrets.DOCKER_TOKEN }}

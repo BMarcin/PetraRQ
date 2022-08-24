@@ -1,6 +1,7 @@
 description: Fast text classifier - 100 samples
 tags:
   - fasttext
+  - python
 param-files:
   - "params.yaml"
 links:
