@@ -1,6 +1,7 @@
 description: Fast text classifier - full dataset
 tags:
   - fasttext
+  - python
 param-files:
   - "params.yaml"
 links:
