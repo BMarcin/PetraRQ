@@ -28,10 +28,10 @@ language_modeling_train:
   seed: 42
 
 classification_train:
-  cuda_visible_devices: [5]
+  cuda_visible_devices: [4]
 
   steps: 5000
-  num_training_samples: 1000
+  num_training_samples: 100
   seq_length: 512
   overlapping_part: 256
   lr: 1e-3
@@ -45,5 +45,5 @@ classification_train:
   use_wandb_logging: true
 
 classification_eval:
-  cuda_visible_devices: [5]
+  cuda_visible_devices: [4]
   epsilon: 1e-2
