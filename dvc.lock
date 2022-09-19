@@ -207,22 +207,22 @@ stages:
     params:
       params.yaml:
         classification_train.lr: 0.001
-        classification_train.num_training_samples: 5000
+        classification_train.num_training_samples: 1000
         classification_train.overlapping_part: 256
         classification_train.seed: 42
         classification_train.seq_length: 512
-        classification_train.steps: 35
+        classification_train.steps: 5000
         classification_train.train_batch_size: 32
     outs:
     - path: ./models/petrarq_classifier/pytorch_model.ckpt
-      md5: 96abd3d735d5a022d1c33e2f67ab72b7
-      size: 438660433
+      md5: 25c09ee52fd14f0402bde778565e117f
+      size: 438664271
   evaluate_classifier:
     cmd: python ./src/eval.py
     deps:
     - path: ./models/petrarq_classifier/pytorch_model.ckpt
-      md5: 96abd3d735d5a022d1c33e2f67ab72b7
-      size: 438660433
+      md5: 25c09ee52fd14f0402bde778565e117f
+      size: 438664271
     - path: ./src/eval.py
       md5: 74caed73dfc6d2052c878a6989739de0
       size: 10225
@@ -231,11 +231,11 @@ stages:
         classification_eval.epsilon: 0.01
     outs:
     - path: ./data/dev/out.tsv
-      md5: 89d8176e058c7ca9f866ddd1430c59f2
+      md5: 088b44c5a32cdc0cc4fc6052d4f8b6fb
       size: 2416449
     - path: ./data/test/out.tsv
-      md5: 1ab50b157f97daa7448d4038e5d92096
+      md5: 4395e3337c27df7b70b1211c02ff60d1
       size: 4835313
     - path: scores_classification.json
-      md5: 6cab09187b4f02bf42addf42c6ce8e37
-      size: 144
+      md5: 8518e21d3f35bc13df5b60e40170438e
+      size: 143
