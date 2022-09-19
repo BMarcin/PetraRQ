@@ -133,13 +133,17 @@ if __name__ == '__main__':
             },
             "classification_train": {
                 "cuda_visible_devices": ",".split(gpus),
-                "warmup_steps": 500,
-                "num_train_epochs": classifier_epochs,
-                "per_device_train_batch_size": classifier_batch_size,
-                "per_device_eval_batch_size": int(classifier_batch_size * 1.5),
+                "overlapping_part": 256,
+                "lr": 1e-3,
+                "increase_each": 0.05,
+                "seq_length": 512,
+                "steps": classifier_epochs,
+                "train_batch_size": classifier_batch_size,
+                "dev_batch_size": int(classifier_batch_size * 1.5),
                 "seed": seed,
                 "output": "probabilities",
                 "num_training_samples": 1000,
+                "use_wandb_logging": False
             },
             "classification_eval": {
                 "epsilon": 1e-2,
