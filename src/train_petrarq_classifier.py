@@ -228,9 +228,9 @@ if __name__ == '__main__':
 
     # save model
     logging.info("Saving model...")
-    shutil.copyfile(checkpoint_callback.best_model_path, os.path.join(models_path, 'pytorch_model.ckpt'))
-    # petra.save_hyperparameters()
-    # trainer.save_checkpoint(
-    #     os.path.join(models_path, 'pytorch_model.ckpt'),
-    #     weights_only=True,
-    # )
+    if os.path.exists(checkpoint_callback.best_model_path):
+        shutil.copyfile(checkpoint_callback.best_model_path, os.path.join(models_path, 'pytorch_model.ckpt'))
+    else:
+        trainer.save_checkpoint(
+            os.path.join(models_path, 'pytorch_model.ckpt'),
+        )
