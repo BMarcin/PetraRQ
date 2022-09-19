@@ -137,7 +137,7 @@ if __name__ == '__main__':
                 "lr": 1e-3,
                 "increase_each": 0.05,
                 "seq_length": 512,
-                "steps": classifier_epochs,
+                "epochs": classifier_epochs,
                 "train_batch_size": classifier_batch_size,
                 "dev_batch_size": int(classifier_batch_size * 1.5),
                 "seed": seed,
@@ -168,7 +168,7 @@ if __name__ == '__main__':
         config["language_modeling_train"]["epochs"] = lm_epochs
         config["language_modeling_train"]["per_device_train_batch_size"] = lm_batch_size
         config["language_modeling_train"]["per_device_eval_batch_size"] = int(lm_batch_size * 1.5)
-        config["classification_train"]["num_train_epochs"] = classifier_epochs
+        config["classification_train"]["epochs"] = classifier_epochs
         config["classification_train"]["per_device_train_batch_size"] = classifier_batch_size
         config["classification_train"]["per_device_eval_batch_size"] = int(classifier_batch_size * 1.5)
 

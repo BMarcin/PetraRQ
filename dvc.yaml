@@ -89,7 +89,7 @@ stages:
     - ./data/train/processed.tsv
     - ./data/labels.tsv
     params:
-    - classification_train.steps
+    - classification_train.epochs
     - classification_train.num_training_samples
     - classification_train.seq_length
     - classification_train.overlapping_part

@@ -165,7 +165,6 @@ if __name__ == '__main__':
         num_labels=len(unique_labels),
         seq_length=config['seq_length'],
         overlapping_part=config['overlapping_part'],
-        steps=config['steps'],
         embeddings=embeds,
         model=model,
         lr=float(config['lr']),
@@ -177,12 +176,12 @@ if __name__ == '__main__':
     if config['use_wandb_logging']:
         wandb_logger = WandbLogger(
             project="PetraRQ-Classifier",
-            name="Recurrent RoBERTa",
+            name="PetraRQ-100",
             log_model="all"
         )
 
         wandb_logger.experiment.config['batch_size'] = config['train_batch_size']
-        wandb_logger.experiment.config['steps'] = config['steps']
+        wandb_logger.experiment.config['epochs'] = config['epochs']
         wandb_logger.experiment.config['overlapping_part'] = config['overlapping_part']
         wandb_logger.experiment.config['lr'] = config['lr']
         wandb_logger.experiment.config['num_training_samples'] = config['num_training_samples']
@@ -199,7 +198,8 @@ if __name__ == '__main__':
 
     trainer = pl.Trainer(
         devices=[int(item) for item in config['cuda_visible_devices']],
-        max_steps=config['steps'],
+        # max_steps=config['steps'],
+        max_epochs=config['epochs'],
         log_every_n_steps=2,
         accelerator='gpu',
         val_check_interval=0.3,
