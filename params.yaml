@@ -31,13 +31,13 @@ classification_train:
   cuda_visible_devices: [0]
 
   steps: 35
-  num_training_samples: 1000
+  num_training_samples: 5000
   seq_length: 512
   overlapping_part: 256
   lr: 1e-3
-  increase_each: 0.8
+  increase_each: 0.05
 
-  train_batch_size: 16
+  train_batch_size: 32
   dev_batch_size: 30
 
   outputs: probabilities #labels or probabilities

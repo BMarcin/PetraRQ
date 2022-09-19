@@ -129,7 +129,7 @@ if __name__ == '__main__':
 
     # create datasets
     logging.info("Creating datasets...")
-    dev_ds = ClassificationDataset(data_dev[:100], labels_dev[:100], unique_labels, tokenizer, increase_each=config['increase_each'], start_len=2048,
+    dev_ds = ClassificationDataset(data_dev, labels_dev, unique_labels, tokenizer, increase_each=config['increase_each'], start_len=2048,
                                    no_limit=True)
     train_ds = ClassificationDataset(data_train, labels_train, unique_labels, tokenizer, no_limit=False,
                                      increase_each=config['increase_each'], start_len=2048)

@@ -31,13 +31,14 @@ def process_texts(texts):
         tokenized_text = tokenizer.encode(text)
         collfunc = coll_fn([
             (tokenized_text,
-            [0],
-            65536)
+             [0],
+             524288)
         ])
         processed_texts.append(
             (torch.tensor(collfunc[0]), torch.tensor(collfunc[2]))
         )
     return processed_texts
+
 
 if __name__ == '__main__':
     logging.basicConfig(
@@ -66,13 +67,6 @@ if __name__ == '__main__':
     data_test = pd.read_csv("./data/test/processed.tsv", delimiter='\t', header=None, encoding="utf8", quoting=0)
     if use_test_data:
         labels_test = pd.read_csv("./data/test/expected.tsv", delimiter='\t', header=None, encoding="utf8", quoting=0)
-
-    # use only 10 items of each dataset
-    data_dev = data_dev[:10]
-    labels_dev = labels_dev[:10]
-    data_test = data_test[:10]
-    if use_test_data:
-        labels_test = labels_test[:10]
 
     # Make unique labels
     logging.info('Making unique labels...')
@@ -134,6 +128,7 @@ if __name__ == '__main__':
     # for probe, gt_labels in tqdm(zip(dev_predictions, labels_dev[0]), desc="Predicting dev set"):
     with torch.no_grad():
         for i, (tensor, attention) in enumerate(tqdm(dev_ins, desc="Predicting dev set")):
+            # print(tensor.shape)
             probe = petra(tensor, attention)
             # print(probe)
             gt_labels = labels_dev[0][i]
@@ -163,92 +158,92 @@ if __name__ == '__main__':
             gt_tensor = labels2tensor(gt_labels.split(" "), label2idx)
             dev_gt.append(gt_tensor)
 
-    #
-    # test_probabilities = []
-    # test_predicted_labels = []
-    # test_gt = []
-    # test_preds = []
-    # test_raw_preds = []
-    #
-    # test_predictions = pipe(list(data_test[0]), batch_size=config['per_device_eval_batch_size'])
-    #
-    # for i in tqdm(range(len(test_predictions)), desc="Predicting test set"):
-    #     probe = test_predictions[i]
-    #
-    #     if use_test_data:
-    #         gt_labels = labels_test[0][i]
-    #
-    #     labels_probabilities = []
-    #     text_labels = []
-    #     preds = []
-    #     raw_preds = []
-    #     for label, label_name in zip(probe, unique_labels):
-    #         score = label['score'] if label['score'] <= 1.0 else 1.0
-    #
-    #         score = score if score <= 1 - float(config_eval['epsilon']) else 1 - float(config_eval['epsilon'])
-    #         score = score if score >= 0 + float(config_eval['epsilon']) else 0 + float(config_eval['epsilon'])
-    #
-    #         labels_probabilities.append(label_name)
-    #         # labels_probabilities.append("{}:{:.9f}".format(label_name, score))
-    #         raw_preds.append("{}:{:.9f}".format(label_name, score))
-    #         # raw_preds.append("{:.9f}".format(score))
-    #         if label['score'] >= 0.5:
-    #             text_labels.append(label_name)
-    #             preds.append(1)
-    #         else:
-    #             preds.append(0)
-    #     test_probabilities.append(" ".join(labels_probabilities))
-    #     test_predicted_labels.append(" ".join(text_labels))
-    #     test_preds.append(preds)
-    #     test_raw_preds.append(raw_preds)
-    #     if use_test_data:
-    #         gt_tensor = labels2tensor(gt_labels.split(" "), label2idx)
-    #         test_gt.append(gt_tensor)
-    #
+    test_probabilities = []
+    test_predicted_labels = []
+    test_gt = []
+    test_preds = []
+    test_raw_preds = []
+
+    dev_ins = process_texts(list(data_test[0]))
+
+    with torch.no_grad():
+        for i, (tensor, attention) in enumerate(tqdm(dev_ins, desc="Predicting test set")):
+            probe = petra(tensor, attention)
+
+            if use_test_data:
+                gt_labels = labels_test[0][i]
+
+            labels_probabilities = []
+            text_labels = []
+            preds = []
+            raw_preds = []
+            for label, label_name in zip(probe.detach().cpu().tolist()[0], unique_labels):
+                score = label if label <= 1.0 else 1.0
+
+                score = score if score <= 1 - float(config_eval['epsilon']) else 1 - float(config_eval['epsilon'])
+                score = score if score >= 0 + float(config_eval['epsilon']) else 0 + float(config_eval['epsilon'])
+
+                labels_probabilities.append(label_name)
+                # labels_probabilities.append("{}:{:.9f}".format(label_name, score))
+                raw_preds.append("{}:{:.9f}".format(label_name, score))
+                # raw_preds.append("{:.9f}".format(score))
+                if label >= 0.5:
+                    text_labels.append(label_name)
+                    preds.append(1)
+                else:
+                    preds.append(0)
+            test_probabilities.append(" ".join(labels_probabilities))
+            test_predicted_labels.append(" ".join(text_labels))
+            test_preds.append(preds)
+            test_raw_preds.append(raw_preds)
+            if use_test_data:
+                gt_tensor = labels2tensor(gt_labels.split(" "), label2idx)
+                test_gt.append(gt_tensor)
+
     # Evaluate
     logging.info('Evaluating...')
     acc_dev = accuracy_score(dev_gt, dev_preds)
     logging.info('Accuracy on dev set: %.2f%%' % (acc_dev * 100))
-    # if use_test_data:
-    #     acc_test = accuracy_score(test_gt, test_preds)
-    #     logging.info('Accuracy on test set: %.2f%%' % (acc_test * 100))
-    #
+    if use_test_data:
+        acc_test = accuracy_score(test_gt, test_preds)
+        logging.info('Accuracy on test set: %.2f%%' % (acc_test * 100))
+
     f1_dev = f1_score(y_true=dev_gt, y_pred=dev_preds, average='macro')
     logging.info('F1 on dev set: %.2f%%' % (f1_dev * 100))
-    # if use_test_data:
-    #     f1_test = f1_score(y_true=test_gt, y_pred=test_preds, average='macro')
-    #     logging.info('F1 on test set: %.2f%%' % (f1_test * 100))
-    #
+    if use_test_data:
+        f1_test = f1_score(y_true=test_gt, y_pred=test_preds, average='macro')
+        logging.info('F1 on test set: %.2f%%' % (f1_test * 100))
+
     precision_dev = precision_score(y_true=dev_gt, y_pred=dev_preds, average='macro')
     logging.info('Precision on dev set: %.2f%%' % (precision_dev * 100))
-    # if use_test_data:
-    #     precision_test = precision_score(y_true=test_gt, y_pred=test_preds, average='macro')
-    #     logging.info('Precision on test set: %.2f%%' % (precision_test * 100))
-    #
+    if use_test_data:
+        precision_test = precision_score(y_true=test_gt, y_pred=test_preds, average='macro')
+        logging.info('Precision on test set: %.2f%%' % (precision_test * 100))
+
     recall_dev = recall_score(y_true=dev_gt, y_pred=dev_preds, average='macro')
     logging.info('Recall on dev set: %.2f%%' % (recall_dev * 100))
-    # if use_test_data:
-    #     recall_test = recall_score(y_true=test_gt, y_pred=test_preds, average='macro')
-    #     logging.info('Recall on test set: %.2f%%' % (recall_test * 100))
-    #
+    if use_test_data:
+        recall_test = recall_score(y_true=test_gt, y_pred=test_preds, average='macro')
+        logging.info('Recall on test set: %.2f%%' % (recall_test * 100))
+
     logging.info('Saving results...')
-    # if use_test_data:
-    #     with open("scores_classification.json", "w", encoding="utf8") as f:
-    #         json.dump({
-    #             "f1": f1_test,
-    #             "accuracy": acc_test,
-    #             "precision": precision_test,
-    #             "recall": recall_test
-    #         }, f, indent=4)
-    # else:
-    with open("scores_classification.json", "w", encoding="utf8") as f:
-        json.dump({
-            "f1": f1_dev,
-            "accuracy": acc_dev,
-            "precision": precision_dev,
-            "recall": recall_dev
-        }, f, indent=4)
-    #
+    if use_test_data:
+        with open("scores_classification.json", "w", encoding="utf8") as f:
+            json.dump({
+                "f1": f1_test,
+                "accuracy": acc_test,
+                "precision": precision_test,
+                "recall": recall_test
+            }, f, indent=4)
+    else:
+        with open("scores_classification.json", "w", encoding="utf8") as f:
+            json.dump({
+                "f1": f1_dev,
+                "accuracy": acc_dev,
+                "precision": precision_dev,
+                "recall": recall_dev
+            }, f, indent=4)
+
     # Save ds predictions outputs
     if config['outputs'] == 'labels':
         # save predictions to csv file
@@ -256,21 +251,21 @@ if __name__ == '__main__':
         with open("./data/dev/out.tsv", "w", encoding="utf8") as f:
             for pred in dev_probabilities:
                 f.write(pred + "\n")
-    #
-    #     # if use_test_data:
-    #     with open("./data/test/out.tsv", "w", encoding="utf8") as f:
-    #         for pred in test_probabilities:
-    #             f.write(pred + "\n")
+
+        # if use_test_data:
+        with open("./data/test/out.tsv", "w", encoding="utf8") as f:
+            for pred in test_probabilities:
+                f.write(pred + "\n")
     else:
         logging.info("Saving probabilities to csv file...")
         with open("./data/dev/out.tsv", "w", encoding="utf8") as f:
             for pred in dev_raw_preds:
                 f.write(" ".join(pred) + "\n")
-    #
-    #     # if use_test_data:
-    #     logging.info("Saving test probabilities to csv file...")
-    #     with open("./data/test/out.tsv", "w", encoding="utf8") as f:
-    #         for pred in test_raw_preds:
-    #             f.write(" ".join(pred) + "\n")
+
+        # if use_test_data:
+        logging.info("Saving test probabilities to csv file...")
+        with open("./data/test/out.tsv", "w", encoding="utf8") as f:
+            for pred in test_raw_preds:
+                f.write(" ".join(pred) + "\n")
 
     logging.info('Done!')

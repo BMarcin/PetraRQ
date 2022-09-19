@@ -202,8 +202,8 @@ stages:
       md5: 060531066a878b80760ea3e71256019e
       size: 7939
     - path: ./src/train_petrarq_classifier.py
-      md5: 43043b9537ccdca6197e8d3bc91842bc
-      size: 8343
+      md5: f863363afb9935b3139b238ad5e28ffc
+      size: 8349
     params:
       params.yaml:
         classification_train.lr: 0.001
@@ -215,27 +215,27 @@ stages:
         classification_train.train_batch_size: 16
     outs:
     - path: ./models/petrarq_classifier/pytorch_model.ckpt
-      md5: a06fe36424e20ed57d6ceee8dc074ff4
-      size: 408503633
+      md5: a68f55c7e8bdc9e6a5ce91258eb872f8
+      size: 438664271
   evaluate_classifier:
     cmd: python ./src/eval.py
     deps:
-    - path: ./models/roberta_classifier/config.json
-      md5: 7a20c587240f977414797cdb172d6aa4
-      size: 1539
-    - path: ./models/roberta_classifier/pytorch_model.bin
-      md5: e704fc8bc8ed1f2e066ac41e54fdb5ca
-      size: 393450541
+    - path: ./models/petrarq_classifier/pytorch_model.ckpt
+      md5: a68f55c7e8bdc9e6a5ce91258eb872f8
+      size: 438664271
     - path: ./src/eval.py
-      md5: 1314f718a15dfd98b145dad7c5a0b1c1
-      size: 10729
+      md5: cc1d07be95dd95d3331e7520a2fc8aa3
+      size: 10691
     params:
       params.yaml:
         classification_eval.epsilon: 0.01
     outs:
     - path: ./data/dev/out.tsv
-      md5: 0b8ce8733897e9f32573079f0430113d
+      md5: c1636b986e8830c64c1291024f8c6c7b
+      size: 4840
+    - path: ./data/test/out.tsv
+      md5: d0ace5867e991b042dc9751dac9b28b3
       size: 4840
     - path: scores_classification.json
-      md5: 7853fe3cac09bb9d0ccfff3818bcce47
+      md5: e408a11579d5202bd4fa104735408c14
       size: 132

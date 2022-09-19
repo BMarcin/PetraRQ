@@ -24,7 +24,7 @@ def process_texts(texts):
         collfunc = coll_fn([
             (tokenized_text,
              [0],
-             65536)
+             524288)
         ])
         processed_texts.append(
             (torch.tensor(collfunc[0]), torch.tensor(collfunc[2]))

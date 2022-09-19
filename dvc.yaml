@@ -102,14 +102,13 @@ stages:
   evaluate_classifier:
     cmd: python ./src/eval.py
     deps:
-    - ./models/roberta_classifier/pytorch_model.bin
-    - ./models/roberta_classifier/config.json
+    - ./models/petrarq_classifier/pytorch_model.ckpt
     - ./src/eval.py
     params:
     - classification_eval.epsilon
     outs:
     - ./data/dev/out.tsv
-#     - ./data/test/out.tsv
+    - ./data/test/out.tsv
     metrics:
       - scores_classification.json:
           cache: false
