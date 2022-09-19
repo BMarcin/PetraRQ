@@ -17,6 +17,8 @@ from transformers import RobertaConfig, RobertaTokenizerFast, RobertaForSequence
 
 from ClassificationDataset import ClassificationDataset
 
+from transformers.models.roberta.modeling_roberta import RobertaEmbeddings
+
 os.environ["WANDB_DISABLED"] = "true"
 
 def compute_metrics(pred):

@@ -28,17 +28,21 @@ language_modeling_train:
   seed: 42
 
 classification_train:
-  cuda_visible_devices: [0, 1, 2]
+  cuda_visible_devices: [0]
 
-  warmup_steps: 500
-  num_train_epochs: 20
+  steps: 35
   num_training_samples: 1000
+  seq_length: 512
+  overlapping_part: 256
+  lr: 1e-3
+  increase_each: 0.8
 
-  per_device_train_batch_size: 15
-  per_device_eval_batch_size: 20
+  train_batch_size: 16
+  dev_batch_size: 30
 
   outputs: probabilities #labels or probabilities
   seed: 42
+  use_wandb_logging: true
 
 classification_eval:
   epsilon: 1e-2

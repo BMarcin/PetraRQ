@@ -1,460 +1,216 @@
-import logging
-import math
-from operator import itemgetter
+from typing import Any
 
 import torch
-import wandb
-from linformer.linformer import GELU, Linformer
-from linformer.reversible import ReversibleSequence
 from torch import nn
 
 import pytorch_lightning as pl
 import torch.nn.functional as F
-from torch.optim.lr_scheduler import OneCycleLR, CyclicLR
+
+from sklearn.metrics import accuracy_score, f1_score, precision_score, recall_score
 
 
-# from src.PetraRQ.PetraRQReversible import ReversibleSequence
+def compute_metrics(preds, labels):
+    preds = (preds >= 0.5).astype(int)
+    acc = accuracy_score(preds, labels)
 
-
-def tensor_std_initializer(tensor):
-    dim = tensor.shape[-1]
-    std = 1 / math.sqrt(dim)
-    tensor.uniform_(-std, std)
-    return tensor
-
-
-class Residual(nn.Module):
-    def __init__(self, fn):
-        super().__init__()
-        self.fn = fn
-
-    def forward(self, x, **kwargs):
-        return x + self.fn(x)
-
-
-class NormOverLayer(nn.Module):
-    def __init__(self, dim, fn):
-        super().__init__()
-        self.fn = fn
-        self.norm = nn.LayerNorm(dim)
-
-    def forward(self, x): # obsluga positional encodings
-        x = self.norm(x)
-        return self.fn(x)
-
-
-class RelativeLogitPositionalEncoding(nn.Module):
-    def __init__(self, d_model, num_embeddings, seq_length):
-        super().__init__()
-        self.d_model = d_model
-        self.seq_length = seq_length
-
-        self.embeddings = nn.Embedding(
-            num_embeddings=num_embeddings,
-            embedding_dim=d_model,
-            # padding_idx=0,
-            _weight=tensor_std_initializer(torch.zeros(num_embeddings, d_model)),
-        )
-
-        self.position_encodings = nn.Embedding(
-            num_embeddings=seq_length,
-            embedding_dim=d_model,
-            _weight=tensor_std_initializer(torch.zeros(seq_length, d_model)),
-        )
-
-        # self.position_encodings = nn.Parameter(tensor_std_initializer(torch.zeros(seq_length)))
-
-    # def forward(self, x, positions):
-    #     return self.embeddings(x), self.position_encodings[positions]
-    def forward(self, x, **kwargs):
-        # return self.embeddings(x), self.position_encodings
-        return self.embeddings(x) + self.position_encodings(torch.arange(x.shape[1]).to(x.device))
-
-
-class PetraRQSelfAttention(nn.Module):
-    def __init__(self, dim, seq_len, k=256, heads=8, dim_head=None, one_kv_head=False, share_kv=False, dropout=0.):
-        super().__init__()
-        assert (dim % heads) == 0, 'dimension must be divisible by the number of heads'
-
-        self.seq_len = seq_len
-        self.k = k
-
-        self.heads = heads
-
-        dim_head = dim_head if dim_head is not None else dim // heads
-        self.dim_head = dim_head
-
-        self.to_q = nn.Linear(dim, dim_head * heads, bias=False)
-
-        kv_dim = dim_head if one_kv_head else (dim_head * heads)
-        self.to_k = nn.Linear(dim, kv_dim, bias=False)
-        self.proj_k = nn.Parameter(tensor_std_initializer(torch.zeros(seq_len, k)))
-
-        self.share_kv = share_kv
-        if not share_kv:
-            self.to_v = nn.Linear(dim, kv_dim, bias=False)
-            self.proj_v = nn.Parameter(tensor_std_initializer(torch.zeros(seq_len, k)))
-
-        self.dropout = nn.Dropout(dropout)
-        self.to_out = nn.Linear(dim_head * heads, dim)
-
-    def forward(self, x, context=None):
-        b, n, d, d_h, h, k = *x.shape, self.dim_head, self.heads, self.k
-        # if 'position_encodings' in kwargs:
-        #     print('using positional encodings')
-        #     position_encodings = kwargs['position_encodings']
-        # else:
-        #     position_encodings = None
-
-        kv_len = n if context is None else context.shape[1]
-        assert kv_len == self.seq_len, f'the sequence length of the key / values must be {self.seq_len} - {kv_len} given'
-
-        queries = self.to_q(x)
-
-        proj_seq_len = lambda args: torch.einsum('bnd,nk->bkd', *args)
-
-        kv_input = x if context is None else context
-
-        keys = self.to_k(kv_input)
-        values = self.to_v(kv_input) if not self.share_kv else keys
-
-        kv_projs = (self.proj_k, self.proj_v if not self.share_kv else self.proj_k)
-
-        # project keys and values along the sequence length dimension to k
-
-        keys, values = map(proj_seq_len, zip((keys, values), kv_projs))
-
-        # merge head into batch for queries and key / values
-
-        queries = queries.reshape(b, n, h, -1).transpose(1, 2)
-
-        merge_key_values = lambda t: t.reshape(b, k, -1, d_h).transpose(1, 2).expand(-1, h, -1, -1)
-        keys, values = map(merge_key_values, (keys, values))
-
-        # attention
-        dots = torch.einsum('bhnd,bhkd->bhnk', queries, keys) * (d_h ** -0.5)
-        attn = dots.softmax(dim=-1)
-        # if positional_encodings is not None:
-        #     print('using positional encodings')
-        #     attn = torch.einsum('bhtn,t->bhtn', attn, positional_encodings)
-        attn = self.dropout(attn)
-        out = torch.einsum('bhnk,bhkd->bhnd', attn, values)
-
-        # split heads
-        out = out.transpose(1, 2).reshape(b, n, -1)
-        return self.to_out(out)
-
-
-class PetraRQFeedForward(nn.Module):
-    def __init__(self, dim, mult=4, dropout=0., glu=False):
-        super().__init__()
-        activation = GELU
-
-        self.glu = glu
-        self.w1 = nn.Linear(dim, dim * mult * (2 if glu else 1))
-        self.act = activation()
-        self.dropout = nn.Dropout(dropout)
-        self.w2 = nn.Linear(dim * mult, dim)
-
-    def forward(self, x):
-        if not self.glu:
-            x = self.w1(x)
-            x = self.act(x)
-        else:
-            x, v = self.w1(x).chunk(2, dim=-1)
-            x = self.act(x) * v
-
-        x = self.dropout(x)
-        x = self.w2(x)
-        return x
+    return {
+        'accuracy': acc,
+        'f1': f1_score(y_true=labels, y_pred=preds, average='weighted'),
+        'precision': precision_score(y_true=labels, y_pred=preds, average='weighted'),
+        'recall': recall_score(y_true=labels, y_pred=preds, average='weighted')
+    }
 
 
 class PetraRQ(pl.LightningModule):
     def __init__(
             self,
             d_model,
-            num_tokens,
+            num_labels,
             seq_length,
-            depth,
-            k=256,
-            heads=8,
-            dim_head=None,
-            one_kv_head=False,
-            share_kv=True,
-            dropout=0.1,
+            overlapping_part,
+            model=None,
+            embeddings=None,
             steps=1000,
-            lr_min=5e-5,
-            lr_max=1e-3,
-            optim="adagrad"
+            lr=1e-4,
     ):
         super(PetraRQ, self).__init__()
+        self.save_hyperparameters(
+            'd_model',
+            'num_labels',
+            'seq_length',
+            'overlapping_part',
+            'steps',
+            ignore=[
+                "embeddings",
+                "embeds",
+                "model",
+                "roberta",
+                "embeds.position_ids", "embeds.word_embeddings.weight", "embeds.position_embeddings.weight",
+                "embeds.token_type_embeddings.weight", "embeds.LayerNorm.weight", "embeds.LayerNorm.bias"
+            ]
+        )
 
         self.d_model = d_model
-        self.num_tokens = num_tokens
+        self.num_labels = num_labels
         self.seq_length = seq_length
-        self.depth = depth
-        self.k = k
-        self.heads = heads
-        self.dim_head = dim_head
-        self.one_kv_head = one_kv_head
-        self.share_kv = share_kv
-        self.dropout = dropout
+        self.overlapping_part = overlapping_part
         self.steps = steps
-        self.lr_min = lr_min
-        self.lr_max = lr_max
-        self.optim = optim
-        self.activation = GELU()
-        self.out_norm = nn.LayerNorm(num_tokens)
+        self.lr = lr
+        self.overlapping_part = overlapping_part
+        self.memory_norm = nn.LayerNorm(d_model)
+        self.out_norm = nn.LayerNorm(d_model)
+        self.between_norm = nn.LayerNorm(d_model)
+        self.activate = nn.GELU()
+        self.sigm = nn.Sigmoid()
+        self.dropout = nn.Dropout(p=0.1)
+        self.dropout2 = nn.Dropout(p=0.2)
+        self.max_curr_len = 512
 
-        assert (self.optim == 'adam' or self.optim == 'adagrad'), 'Optim must be set to "adam" or "adagrad"'
+        self.embeds = embeddings
+        self.roberta = model
 
-        self.token_emb = nn.Embedding(num_tokens, d_model)
-        self.pos_emb = nn.Embedding(seq_length, d_model)
-        self.linformer = Linformer(d_model, seq_length, depth, k=k, heads=heads, dim_head=dim_head,
-                                   one_kv_head=one_kv_head, share_kv=share_kv, reversible=True, dropout=dropout)
-        self.to_logits = nn.Linear(d_model, num_tokens)
+        self.fc = nn.Linear(2 * d_model, 2 * d_model)
+        self.fc_mem = nn.Linear(d_model, d_model)
+        self.fc_between = nn.Linear(d_model, 512)
+        self.fc_between2 = nn.Linear(512, d_model)
+        self.to_logits = nn.Linear(2 * d_model, num_labels)
 
-        # self.embeddings = RelativeLogitPositionalEncoding(
-        #     d_model=d_model,
-        #     num_embeddings=num_tokens,
-        #     seq_length=seq_length,
-        # )
-        #
-        # self.petrarq_layers = nn.ModuleList()
-        # for _ in range(depth):
-        #     attention = PetraRQSelfAttention(
-        #         d_model,
-        #         seq_len=seq_length,
-        #         k=k,
-        #         heads=heads,
-        #         dim_head=dim_head,
-        #         one_kv_head=one_kv_head,
-        #         share_kv=share_kv,
-        #         dropout=dropout,
-        #     )
-        #
-        #     ff = PetraRQFeedForward(
-        #         d_model,
-        #         dropout=dropout,
-        #         glu=True,
-        #     )
-        #
-        #     self.petrarq_layers.append(
-        #         nn.ModuleList([
-        #             NormOverLayer(d_model, attention),
-        #             NormOverLayer(d_model, ff),
-        #         ])
-        #     )
-        #
-        #     self.net = ReversibleSequence(self.petrarq_layers)
-        #     self.outs = nn.Linear(d_model, num_tokens)
+        if self.roberta is not None:
+            for param in self.roberta.parameters():
+                param.requires_grad = False
 
-    def forward(self, x, **kwargs):
-        # x, position_encodings = self.embeddings(x)
-        # x = self.embeddings(x)
-        # x = self.net(x)
-        # x = self.outs(x)
-        # x = self.activation(x)
-        # x = self.out_norm(x)
-        x = self.token_emb(x)
-        x = self.pos_emb(torch.arange(x.shape[1], device=x.device)) + x
-        x = self.linformer(x)
-        out = self.to_logits(x)
+        if self.embeds is not None:
+            for param in self.embeds.parameters():
+                param.requires_grad = False
+
+    def forward(self, x_in, attention):
+        if self.roberta is None or self.embeds is None:
+            raise ValueError("Model or embeddings are not defined")
+
+        floating_memory = None
+        output_hidden_layers = None
+
+        i = 0
+        while (output_hidden_layers is None) or (i < (int(x_in.shape[1] / self.overlapping_part) - 1)):
+            part = self.seq_length / self.overlapping_part
+            if floating_memory is None:
+                x_pos = self.embeds(x_in[:, :self.seq_length].to(self.device))
+                att_part = attention[:, :self.seq_length].to(self.device)
+            else:
+                overlapping_left = int((self.overlapping_part * (i + part - 1)))
+                overlapping_right = int((self.overlapping_part * (i + part)))
+
+                toks = x_in[:, overlapping_left:overlapping_right].to(self.device)
+
+                att_part = torch.cat((att_part[:, self.overlapping_part:],
+                                      attention[:, overlapping_left:overlapping_right].to(self.device)), dim=1)
+                x_pos = self.embeds(toks)
+                x_p1 = x[:, self.overlapping_part:, :]
+                x_pos = torch.cat((x_p1, x_pos), dim=1)
+                x_pos = self.dropout(x_pos)
+                del x_p1
+
+            x = self.roberta(inputs_embeds=x_pos.detach(), attention_mask=att_part).last_hidden_state
+
+            x = self.dropout(x)
+            x = self.fc_between(x)
+            x = self.activate(x)
+            x = self.dropout(x)
+            x = self.fc_between2(x)
+            x = self.activate(x)
+
+            if floating_memory is None:
+                floating_memory = self.dropout(x[:, :self.overlapping_part, :])
+                floating_memory = self.fc_mem(floating_memory)
+                floating_memory = self.activate(floating_memory)
+                output_hidden_layers = self.overlapping_part
+            else:
+                add = self.dropout(x[:, :self.overlapping_part, :])
+                add = floating_memory + self.fc_mem(add)
+                add = self.activate(add)
+                floating_memory = add
+                output_hidden_layers += self.overlapping_part
+            del x_pos
+            i += 1
+
+        out = torch.cat((floating_memory, x[:, self.overlapping_part:, :]), dim=2)
+        out = torch.mean(out, dim=1)
+        out = self.dropout(out)
+        out = self.fc(out)
+        out = self.activate(out)
+        out = self.dropout(out)
+        out = self.to_logits(out)
+        out = self.sigm(out)
         return out
 
     def configure_optimizers(self):
-        if self.optim == 'adagrad':
-            optimizer = torch.optim.Adagrad(
-                self.parameters(),
-                lr=self.lr_min,
-                weight_decay=0.01
-            )
-        elif self.optim == 'adam':
-            optimizer = torch.optim.AdamW(
-                self.parameters(),
-                lr=self.lr_min,
-                weight_decay=0.01,
-                betas=(0.9, 0.999)
-            )
-
-        # lr_scheduler = OneCycleLR(
-        #     optimizer,
-        #     max_lr=self.lr_max,
-        #     total_steps=self.steps,
-        #     cycle_momentum=False,
-        # )
-
-        # return [optimizer], [{'scheduler': lr_scheduler, 'interval': 'step'}]
+        optimizer = torch.optim.Adam(
+            self.parameters(),
+            lr=self.lr,
+        )
         return optimizer
 
     def training_step(self, batch, batch_idx):
-        # x, y, token_pos = batch
-        x, y = batch
-        x = self.forward(x)
-        # print('x shape', x.shape)
-        # print('y shape', y.shape)
-        # print(token_pos)
-        # print('output shape', x.shape)
-        # print('target shape', y.shape)
-        # print('cross entropy x', x.view(-1, self.num_tokens).shape)
-        # print('cross entropy y', y.long().view(-1).shape)
+        xs, ys, attention = batch
 
-        # loss = F.cross_entropy(x[range(x.shape[0]), token_pos, :], y)
-        loss = F.cross_entropy(x.view(-1, self.num_tokens), y.long().view(-1))
-        self.log('train/loss', loss, prog_bar=True)
-        wandb.log({'train/loss': loss})
+        if xs.shape[1] > self.max_curr_len:
+            self.max_curr_len = xs.shape[1]
 
-        perplexity = torch.exp(loss)
-        self.log('train/perplexity', perplexity, prog_bar=True)
-        wandb.log({'train/perplexity': perplexity})
+        x = torch.tensor(xs).to("cpu")
+        y = torch.tensor(ys).to(self.device)
+        attention = torch.tensor(attention).to("cpu")
 
-        # wandb.log({'train/learning_rate': self.optimizers[0].param_groups[0]['lr']})
+        x = self.forward(x, attention)
 
-        return {'loss': loss, 'perplexity': perplexity}
+        loss = F.binary_cross_entropy(x, y)
+
+        metrics = compute_metrics(x.detach().cpu().numpy(), y.long().cpu().numpy())
+
+        self.log('train/f1', metrics['f1'], prog_bar=True, batch_size=x.shape[0])
+        self.log('train/accuracy', metrics['accuracy'], prog_bar=True, batch_size=x.shape[0])
+        self.log('train/precision', metrics['precision'], prog_bar=True, batch_size=x.shape[0])
+        self.log('train/recall', metrics['recall'], prog_bar=True, batch_size=x.shape[0])
+        self.log('train/len', xs.shape[1], prog_bar=True, batch_size=x.shape[0])
+
+        self.log('train/loss', loss, prog_bar=True, batch_size=x.shape[0])
+        return {
+            'loss': loss,
+            'train_f1': metrics['f1'],
+            'train_acc': metrics['accuracy'],
+            'train_precision': metrics['precision'],
+            'train_recall': metrics['recall']
+        }
 
     def validation_step(self, batch, batch_idx):
-        # x, y, token_pos = batch
-        x, y = batch
-        x = self.forward(x)
-        # loss = F.cross_entropy(x[range(x.shape[0]), token_pos, :], y)
-        loss = F.cross_entropy(x.view(-1, self.num_tokens), y.long().view(-1))
-        perplexity = torch.exp(loss)
-        self.log('eval/loss', loss, prog_bar=True)
-        wandb.log({'eval/loss': loss})
-        self.log('eval/perplexity', perplexity, prog_bar=True)
-        wandb.log({'eval/perplexity': perplexity})
-        return {'val_loss': loss, 'val_perplexity': perplexity}
+        xs, ys, attention = batch
+        xs = xs[:, :self.max_curr_len]
+        attention = attention[:, :self.max_curr_len]
 
+        x = torch.tensor(xs).to("cpu")
+        y = torch.tensor(ys).to(self.device)
+        attention = torch.tensor(attention).to("cpu")
 
-# class PetraRQalaLinformer(pl.LightningModule):
-#     def __init__(
-#             self,
-#             d_model,
-#             num_tokens,
-#             seq_length,
-#             depth,
-#             k=256,
-#             heads=8,
-#             dim_head=None,
-#             one_kv_head=False,
-#             share_kv=True,
-#             dropout=0.1,
-#             steps=1000,
-#     ):
-#         super(PetraRQalaLinformer, self).__init__()
-#
-#         self.d_model = d_model
-#         self.num_tokens = num_tokens
-#         self.seq_length = seq_length
-#         self.depth = depth
-#         self.k = k
-#         self.heads = heads
-#         self.dim_head = dim_head
-#         self.one_kv_head = one_kv_head
-#         self.share_kv = share_kv
-#         self.dropout = dropout
-#         self.steps = steps
-#
-#         self.embeddings = RelativeLogitPositionalEncoding(
-#             d_model=d_model,
-#             num_embeddings=num_tokens,
-#             seq_length=seq_length,
-#         )
-#
-#         self.petrarq_layers = nn.ModuleList()
-#         for _ in range(depth):
-#             attention = LinformerSelfAttention(
-#                 d_model,
-#                 seq_len=seq_length,
-#                 k=k,
-#                 heads=heads,
-#                 dim_head=dim_head,
-#                 one_kv_head=one_kv_head,
-#                 share_kv=share_kv,
-#                 dropout=dropout,
-#             )
-#
-#             ff = FeedForward(
-#                 d_model,
-#                 dropout=dropout,
-#                 glu=True,
-#             )
-#
-#             self.petrarq_layers.append(
-#                 nn.ModuleList([
-#                     PreNorm(d_model, attention),
-#                     PreNorm(d_model, ff),
-#                 ])
-#             )
-#
-#             self.net = ReversibleSequence(self.petrarq_layers)
-#             self.outs = nn.Linear(d_model, num_tokens)
-#
-#     def forward(self, x):
-#         x, position_encodings = self.embeddings(x)
-#         x = self.net(x)
-#         x = self.outs(x)
-#         return x
-#
-#     def configure_optimizers(self):
-#         optimizer = torch.optim.Adagrad(
-#             self.parameters(),
-#             lr=1e-6,
-#             weight_decay=0.01,
-#         )
-#
-#         lr_scheduler = OneCycleLR(
-#             optimizer,
-#             max_lr=1e-3,
-#             total_steps=self.steps,
-#             cycle_momentum=False,
-#         )
-#
-#         return [optimizer], [{'scheduler': lr_scheduler, 'interval': 'step'}]
-#
-#     def training_step(self, batch, batch_idx):
-#         x, y, token_pos = batch
-#         x = self.forward(x)
-#         # print('x shape', x.shape)
-#         # print('y shape', y.shape)
-#         # print(token_pos)
-#         # print('output shape', x[:, -1, :].shape)
-#         loss = F.cross_entropy(x[range(x.shape[0]), token_pos, :], y)
-#         self.log('train_loss', loss, prog_bar=True)
-#         return {'loss': loss}
+        x = self.forward(x, attention)
 
+        loss = F.binary_cross_entropy(x, y)
 
-if __name__ == '__main__':
-    # pre = RelativeLogitPositionalEncoding(d_model=10, num_embeddings=7, seq_length=4)
+        metrics = compute_metrics(x.cpu().numpy(), y.long().cpu().numpy())
 
-    input_tensor = torch.tensor([
-        [1, 2, 3, 4],
-        [3, 4, 5, 6]
-    ])
+        self.log('eval/f1', metrics['f1'], prog_bar=True, batch_size=x.shape[0])
+        self.log('eval/accuracy', metrics['accuracy'], prog_bar=True, batch_size=x.shape[0])
+        self.log('eval/precision', metrics['precision'], prog_bar=True, batch_size=x.shape[0])
+        self.log('eval/recall', metrics['recall'], prog_bar=True, batch_size=x.shape[0])
+        self.log('eval/len', xs.shape[1], prog_bar=True, batch_size=x.shape[0])
 
-    positions = torch.tensor([
-        [0, 1, 2, 3],
-        [2, 3, 4, 5]
-    ])
+        self.log('eval/loss', loss, prog_bar=True, batch_size=x.shape[0])
+        return {
+            'val_loss': loss,
+            'val_f1': metrics['f1'],
+            'val_acc': metrics['accuracy'],
+            'val_precision': metrics['precision'],
+            'val_recall': metrics['recall']
+        }
 
-    # embeds, poss = output_tensor = pre(input_tensor)
-
-    petra = PetraRQ(
-        d_model=512,
-        num_tokens=7,
-        seq_length=4,
-        depth=2,
-        k=256,
-        heads=8,
-        dim_head=None,
-        one_kv_head=False,
-        share_kv=True,
-        dropout=0.1
-    )
-    outs = petra(input_tensor)
-
-    trainer = pl.Trainer(
-        gpus=0,
-        max_epochs=1,
-    )
-    trainer.fit(petra)
+    # def save(self):
+    #     for hparam_key, hparam_value in self.hparams.items():
+    #         print(f'{hparam_key} = {hparam_value}')
