@@ -177,7 +177,7 @@ if __name__ == '__main__':
     if config['use_wandb_logging']:
         wandb_logger = WandbLogger(
             project="PetraRQ-Classifier",
-            name="Recurrent RoBERTa",
+            name="PetraRQ-10k",
             log_model="all"
         )
 
