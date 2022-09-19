@@ -31,7 +31,7 @@ classification_train:
   cuda_visible_devices: [4]
 
   epochs: 2
-  num_training_samples: 100
+  num_training_samples: -1
   seq_length: 512
   overlapping_part: 256
   lr: 1e-3
