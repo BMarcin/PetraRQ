@@ -103,7 +103,6 @@ if __name__ == '__main__':
         num_labels=len(unique_labels),
         seq_length=config['seq_length'],
         overlapping_part=config['overlapping_part'],
-        steps=config['steps'],
         embeddings=embeds,
         model=model,
         lr=float(config['lr']),
