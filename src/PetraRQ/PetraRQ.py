@@ -30,7 +30,7 @@ class PetraRQ(pl.LightningModule):
             overlapping_part,
             model=None,
             embeddings=None,
-            steps=1000,
+            # steps=1000,
             lr=1e-4,
     ):
         super(PetraRQ, self).__init__()
@@ -39,7 +39,7 @@ class PetraRQ(pl.LightningModule):
             'num_labels',
             'seq_length',
             'overlapping_part',
-            'steps',
+            # 'steps',
             ignore=[
                 "embeddings",
                 "embeds",
@@ -54,7 +54,7 @@ class PetraRQ(pl.LightningModule):
         self.num_labels = num_labels
         self.seq_length = seq_length
         self.overlapping_part = overlapping_part
-        self.steps = steps
+        # self.steps = steps
         self.lr = lr
         self.overlapping_part = overlapping_part
         self.memory_norm = nn.LayerNorm(d_model)

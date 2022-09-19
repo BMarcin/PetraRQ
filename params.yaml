@@ -30,12 +30,12 @@ language_modeling_train:
 classification_train:
   cuda_visible_devices: [5]
 
-  steps: 5000
+  epochs: 2
   num_training_samples: 1000
   seq_length: 512
   overlapping_part: 256
   lr: 1e-3
-  increase_each: 0.05
+  increase_each: 0.1
 
   train_batch_size: 32
   dev_batch_size: 30
