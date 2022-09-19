@@ -158,7 +158,7 @@ stages:
       size: 215738076
     - path: ./data/labels.tsv
       md5: e16bcdbc2b4c6c92d285156fd0cfd011
-      size: 272
+      size: 254
     - path: ./data/test/expected.tsv
       md5: 91df714814cad93605ee6896113114cd
       size: 181433
@@ -202,40 +202,40 @@ stages:
       md5: 060531066a878b80760ea3e71256019e
       size: 7939
     - path: ./src/train_petrarq_classifier.py
-      md5: f863363afb9935b3139b238ad5e28ffc
-      size: 8349
+      md5: b06dbea9fe9ccc0eca3675ca332b640f
+      size: 8353
     params:
       params.yaml:
         classification_train.lr: 0.001
-        classification_train.num_training_samples: 1000
+        classification_train.num_training_samples: 5000
         classification_train.overlapping_part: 256
         classification_train.seed: 42
         classification_train.seq_length: 512
         classification_train.steps: 35
-        classification_train.train_batch_size: 16
+        classification_train.train_batch_size: 32
     outs:
     - path: ./models/petrarq_classifier/pytorch_model.ckpt
-      md5: a68f55c7e8bdc9e6a5ce91258eb872f8
-      size: 438664271
+      md5: 96abd3d735d5a022d1c33e2f67ab72b7
+      size: 438660433
   evaluate_classifier:
     cmd: python ./src/eval.py
     deps:
     - path: ./models/petrarq_classifier/pytorch_model.ckpt
-      md5: a68f55c7e8bdc9e6a5ce91258eb872f8
-      size: 438664271
+      md5: 96abd3d735d5a022d1c33e2f67ab72b7
+      size: 438660433
     - path: ./src/eval.py
-      md5: cc1d07be95dd95d3331e7520a2fc8aa3
-      size: 10691
+      md5: 74caed73dfc6d2052c878a6989739de0
+      size: 10225
     params:
       params.yaml:
         classification_eval.epsilon: 0.01
     outs:
     - path: ./data/dev/out.tsv
-      md5: c1636b986e8830c64c1291024f8c6c7b
-      size: 4840
+      md5: 89d8176e058c7ca9f866ddd1430c59f2
+      size: 2416449
     - path: ./data/test/out.tsv
-      md5: d0ace5867e991b042dc9751dac9b28b3
-      size: 4840
+      md5: 1ab50b157f97daa7448d4038e5d92096
+      size: 4835313
     - path: scores_classification.json
-      md5: e408a11579d5202bd4fa104735408c14
-      size: 132
+      md5: 6cab09187b4f02bf42addf42c6ce8e37
+      size: 144
