@@ -76,6 +76,12 @@ if __name__ == '__main__':
     labels_train = pd.read_csv("./data/train/expected.tsv", delimiter='\t', header=None, encoding="utf8", quoting=0)
     labels_dev = pd.read_csv("./data/dev/expected.tsv", delimiter='\t', header=None, encoding="utf8", quoting=0)
 
+    # # limit dev data to 30 samples and train data to 300 samples
+    # data_dev = data_dev[:30]
+    # labels_dev = labels_dev[:30]
+    # data_train = data_train[:3000]
+    # labels_train = labels_train[:3000]
+
     unique_labels = pd.read_csv("./data/labels.tsv", delimiter='\t', header=None, encoding="utf8", quoting=0)
 
     # using config You can adjust how many random samples are used in training
@@ -193,7 +199,8 @@ if __name__ == '__main__':
         save_top_k=3,
         monitor='eval/f1',
         mode='max',
-        filename='petrarq-{epoch}-{val_loss:.2f}'
+        filename='petrarq-{epoch}-{eval/f1:.2f}',
+        auto_insert_metric_name=False
     )
 
     trainer = pl.Trainer(
@@ -229,6 +236,7 @@ if __name__ == '__main__':
     # save model
     logging.info("Saving model...")
     if os.path.exists(checkpoint_callback.best_model_path):
+        logging.info("Best model: {}".format(checkpoint_callback.best_model_path))
         shutil.copyfile(checkpoint_callback.best_model_path, os.path.join(models_path, 'pytorch_model.ckpt'))
     else:
         trainer.save_checkpoint(
