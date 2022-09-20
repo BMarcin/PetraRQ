@@ -193,7 +193,8 @@ if __name__ == '__main__':
         save_top_k=3,
         monitor='eval/f1',
         mode='max',
-        filename='petrarq-{epoch}-{val_loss:.2f}'
+        filename='petrarq-{epoch}-{eval/f1:.2f}',
+        auto_insert_metric_name=False
     )
 
     trainer = pl.Trainer(
