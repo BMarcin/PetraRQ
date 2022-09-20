@@ -199,43 +199,43 @@ stages:
       md5: 4b138c0c731b736822e3f7446380c979
       size: 927
     - path: ./src/PetraRQ/PetraRQ.py
-      md5: 060531066a878b80760ea3e71256019e
-      size: 7939
+      md5: 555aeede29edd395414dd2592827b868
+      size: 7945
     - path: ./src/train_petrarq_classifier.py
-      md5: b06dbea9fe9ccc0eca3675ca332b640f
-      size: 8353
+      md5: 61fdac81e5cf2cf6b40e97d0fa88b7bc
+      size: 8389
     params:
       params.yaml:
+        classification_train.epochs: 2
         classification_train.lr: 0.001
         classification_train.num_training_samples: 1000
         classification_train.overlapping_part: 256
         classification_train.seed: 42
         classification_train.seq_length: 512
-        classification_train.steps: 5000
         classification_train.train_batch_size: 32
     outs:
     - path: ./models/petrarq_classifier/pytorch_model.ckpt
-      md5: 25c09ee52fd14f0402bde778565e117f
-      size: 438664271
+      md5: a2d838b1b32a25c8781d3e47612905a9
+      size: 438664781
   evaluate_classifier:
     cmd: python ./src/eval.py
     deps:
     - path: ./models/petrarq_classifier/pytorch_model.ckpt
-      md5: 25c09ee52fd14f0402bde778565e117f
-      size: 438664271
+      md5: a2d838b1b32a25c8781d3e47612905a9
+      size: 438664781
     - path: ./src/eval.py
-      md5: 74caed73dfc6d2052c878a6989739de0
-      size: 10225
+      md5: 6ca1a18ec707304bf746575007fbe8cd
+      size: 10227
     params:
       params.yaml:
         classification_eval.epsilon: 0.01
     outs:
     - path: ./data/dev/out.tsv
-      md5: 088b44c5a32cdc0cc4fc6052d4f8b6fb
+      md5: 5877d7e392f9fe65b24c2a1c412258ec
       size: 2416449
     - path: ./data/test/out.tsv
-      md5: 4395e3337c27df7b70b1211c02ff60d1
+      md5: c51fa1dcb0ef13c181d455f27134a702
       size: 4835313
     - path: scores_classification.json
-      md5: 8518e21d3f35bc13df5b60e40170438e
+      md5: 7b99e94a9af7b3b5448ab7e003f36dfc
       size: 143
