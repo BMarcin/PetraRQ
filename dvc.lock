@@ -199,43 +199,43 @@ stages:
       md5: 4b138c0c731b736822e3f7446380c979
       size: 927
     - path: ./src/PetraRQ/PetraRQ.py
-      md5: 060531066a878b80760ea3e71256019e
-      size: 7939
+      md5: 8e514de63be0c2bd2896f454794f234e
+      size: 7867
     - path: ./src/train_petrarq_classifier.py
-      md5: b06dbea9fe9ccc0eca3675ca332b640f
-      size: 8353
+      md5: 5692115fe1c57d79142f99d4fedcafe0
+      size: 8357
     params:
       params.yaml:
+        classification_train.epochs: 2
         classification_train.lr: 0.001
-        classification_train.num_training_samples: 1000
+        classification_train.num_training_samples: 10000
         classification_train.overlapping_part: 256
         classification_train.seed: 42
         classification_train.seq_length: 512
-        classification_train.steps: 5000
         classification_train.train_batch_size: 32
     outs:
     - path: ./models/petrarq_classifier/pytorch_model.ckpt
-      md5: 25c09ee52fd14f0402bde778565e117f
-      size: 438664271
+      md5: 2ceef7de3ce6973894e7f9e3c00e5e0b
+      size: 438664781
   evaluate_classifier:
     cmd: python ./src/eval.py
     deps:
     - path: ./models/petrarq_classifier/pytorch_model.ckpt
-      md5: 25c09ee52fd14f0402bde778565e117f
-      size: 438664271
+      md5: 2ceef7de3ce6973894e7f9e3c00e5e0b
+      size: 438664781
     - path: ./src/eval.py
-      md5: 74caed73dfc6d2052c878a6989739de0
-      size: 10225
+      md5: 6ca1a18ec707304bf746575007fbe8cd
+      size: 10227
     params:
       params.yaml:
         classification_eval.epsilon: 0.01
     outs:
     - path: ./data/dev/out.tsv
-      md5: 088b44c5a32cdc0cc4fc6052d4f8b6fb
+      md5: f4d7646659f6ad6661fa203f9a0cdf2a
       size: 2416449
     - path: ./data/test/out.tsv
-      md5: 4395e3337c27df7b70b1211c02ff60d1
+      md5: a8888b127892742f1bf0ee2bc528dd05
       size: 4835313
     - path: scores_classification.json
-      md5: 8518e21d3f35bc13df5b60e40170438e
-      size: 143
+      md5: fd2f664a850e13ebcf4fbd53d31cd10f
+      size: 141
