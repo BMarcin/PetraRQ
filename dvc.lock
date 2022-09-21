@@ -202,8 +202,8 @@ stages:
       md5: 555aeede29edd395414dd2592827b868
       size: 7945
     - path: ./src/train_petrarq_classifier.py
-      md5: 61fdac81e5cf2cf6b40e97d0fa88b7bc
-      size: 8389
+      md5: 3c1e3c7f47d351685651b1daededb02f
+      size: 8427
     params:
       params.yaml:
         classification_train.epochs: 2
@@ -215,14 +215,14 @@ stages:
         classification_train.train_batch_size: 32
     outs:
     - path: ./models/petrarq_classifier/pytorch_model.ckpt
-      md5: a2d838b1b32a25c8781d3e47612905a9
-      size: 438664781
+      md5: a0d302bc5b54c3cd1e864e2553980636
+      size: 438664717
   evaluate_classifier:
     cmd: python ./src/eval.py
     deps:
     - path: ./models/petrarq_classifier/pytorch_model.ckpt
-      md5: a2d838b1b32a25c8781d3e47612905a9
-      size: 438664781
+      md5: a0d302bc5b54c3cd1e864e2553980636
+      size: 438664717
     - path: ./src/eval.py
       md5: 6ca1a18ec707304bf746575007fbe8cd
       size: 10227
