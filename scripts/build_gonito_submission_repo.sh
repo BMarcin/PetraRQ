@@ -133,7 +133,7 @@ git status
 echo "before commit"
 git commit -m "$COMMIT_MESSAGE"
 echo "after commit"
-git push -f origin roberta-nn-1k
+git push -f origin petrarq
 echo "after push"
 git-annex sync --no-content --no-pull --push --all
 echo "after sync"
