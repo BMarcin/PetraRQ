@@ -28,8 +28,8 @@ git-annex sync --content
 
 cd ../eur-lex-documents-marcinb
 
-git switch -c roberta-nn-1k
-git pull origin roberta-nn-1k || true
+git switch -c petrarq
+git pull origin petrarq || true
 
 # use git annex
 git-annex init
