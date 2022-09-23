@@ -28,8 +28,8 @@ git-annex sync --content
 
 cd ../eur-lex-documents-marcinb
 
-git switch -c roberta-nn-1k
-git pull origin roberta-nn-1k || true
+git switch -c "$BRANCH_NAME"
+git pull origin "$BRANCH_NAME" || true
 
 # use git annex
 git-annex init
@@ -133,7 +133,7 @@ git status
 echo "before commit"
 git commit -m "$COMMIT_MESSAGE"
 echo "after commit"
-git push -f origin roberta-nn-1k
+git push -f origin "$BRANCH_NAME"
 echo "after push"
 git-annex sync --no-content --no-pull --push --all
 echo "after sync"

@@ -86,7 +86,7 @@ jobs:
       - DockerBuildPush
       - DockerBuildPushGPU
     container:
-      image: ghcr.io/bmarcin/petrarq:petrarq-1k-gpu
+      image: ghcr.io/bmarcin/petrarq:petrarq-10k-gpu
       credentials:
        username: ${{ github.actor }}
        password: ${{ secrets.DOCKER_TOKEN }}
