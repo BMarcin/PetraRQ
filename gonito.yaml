@@ -1,7 +1,8 @@
-description: Roberta classifier - 1k samples
+description: PetraRQ Classifier - 100 samples
 tags:
   - roberta
   - neural-network
+  - pytorch-nn
 param-files:
   - "params.yaml"
 links:
