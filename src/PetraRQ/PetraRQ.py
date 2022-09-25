@@ -150,6 +150,8 @@ class PetraRQ(pl.LightningModule):
     def training_step(self, batch, batch_idx):
         xs, ys, attention = batch
 
+        print(ys)
+
         if xs.shape[1] > self.max_curr_len:
             self.max_curr_len = xs.shape[1]
 
