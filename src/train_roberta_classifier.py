@@ -48,7 +48,7 @@ if __name__ == '__main__':
     # load config
     logging.info("Loading config...")
     config = yaml.safe_load(open("./params.yaml"))['classification_train']
-    config_train = yaml.safe_load(open("./params.yaml"))['language_modeling_train']
+    # config_train = yaml.safe_load(open("./params.yaml"))['language_modeling_train']
     os.environ["CUDA_VISIBLE_DEVICES"] = ",".join([str(item) for item in config['cuda_visible_devices']])
     os.environ["WANDB_PROJECT"] = 'PetraRQ-Classifier-Books'
 
@@ -71,7 +71,7 @@ if __name__ == '__main__':
     os.makedirs(models_path, exist_ok=True)
 
     logging.info("Loading tokenizer...")
-    tokenizer = RobertaTokenizerFast.from_pretrained("xlm-roberta-base", max_len=config_train['max_seq_length'],
+    tokenizer = RobertaTokenizerFast.from_pretrained("xlm-roberta-base", max_len=514,
                                                      use_fast=True)
     # Load the data
     logging.info('Loading data...')
