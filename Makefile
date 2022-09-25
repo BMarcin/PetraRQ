@@ -4,12 +4,12 @@ all: ./data/in-header.tsv ./data/out-header.tsv
 	dvc pull
 	dvc repro
 
-./data/in-header.tsv ./data/out-header.tsv: ./data/parsed-books.json
+./data/in-header.tsv ./data/out-header.tsv: ./data/parsed_books.json
 	echo "InText	Time" >> ./data/in-header.tsv
 	echo "Labels" >> ./data/out-header.tsv
 
-./data/parsed-books.json:
-	dvc pull ./data/parsed-books.json
+./data/parsed_books.json:
+	dvc pull ./data/parsed_books.json
 
 clean:
 	rm -f ./data/parsed-books.json
