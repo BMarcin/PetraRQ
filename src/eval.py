@@ -13,7 +13,7 @@ from sklearn.metrics import accuracy_score, f1_score, precision_score, recall_sc
 
 def labels2tensor(labels, label2idx):
     # print(labels)
-    unique = set([label2idx[label.strip().lower()] for label in labels])
+    unique = set([label2idx[label.strip()] for label in labels])
     if len(unique) == 0:
         return torch.zeros([len(label2idx)], dtype=torch.long).tolist()
     return torch.zeros([len(label2idx)]).index_fill_(0, torch.tensor(list(unique)), 1).tolist()
