@@ -79,23 +79,14 @@ if __name__ == '__main__':
 
     # Load models
     logging.info('Loading models...')
-    lm_model_path = "./models/roberta_lm"
-    models_path = "./models/petrarq_classifier"
-
-    logging.info("Defining special characters...")
-    special_tokens = [
-        '<url>',
-        '<email>',
-        '<number>',
-        '<date>',
-    ]
+    models_path = "./models/petrarq_classifier_books"
 
     tokenizer = RobertaTokenizerFast.from_pretrained(
-        lm_model_path,
+        "xlm-roberta-base",
         use_fast=True)
 
     logging.info("Defining model...")
-    model = RobertaModel.from_pretrained(lm_model_path)
+    model = RobertaModel.from_pretrained("xlm-roberta-base")
     embeds = model.embeddings
 
     petra = PetraRQ(

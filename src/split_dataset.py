@@ -1,6 +1,7 @@
 import csv
 import json
 import logging
+from dateutil.parser import parse
 from pathlib import Path
 import yaml
 import pandas as pd
@@ -12,17 +13,17 @@ from tqdm.auto import tqdm
 from DatasetSplitter import dataset_splitter_by_time
 
 
-def save_ds_part(items: list, in_filename: Path, expected_filename: Path, label_replacement_list: dict):
+def save_ds_part(items: list, in_filename: Path, expected_filename: Path):
     with open(in_filename, "w", encoding="utf8") as in_file:
         with open(expected_filename, "w", encoding="utf8") as expected_file:
             csv_in_writer = csv.writer(in_file, delimiter='\t', quoting=csv.QUOTE_MINIMAL, lineterminator="\n")
             csv_expected_writer = csv.writer(expected_file, delimiter='\t', quoting=csv.QUOTE_MINIMAL, lineterminator="\n")
 
             for item in tqdm(items, desc='Saving {} and {}'.format(str(in_filename), str(expected_filename))):
-                processed_item = item['content'].replace("\n", "\\n").replace("\t", "\\t")
-                if len(processed_item.replace(" ", "")) >= 3:
+                processed_item = item['content'].replace("\n", "\\n").replace("\t", "\\t").replace("'", " ").replace('"', ' ')
+                if len(processed_item.replace(" ", "")) >= 10:
                     csv_in_writer.writerow([processed_item, item['date']])
-                    buckets = list(set([label_replacement_list[lab.lower().strip()] for lab in item['buckets']]))
+                    buckets = item['labels']
                     csv_expected_writer.writerow([' '.join(buckets)])
 
 
@@ -39,7 +40,7 @@ if __name__ == '__main__':
 
     parts = config['parts']
 
-    ds_path = Path("./data/parsed-pdfs.json")
+    ds_path = Path("./data/parsed_books.json")
     if ds_path.exists():
         logging.info("Reading input file")
         data_src = json.loads(ds_path.read_text(encoding="utf8"))
@@ -47,7 +48,7 @@ if __name__ == '__main__':
         logging.info("Reformatting data")
         data = []
         for item in tqdm(data_src):
-            item['date'] = datetime.strptime(item['date'], "%d/%m/%Y").strftime("%Y-%m-%d")
+            item['date'] = item['date'][:10]
             item['hash'] = hashlib.md5(item['content'].encode('utf-8')).hexdigest()
             data.append(item)
 
@@ -63,12 +64,12 @@ if __name__ == '__main__':
             parts
         )
 
-        labels = json.loads(Path("./data/labels_replacement_list.json").read_text(encoding="utf8"))
+        # labels = json.loads(Path("./data/labels_replacement_list.json").read_text(encoding="utf8"))
 
         logging.info('Saving dataset to splitted files')
-        save_ds_part(splitted_items['dev'], Path('./data/dev/in.tsv'), Path('./data/dev/expected.tsv'), labels)
-        save_ds_part(splitted_items['test'], Path('./data/test/in.tsv'), Path('./data/test/expected.tsv'), labels)
-        save_ds_part(splitted_items['train'], Path('./data/train/in.tsv'), Path('./data/train/expected.tsv'), labels)
+        save_ds_part(splitted_items['dev'], Path('./data/dev/in.tsv'), Path('./data/dev/expected.tsv'))
+        save_ds_part(splitted_items['test'], Path('./data/test/in.tsv'), Path('./data/test/expected.tsv'))
+        save_ds_part(splitted_items['train'], Path('./data/train/in.tsv'), Path('./data/train/expected.tsv'))
 
         data_dev = pd.read_csv("./data/dev/in.tsv", delimiter='\t', header=None, encoding="utf8", quoting=0, quotechar="'")
         labels_dev = pd.read_csv("./data/dev/expected.tsv", delimiter='\t', header=None, encoding="utf8", quoting=0, quotechar="'")

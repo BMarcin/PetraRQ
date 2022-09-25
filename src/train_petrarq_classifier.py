@@ -33,7 +33,7 @@ if __name__ == '__main__':
     seed_everything(config['seed'], workers=True)
 
     if config['use_wandb_logging']:
-        os.environ["WANDB_PROJECT"] = 'PetraRQ-Classifier'
+        os.environ["WANDB_PROJECT"] = 'PetraRQ-Classifier-Books'
         os.environ["WANDB_DISABLED"] = "false"
 
         logging.info("Logging to wandb...")
@@ -46,28 +46,14 @@ if __name__ == '__main__':
     train_ds = "./data/train/"
 
     # set models path
-    lm_model_path = "./models/roberta_lm"
-    models_path = "./models/petrarq_classifier"
+    models_path = "./models/petrarq_classifier_books"
     os.makedirs(models_path, exist_ok=True)
     os.makedirs(os.path.join(models_path, "checkpoints"), exist_ok=True)
 
-    # define special characters
-    logging.info("Defining special characters...")
-    special_tokens = [
-        '<url>',
-        '<email>',
-        '<number>',
-        '<date>',
-    ]
 
     logging.info("Loading tokenizer...")
-    tokenizer = RobertaTokenizerFast.from_pretrained(lm_model_path, max_len=config_train['max_seq_length'],
+    tokenizer = RobertaTokenizerFast.from_pretrained("xlm-roberta-base", max_len=config_train['max_seq_length'],
                                                      use_fast=True)
-
-    # add special tokens
-    tokenizer.add_special_tokens({
-        'additional_special_tokens': special_tokens
-    })
 
     # Load the data
     logging.info('Loading data...')
@@ -163,7 +149,7 @@ if __name__ == '__main__':
 
     # define model
     logging.info("Defining model...")
-    model = RobertaModel.from_pretrained(lm_model_path)
+    model = RobertaModel.from_pretrained("xlm-roberta-base")
     embeds = model.embeddings
 
     petra = PetraRQ(
@@ -195,7 +181,7 @@ if __name__ == '__main__':
         wb_logger = {'logger': wandb_logger}
 
     checkpoint_callback = ModelCheckpoint(
-        dirpath='./models/petrarq_classifier/checkpoints',
+        dirpath='./models/petrarq_classifier_books/checkpoints',
         save_top_k=3,
         monitor='eval/f1',
         mode='max',
