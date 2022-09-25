@@ -49,7 +49,7 @@ if __name__ == '__main__':
     # Load config
     logging.info("Loading config...")
     config = yaml.safe_load(open("./params.yaml"))['classification_train']
-    config_train = yaml.safe_load(open("./params.yaml"))['language_modeling_train']
+    # config_train = yaml.safe_load(open("./params.yaml"))['language_modeling_train']
     config_eval = yaml.safe_load(open("./params.yaml"))['classification_eval']
     os.environ["CUDA_VISIBLE_DEVICES"] = ",".join([str(item) for item in config['cuda_visible_devices']])
 
@@ -61,10 +61,10 @@ if __name__ == '__main__':
 
     # Load the data
     logging.info('Loading data...')
-    data_dev = pd.read_csv("./data/dev/processed.tsv", delimiter='\t', header=None, encoding="utf8", quoting=0)
+    data_dev = pd.read_csv("./data/dev/in.tsv", delimiter='\t', header=None, encoding="utf8", quoting=0)
     labels_dev = pd.read_csv("./data/dev/expected.tsv", delimiter='\t', header=None, encoding="utf8", quoting=0)
 
-    data_test = pd.read_csv("./data/test/processed.tsv", delimiter='\t', header=None, encoding="utf8", quoting=0)
+    data_test = pd.read_csv("./data/test/in.tsv", delimiter='\t', header=None, encoding="utf8", quoting=0)
     if use_test_data:
         labels_test = pd.read_csv("./data/test/expected.tsv", delimiter='\t', header=None, encoding="utf8", quoting=0)
 
@@ -90,7 +90,7 @@ if __name__ == '__main__':
     embeds = model.embeddings
 
     petra = PetraRQ(
-        d_model=config_train['hidden_size'],
+        d_model=768,
         num_labels=len(unique_labels),
         seq_length=config['seq_length'],
         overlapping_part=config['overlapping_part'],
