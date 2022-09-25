@@ -62,8 +62,8 @@ if __name__ == '__main__':
     labels_dev = pd.read_csv("./data/dev/expected.tsv", delimiter='\t', header=None, encoding="utf8", quoting=0)
 
     # # limit dev data to 30 samples and train data to 300 samples
-    # data_dev = data_dev[:30]
-    # labels_dev = labels_dev[:30]
+    data_dev = data_dev[:30]
+    labels_dev = labels_dev[:30]
     # data_train = data_train[:3000]
     # labels_train = labels_train[:3000]
 

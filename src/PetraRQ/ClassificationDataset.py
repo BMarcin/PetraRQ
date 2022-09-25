@@ -49,7 +49,7 @@ class ClassificationDataset(torch.utils.data.Dataset):
 
         tokenized = self.tokenizer.encode(self.input_texts[idx])
         labels = self.labels2tensor(self.input_labels.iloc[idx][0].split(' '))
-        print(self.input_labels.iloc[idx][0].split(' '))
+        print(self.input_texts[idx][:300])
 
         length = None
 
