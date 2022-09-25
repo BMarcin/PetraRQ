@@ -9,7 +9,7 @@ def coll_fn(batch):
     labels = []
     cur_lens = []
 
-    pad_token = 5
+    pad_token = 1
     ccc = Counter()
 
     for (text, label, curr_len) in batch:
