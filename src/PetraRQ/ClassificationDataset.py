@@ -25,7 +25,7 @@ class ClassificationDataset(torch.utils.data.Dataset):
             self.increase_groups.append((i, i + int(len(self.input_texts) * increase_each)))
 
         self.random_ids = list(range(len(self.input_texts)))
-        random.shuffle(self.random_ids)
+        # random.shuffle(self.random_ids)
         self.group = 0
 
         self.increase_counter = 0
