@@ -10,7 +10,7 @@ from pytorch_lightning import seed_everything
 from pytorch_lightning.callbacks import ModelCheckpoint, LearningRateMonitor, TQDMProgressBar, EarlyStopping
 from pytorch_lightning.loggers import WandbLogger
 from torch.utils.data import DataLoader
-from transformers import RobertaTokenizerFast, RobertaModel
+from transformers import XLMRobertaTokenizerFast, XLMRobertaModel
 
 from PetraRQ.ClassificationDataset import ClassificationDataset
 from PetraRQ.CollateFunction import coll_fn
@@ -52,7 +52,7 @@ if __name__ == '__main__':
 
 
     logging.info("Loading tokenizer...")
-    tokenizer = RobertaTokenizerFast.from_pretrained("xlm-roberta-base", max_len=512,
+    tokenizer = XLMRobertaTokenizerFast.from_pretrained("xlm-roberta-base", max_len=512,
                                                      use_fast=True)
 
     # Load the data
@@ -149,7 +149,7 @@ if __name__ == '__main__':
 
     # define model
     logging.info("Defining model...")
-    model = RobertaModel.from_pretrained("xlm-roberta-base")
+    model = XLMRobertaModel.from_pretrained("xlm-roberta-base")
     embeds = model.embeddings
 
     petra = PetraRQ(
