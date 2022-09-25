@@ -35,7 +35,7 @@ class ClassificationDataset(torch.utils.data.Dataset):
         return len(self.input_texts)
 
     def labels2tensor(self, labels):
-        return set([self.label2idx[label.strip()] for label in labels])
+        return set([self.label2idx[label.strip().lower()] for label in labels])
 
     def tensor2labels(self, tensor):
         labels = []
