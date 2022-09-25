@@ -52,7 +52,7 @@ if __name__ == '__main__':
 
 
     logging.info("Loading tokenizer...")
-    tokenizer = BertTokenizerFast.from_pretrained("deepsense-ai/trelbert", use_fast=True)
+    tokenizer = XLMRobertaTokenizerFast.from_pretrained("xlm-roberta-base", use_fast=True)
 
     # Load the data
     logging.info('Loading data...')
@@ -148,7 +148,7 @@ if __name__ == '__main__':
 
     # define model
     logging.info("Defining model...")
-    model = BertModel.from_pretrained("deepsense-ai/trelbert")
+    model = XLMRobertaModel.from_pretrained("xlm-roberta-base")
     embeds = model.embeddings
 
     petra = PetraRQ(
