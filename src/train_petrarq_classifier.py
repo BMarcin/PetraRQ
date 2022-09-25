@@ -27,7 +27,7 @@ if __name__ == '__main__':
 
     logging.info("Loading config...")
     config = yaml.safe_load(open("./params.yaml"))['classification_train']
-    config_train = yaml.safe_load(open("./params.yaml"))['language_modeling_train']
+    # config_train = yaml.safe_load(open("./params.yaml"))['language_modeling_train']
     os.environ["CUDA_VISIBLE_DEVICES"] = ",".join([str(item) for item in config['cuda_visible_devices']])
 
     seed_everything(config['seed'], workers=True)
@@ -52,7 +52,7 @@ if __name__ == '__main__':
 
 
     logging.info("Loading tokenizer...")
-    tokenizer = RobertaTokenizerFast.from_pretrained("xlm-roberta-base", max_len=config_train['max_seq_length'],
+    tokenizer = RobertaTokenizerFast.from_pretrained("xlm-roberta-base", max_len=512,
                                                      use_fast=True)
 
     # Load the data
@@ -153,7 +153,7 @@ if __name__ == '__main__':
     embeds = model.embeddings
 
     petra = PetraRQ(
-        d_model=config_train['hidden_size'],
+        d_model=768,
         num_labels=len(unique_labels),
         seq_length=config['seq_length'],
         overlapping_part=config['overlapping_part'],
