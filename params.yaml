@@ -16,7 +16,7 @@ classification_train:
   seq_length: 512
   overlapping_part: 256
   lr: 1e-3
-  increase_each: 0.6
+  increase_each: 0.025
 
   train_batch_size: 32
   dev_batch_size: 30
