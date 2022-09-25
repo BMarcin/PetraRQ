@@ -56,8 +56,8 @@ if __name__ == '__main__':
 
     # Load the data
     logging.info('Loading data...')
-    data_train = pd.read_csv("./data/train/in.tsv", delimiter='\t', header=None, encoding="utf8", quoting=0)
-    data_dev = pd.read_csv("./data/dev/in.tsv", delimiter='\t', header=None, encoding="utf8", quoting=0)
+    data_train = pd.read_csv("./data/train/processed.tsv", delimiter='\t', header=None, encoding="utf8", quoting=0)
+    data_dev = pd.read_csv("./data/dev/processed.tsv", delimiter='\t', header=None, encoding="utf8", quoting=0)
     labels_train = pd.read_csv("./data/train/expected.tsv", delimiter='\t', header=None, encoding="utf8", quoting=0)
     labels_dev = pd.read_csv("./data/dev/expected.tsv", delimiter='\t', header=None, encoding="utf8", quoting=0)
 

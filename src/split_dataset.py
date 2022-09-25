@@ -1,9 +1,6 @@
 import csv
 import json
 import logging
-
-import cleantext
-from dateutil.parser import parse
 from pathlib import Path
 import yaml
 import pandas as pd
@@ -22,22 +19,8 @@ def save_ds_part(items: list, in_filename: Path, expected_filename: Path):
             csv_expected_writer = csv.writer(expected_file, delimiter='\t', quoting=csv.QUOTE_MINIMAL, lineterminator="\n")
 
             for item in tqdm(items, desc='Saving {} and {}'.format(str(in_filename), str(expected_filename))):
-                processed_item = cleantext.clean(
-                    item['content'].replace("\n", "\\n").replace("\t", "\\t").replace("'", " ").replace('"', ' '),
-                    fix_unicode=True,
-                    lower=False,
-                    normalize_whitespace=True,
-                    no_line_breaks=True,
-                    no_urls=True,
-                    no_emails=True,
-                    no_phone_numbers=True,
-                    no_numbers=True,
-                    no_digits=True,
-                    no_currency_symbols=True,
-                    no_punct=True,
-                    no_emoji=True,
-                    lang='en'
-                )
+                processed_item = item['content'].replace("\n", "\\n").replace("\t", "\\t").replace("'", " ").replace('"', ' ')
+
                 if len(processed_item.replace(" ", "")) >= 10:
                     csv_in_writer.writerow([processed_item, item['date']])
                     buckets = item['labels']

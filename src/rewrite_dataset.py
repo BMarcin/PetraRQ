@@ -30,17 +30,17 @@ if __name__ == '__main__':
         threads=config['threads']
     )
 
-    with open("./data/dev/lm.txt", "w", encoding="utf8") as f:
-        for item in tqdm(dev, desc="Saving dev ds"):
-            f.write(item + '\n')
-
-    with open("./data/test/lm.txt", "w", encoding="utf8") as f:
-        for item in tqdm(test, desc="Saving test ds"):
-            f.write(item + '\n')
-
-    with open("./data/train/lm.txt", "w", encoding="utf8") as f:
-        for item in tqdm(train, desc="Saving train ds"):
-            f.write(item + '\n')
+    # with open("./data/dev/lm.txt", "w", encoding="utf8") as f:
+    #     for item in tqdm(dev, desc="Saving dev ds"):
+    #         f.write(item + '\n')
+    #
+    # with open("./data/test/lm.txt", "w", encoding="utf8") as f:
+    #     for item in tqdm(test, desc="Saving test ds"):
+    #         f.write(item + '\n')
+    #
+    # with open("./data/train/lm.txt", "w", encoding="utf8") as f:
+    #     for item in tqdm(train, desc="Saving train ds"):
+    #         f.write(item + '\n')
 
     dev_in[2] = dev
     test_in[2] = test
