@@ -8,7 +8,7 @@ all: ./data/in-header.tsv ./data/out-header.tsv
 	echo "InText	Time" >> ./data/in-header.tsv
 	echo "Labels" >> ./data/out-header.tsv
 
-./data/parsed-pdfs.json:
+./data/parsed-books.json:
 	dvc pull ./data/parsed-books.json
 
 clean:
