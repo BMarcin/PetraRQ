@@ -20,18 +20,18 @@ stages:
     - ./data/train/expected.tsv
     - ./data/train/in.tsv
 
-  rewrite_dataset_to_lm_texts:
-    cmd: python ./src/rewrite_dataset.py
-    deps:
-    - ./src/DatasetRewriter/LanguageModelingRewriter.py
-    - ./src/rewrite_dataset.py
-    - ./data/dev/in.tsv
-    - ./data/test/in.tsv
-    - ./data/train/in.tsv
-    outs:
-    - ./data/dev/processed.tsv
-    - ./data/test/processed.tsv
-    - ./data/train/processed.tsv
+#   rewrite_dataset_to_lm_texts:
+#     cmd: python ./src/rewrite_dataset.py
+#     deps:
+#     - ./src/DatasetRewriter/LanguageModelingRewriter.py
+#     - ./src/rewrite_dataset.py
+#     - ./data/dev/in.tsv
+#     - ./data/test/in.tsv
+#     - ./data/train/in.tsv
+#     outs:
+#     - ./data/dev/processed.tsv
+#     - ./data/test/processed.tsv
+#     - ./data/train/processed.tsv
 
   train_classifier:
     cmd: python ./src/train_petrarq_classifier.py
@@ -41,11 +41,11 @@ stages:
     - ./src/PetraRQ/PetraRQ.py
     - ./src/PetraRQ/CollateFunction.py
     - ./data/dev/expected.tsv
-    - ./data/dev/processed.tsv
+    - ./data/dev/in.tsv
     - ./data/test/expected.tsv
-    - ./data/test/processed.tsv
+    - ./data/test/in.tsv
     - ./data/train/expected.tsv
-    - ./data/train/processed.tsv
+    - ./data/train/in.tsv
     - ./data/labels.tsv
     params:
     - classification_train.epochs
