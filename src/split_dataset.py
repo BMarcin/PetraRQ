@@ -11,6 +11,7 @@ import hashlib
 from tqdm.auto import tqdm
 
 from DatasetSplitter import dataset_splitter_by_time
+import cleantext
 
 
 def save_ds_part(items: list, in_filename: Path, expected_filename: Path):
@@ -20,7 +21,15 @@ def save_ds_part(items: list, in_filename: Path, expected_filename: Path):
             csv_expected_writer = csv.writer(expected_file, delimiter='\t', quoting=csv.QUOTE_MINIMAL, lineterminator="\n")
 
             for item in tqdm(items, desc='Saving {} and {}'.format(str(in_filename), str(expected_filename))):
-                processed_item = item['content'].replace("\n", "\\n").replace("\t", "\\t").replace("'", " ").replace('"', ' ')
+                processed_item = cleantext.clean_words(
+                    item['content'].replace("\n", "\\n").replace("\t", "\\t").replace("'", " ").replace('"', ' '),
+                    extra_spaces=True,
+                    # lower=False,
+                    stemming=False,
+                    lowercase=False,
+                    numbers=True,
+                    punct=True
+                )
                 if len(processed_item.replace(" ", "")) >= 10:
                     csv_in_writer.writerow([processed_item, item['date']])
                     buckets = item['labels']
