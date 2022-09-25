@@ -4,7 +4,7 @@ stages:
     deps:
     - ./data/in-header.tsv
     - ./data/out-header.tsv
-    - ./data/parsed-pdfs.json
+    - ./data/parsed_books.json
     - ./src/DatasetSplitter/DatasetSplitter.py
     - ./src/split_dataset.py
     params:
@@ -20,89 +20,80 @@ stages:
     - ./data/train/expected.tsv
     - ./data/train/in.tsv
 
-  rewrite_dataset_to_lm_texts:
-    cmd: python ./src/rewrite_dataset.py
-    deps:
-    - ./src/DatasetRewriter/LanguageModelingRewriter.py
-    - ./src/rewrite_dataset.py
-    - ./data/dev/in.tsv
-    - ./data/test/in.tsv
-    - ./data/train/in.tsv
-    outs:
-    - ./data/dev/lm.txt
-    - ./data/test/lm.txt
-    - ./data/train/lm.txt
-    - ./data/dev/processed.tsv
-    - ./data/test/processed.tsv
-    - ./data/train/processed.tsv
-
-  train_lm:
-    cmd: python ./src/train_roberta_lm.py
-    deps:
-    - ./src/train_roberta_lm.py
-    - ./data/dev/lm.txt
-    - ./data/test/lm.txt
-    - ./data/train/lm.txt
-    - ./data/labels.tsv
-    params:
-    - language_modeling_train.vocab_size
-    - language_modeling_train.tokenizer_min_frequency
-    - language_modeling_train.max_seq_length
-    - language_modeling_train.mlm_probability
-    - language_modeling_train.num_attention_heads
-    - language_modeling_train.num_hidden_layers
-    - language_modeling_train.hidden_size
-    - language_modeling_train.hidden_dropout_prob
-    - language_modeling_train.epochs
-    - language_modeling_train.seed
-    outs:
-    - ./models/roberta_lm/merges.txt
-    - ./models/roberta_lm/vocab.json
-    - ./models/roberta_lm/pytorch_model.bin
-    - ./models/roberta_lm/tokenizer.json
-    - ./models/roberta_lm/config.json
-    - ./models/roberta_lm/special_tokens_map.json
-    - ./models/roberta_lm/tokenizer_config.json
-    metrics:
-      - scores.json:
-          cache: false
-
+#   rewrite_dataset_to_lm_texts:
+#     cmd: python ./src/rewrite_dataset.py
+#     deps:
+#     - ./src/DatasetRewriter/LanguageModelingRewriter.py
+#     - ./src/rewrite_dataset.py
+#     - ./data/dev/in.tsv
+#     - ./data/test/in.tsv
+#     - ./data/train/in.tsv
+#     outs:
+#     - ./data/dev/lm.txt
+#     - ./data/test/lm.txt
+#     - ./data/train/lm.txt
+#     - ./data/dev/processed.tsv
+#     - ./data/test/processed.tsv
+#     - ./data/train/processed.tsv
+#
+#   train_lm:
+#     cmd: python ./src/train_roberta_lm.py
+#     deps:
+#     - ./src/train_roberta_lm.py
+#     - ./data/dev/lm.txt
+#     - ./data/test/lm.txt
+#     - ./data/train/lm.txt
+#     - ./data/labels.tsv
+#     params:
+#     - language_modeling_train.vocab_size
+#     - language_modeling_train.tokenizer_min_frequency
+#     - language_modeling_train.max_seq_length
+#     - language_modeling_train.mlm_probability
+#     - language_modeling_train.num_attention_heads
+#     - language_modeling_train.num_hidden_layers
+#     - language_modeling_train.hidden_size
+#     - language_modeling_train.hidden_dropout_prob
+#     - language_modeling_train.epochs
+#     - language_modeling_train.seed
+#     outs:
+#     - ./models/roberta_lm/merges.txt
+#     - ./models/roberta_lm/vocab.json
+#     - ./models/roberta_lm/pytorch_model.bin
+#     - ./models/roberta_lm/tokenizer.json
+#     - ./models/roberta_lm/config.json
+#     - ./models/roberta_lm/special_tokens_map.json
+#     - ./models/roberta_lm/tokenizer_config.json
+#     metrics:
+#       - scores.json:
+#           cache: false
+#
   train_classifier:
-    cmd: python ./src/train_petrarq_classifier.py
+    cmd: python ./src/train_roberta_classifier.py
     deps:
-    - ./src/train_petrarq_classifier.py
-    - ./src/PetraRQ/ClassificationDataset.py
-    - ./src/PetraRQ/PetraRQ.py
-    - ./src/PetraRQ/CollateFunction.py
-    - ./models/roberta_lm/merges.txt
-    - ./models/roberta_lm/vocab.json
-    - ./models/roberta_lm/pytorch_model.bin
-    - ./models/roberta_lm/tokenizer.json
-    - ./models/roberta_lm/config.json
-    - ./models/roberta_lm/special_tokens_map.json
-    - ./models/roberta_lm/tokenizer_config.json
+    - ./src/train_roberta_classifier.py
+    - ./src/ClassificationDataset/ClassificationDataset.py
+    - ./src/train_roberta_classifier.py
     - ./data/dev/expected.tsv
-    - ./data/dev/processed.tsv
+    - ./data/dev/in.tsv
     - ./data/test/expected.tsv
-    - ./data/test/processed.tsv
+    - ./data/test/in.tsv
     - ./data/train/expected.tsv
-    - ./data/train/processed.tsv
+    - ./data/train/in.tsv
     - ./data/labels.tsv
     params:
-    - classification_train.epochs
-    - classification_train.num_training_samples
-    - classification_train.seq_length
-    - classification_train.overlapping_part
-    - classification_train.lr
-    - classification_train.train_batch_size
+    - classification_train.warmup_steps
+    - classification_train.num_train_epochs
     - classification_train.seed
+    - classification_train.num_training_samples
     outs:
-    - ./models/petrarq_classifier/pytorch_model.ckpt
+    - ./models/roberta_classifier_books/pytorch_model.bin
+    - ./models/roberta_classifier_books/config.json
 
   evaluate_classifier:
     cmd: python ./src/eval.py
     deps:
-    - ./models/petrarq_classifier/pytorch_model.ckpt
+    - ./models/roberta_classifier_books/pytorch_model.bin
+    - ./models/roberta_classifier_books/config.json
     - ./src/eval.py
     params:
     - classification_eval.epsilon

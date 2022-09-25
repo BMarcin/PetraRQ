@@ -19,7 +19,7 @@ from ClassificationDataset import ClassificationDataset
 
 from transformers.models.roberta.modeling_roberta import RobertaEmbeddings
 
-os.environ["WANDB_DISABLED"] = "true"
+# os.environ["WANDB_DISABLED"] = "true"
 
 def compute_metrics(pred):
     labels = pred.label_ids
@@ -50,7 +50,7 @@ if __name__ == '__main__':
     config = yaml.safe_load(open("./params.yaml"))['classification_train']
     config_train = yaml.safe_load(open("./params.yaml"))['language_modeling_train']
     os.environ["CUDA_VISIBLE_DEVICES"] = ",".join([str(item) for item in config['cuda_visible_devices']])
-    os.environ["WANDB_PROJECT"] = 'PetraRQ-Classifier'
+    os.environ["WANDB_PROJECT"] = 'PetraRQ-Classifier-Books'
 
     # set random state
     np.random.seed(config['seed'])
@@ -66,28 +66,13 @@ if __name__ == '__main__':
     train_ds = "./data/train/"
 
     # set models path
-    lm_model_path = "./models/roberta_lm"
-    models_path = "./models/roberta_classifier"
+    # lm_model_path = "./models/roberta_lm"
+    models_path = "./models/roberta_classifier_books"
     os.makedirs(models_path, exist_ok=True)
 
-    # define special characters
-    logging.info("Defining special characters...")
-    special_tokens = [
-        '<url>',
-        '<email>',
-        '<number>',
-        '<date>',
-    ]
-
     logging.info("Loading tokenizer...")
-    tokenizer = RobertaTokenizerFast.from_pretrained(lm_model_path, max_len=config_train['max_seq_length'],
+    tokenizer = RobertaTokenizerFast.from_pretrained("xlm-roberta-base", max_len=config_train['max_seq_length'],
                                                      use_fast=True)
-
-    # add special tokens
-    tokenizer.add_special_tokens({
-        'additional_special_tokens': special_tokens
-    })
-
     # Load the data
     logging.info('Loading data...')
     data_train = pd.read_csv("./data/train/processed.tsv", delimiter='\t', header=None, encoding="utf8", quoting=0)
@@ -155,7 +140,7 @@ if __name__ == '__main__':
 
     # define model
     logging.info("Defining model...")
-    model = RobertaForSequenceClassification.from_pretrained(lm_model_path, num_labels=num_labels)
+    model = RobertaForSequenceClassification.from_pretrained("xlm-roberta-base", num_labels=num_labels)
 
     # build trainer
     logging.info("Building trainer...")

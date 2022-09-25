@@ -4,15 +4,15 @@ all: ./data/in-header.tsv ./data/out-header.tsv
 	dvc pull
 	dvc repro
 
-./data/in-header.tsv ./data/out-header.tsv: ./data/parsed-pdfs.json
+./data/in-header.tsv ./data/out-header.tsv: ./data/parsed-books.json
 	echo "InText	Time" >> ./data/in-header.tsv
 	echo "Labels" >> ./data/out-header.tsv
 
 ./data/parsed-pdfs.json:
-	dvc pull ./data/parsed-pdfs.json
+	dvc pull ./data/parsed-books.json
 
 clean:
-	rm -f ./data/parsed-pdfs.json
+	rm -f ./data/parsed-books.json
 	rm -f ./data/dev/*.tsv
 	rm -f ./data/test/*.tsv
 	rm -f ./data/train/*.tsv
@@ -21,6 +21,3 @@ clean:
 	rm -f ./data/dev/lm.txt
 	rm -f ./data/test/lm.txt
 	rm -f ./data/train/lm.txt
-	rm -f ./data/dev/processed.tsv
-	rm -f ./data/test/processed.tsv
-	rm -f ./data/train/processed.tsv

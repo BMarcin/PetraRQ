@@ -1,6 +1,8 @@
 import json
 import logging
 import os
+import pickle
+from itertools import repeat
 from pathlib import Path
 
 import pandas as pd
@@ -8,9 +10,7 @@ import torch
 import yaml
 from sklearn.metrics import accuracy_score, f1_score, precision_score, recall_score
 from tqdm.auto import tqdm
-from transformers import RobertaTokenizerFast, RobertaModel
-
-from PetraRQ import PetraRQ, coll_fn, ClassificationDataset
+from transformers import RobertaTokenizerFast, TextClassificationPipeline, RobertaForSequenceClassification
 
 
 def labels2tensor(labels, label2idx):
@@ -19,25 +19,6 @@ def labels2tensor(labels, label2idx):
     if len(unique) == 0:
         return torch.zeros([len(label2idx)], dtype=torch.long).tolist()
     return torch.zeros([len(label2idx)]).index_fill_(0, torch.tensor(list(unique)), 1).tolist()
-
-
-def process_texts(texts):
-    # tokenized_texts = tokenizer.batch_encode_plus(
-    #     texts,
-    # )
-
-    processed_texts = []
-    for text in texts:
-        tokenized_text = tokenizer.encode(text)
-        collfunc = coll_fn([
-            (tokenized_text,
-             [0],
-             524288)
-        ])
-        processed_texts.append(
-            (torch.tensor(collfunc[0]), torch.tensor(collfunc[2]))
-        )
-    return processed_texts
 
 
 if __name__ == '__main__':
@@ -79,39 +60,20 @@ if __name__ == '__main__':
 
     # Load models
     logging.info('Loading models...')
-    lm_model_path = "./models/roberta_lm"
-    models_path = "./models/petrarq_classifier"
-
-    logging.info("Defining special characters...")
-    special_tokens = [
-        '<url>',
-        '<email>',
-        '<number>',
-        '<date>',
-    ]
+    models_path = "./models/roberta_classifier_books"
 
     tokenizer = RobertaTokenizerFast.from_pretrained(
-        lm_model_path,
+        "xlm-roberta-base",
         use_fast=True)
 
     logging.info("Defining model...")
-    model = RobertaModel.from_pretrained(lm_model_path)
-    embeds = model.embeddings
-
-    petra = PetraRQ(
-        d_model=config_train['hidden_size'],
-        num_labels=len(unique_labels),
-        seq_length=config['seq_length'],
-        overlapping_part=config['overlapping_part'],
-        embeddings=embeds,
-        model=model,
-        lr=float(config['lr']),
-    ).to("cuda")
-    point = torch.load(
-        os.path.join(models_path, "pytorch_model.ckpt"),
+    pipe = TextClassificationPipeline(
+        model=RobertaForSequenceClassification.from_pretrained(models_path, ),
+        tokenizer=tokenizer,
+        return_all_scores=True,
+        max_length=config_train['max_seq_length'],
+        truncation=True,
     )
-    petra.load_state_dict(point["state_dict"])
-    petra.eval()
 
     # Predict
     logging.info('Predicting...')
@@ -121,41 +83,38 @@ if __name__ == '__main__':
     dev_preds = []
     dev_raw_preds = []
 
-    dev_ins = process_texts(list(data_dev[0]))
-
-    # dev_predictions = pipe(list(data_dev[0]), batch_size=config['per_device_eval_batch_size'])
+    dev_predictions = pipe(list(data_dev[0]), batch_size=config['per_device_eval_batch_size'])
     # for probe, gt_labels in tqdm(zip(dev_predictions, labels_dev[0]), desc="Predicting dev set"):
-    with torch.no_grad():
-        for i, (tensor, attention) in enumerate(tqdm(dev_ins, desc="Predicting dev set")):
-            # print(tensor.shape)
-            probe = petra(tensor, attention)
-            # print(probe)
-            gt_labels = labels_dev[0][i]
-            # print(gt_labels)
+    for i in tqdm(range(len(dev_predictions)), desc="Predicting dev set"):
+        probe = dev_predictions[i]
+        gt_labels = labels_dev[0][i]
 
-            labels_probabilities = []
-            text_labels = []
-            preds = []
-            raw_preds = []
-            for label, label_name in zip(probe.detach().cpu().tolist()[0], unique_labels):
-                score = label if label <= 1.0 else 1.0
+        labels_probabilities = []
+        text_labels = []
+        preds = []
+        raw_preds = []
+        for label, label_name in zip(probe, unique_labels):
+            score = label['score'] if label['score'] <= 1.0 else 1.0
 
-                score = score if score <= 1 - float(config_eval['epsilon']) else 1 - float(config_eval['epsilon'])
-                score = score if score >= 0 + float(config_eval['epsilon']) else 0 + float(config_eval['epsilon'])
+            score = score if score <= 1 - float(config_eval['epsilon']) else 1 - float(config_eval['epsilon'])
+            score = score if score >= 0 + float(config_eval['epsilon']) else 0 + float(config_eval['epsilon'])
 
-                labels_probabilities.append(label_name)
-                raw_preds.append("{}:{:.9f}".format(label_name, score))
-                if label >= 0.5:
-                    text_labels.append(label_name)
-                    preds.append(1)
-                else:
-                    preds.append(0)
-            dev_preds.append(preds)
-            dev_raw_preds.append(raw_preds)
-            dev_probabilities.append(" ".join(labels_probabilities))
-            dev_predicted_labels.append(" ".join(text_labels))
-            gt_tensor = labels2tensor(gt_labels.split(" "), label2idx)
-            dev_gt.append(gt_tensor)
+            labels_probabilities.append(label_name)
+            raw_preds.append("{}:{:.9f}".format(label_name, score))
+            if label['score'] >= 0.5:
+                text_labels.append(label_name)
+                preds.append(1)
+            else:
+                preds.append(0)
+        dev_preds.append(preds)
+        dev_raw_preds.append(raw_preds)
+        dev_probabilities.append(" ".join(labels_probabilities))
+        dev_predicted_labels.append(" ".join(text_labels))
+        gt_tensor = labels2tensor(gt_labels.split(" "), label2idx)
+        dev_gt.append(gt_tensor)
+        #print(gt_tensor.shape)
+#    print(gt_tensor)
+#    print(dev_gt[0])
 
     test_probabilities = []
     test_predicted_labels = []
@@ -163,41 +122,40 @@ if __name__ == '__main__':
     test_preds = []
     test_raw_preds = []
 
-    dev_ins = process_texts(list(data_test[0]))
+    test_predictions = pipe(list(data_test[0]), batch_size=config['per_device_eval_batch_size'])
 
-    with torch.no_grad():
-        for i, (tensor, attention) in enumerate(tqdm(dev_ins, desc="Predicting test set")):
-            probe = petra(tensor, attention)
+    for i in tqdm(range(len(test_predictions)), desc="Predicting test set"):
+        probe = test_predictions[i]
 
-            if use_test_data:
-                gt_labels = labels_test[0][i]
+        if use_test_data:
+            gt_labels = labels_test[0][i]
 
-            labels_probabilities = []
-            text_labels = []
-            preds = []
-            raw_preds = []
-            for label, label_name in zip(probe.detach().cpu().tolist()[0], unique_labels):
-                score = label if label <= 1.0 else 1.0
+        labels_probabilities = []
+        text_labels = []
+        preds = []
+        raw_preds = []
+        for label, label_name in zip(probe, unique_labels):
+            score = label['score'] if label['score'] <= 1.0 else 1.0
 
-                score = score if score <= 1 - float(config_eval['epsilon']) else 1 - float(config_eval['epsilon'])
-                score = score if score >= 0 + float(config_eval['epsilon']) else 0 + float(config_eval['epsilon'])
+            score = score if score <= 1 - float(config_eval['epsilon']) else 1 - float(config_eval['epsilon'])
+            score = score if score >= 0 + float(config_eval['epsilon']) else 0 + float(config_eval['epsilon'])
 
-                labels_probabilities.append(label_name)
-                # labels_probabilities.append("{}:{:.9f}".format(label_name, score))
-                raw_preds.append("{}:{:.9f}".format(label_name, score))
-                # raw_preds.append("{:.9f}".format(score))
-                if label >= 0.5:
-                    text_labels.append(label_name)
-                    preds.append(1)
-                else:
-                    preds.append(0)
-            test_probabilities.append(" ".join(labels_probabilities))
-            test_predicted_labels.append(" ".join(text_labels))
-            test_preds.append(preds)
-            test_raw_preds.append(raw_preds)
-            if use_test_data:
-                gt_tensor = labels2tensor(gt_labels.split(" "), label2idx)
-                test_gt.append(gt_tensor)
+            labels_probabilities.append(label_name)
+            # labels_probabilities.append("{}:{:.9f}".format(label_name, score))
+            raw_preds.append("{}:{:.9f}".format(label_name, score))
+            # raw_preds.append("{:.9f}".format(score))
+            if label['score'] >= 0.5:
+                text_labels.append(label_name)
+                preds.append(1)
+            else:
+                preds.append(0)
+        test_probabilities.append(" ".join(labels_probabilities))
+        test_predicted_labels.append(" ".join(text_labels))
+        test_preds.append(preds)
+        test_raw_preds.append(raw_preds)
+        if use_test_data:
+            gt_tensor = labels2tensor(gt_labels.split(" "), label2idx)
+            test_gt.append(gt_tensor)
 
     # Evaluate
     logging.info('Evaluating...')

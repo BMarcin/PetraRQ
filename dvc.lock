@@ -9,15 +9,15 @@ stages:
     - path: ./data/out-header.tsv
       md5: 757889307369887028c89db5646b73de
       size: 7
-    - path: ./data/parsed-pdfs.json
-      md5: e9b60861734ddc93be6318db98c155e2
-      size: 3407420087
+    - path: ./data/parsed_books.json
+      md5: 9576a6183ea8650d4532f5ecf609543d
+      size: 3551043806
     - path: ./src/DatasetSplitter/DatasetSplitter.py
       md5: 74decfd061dccc1e8e9f604ede9ea119
       size: 2315
     - path: ./src/split_dataset.py
-      md5: 23feb175f5dfb8fbb9d606608b14e4e2
-      size: 4295
+      md5: 2da1ebdeffb57acd413cd680b25ba3bc
+      size: 4200
     params:
       params.yaml:
         datasetsplit.dev: 0.05
@@ -26,28 +26,28 @@ stages:
         datasetsplit.train: 0.85
     outs:
     - path: ./data/dev/expected.tsv
-      md5: ede893922b331adf870dad11b67be295
-      size: 94971
+      md5: dc4a2f2afd01b1ae6d8558e9203098ff
+      size: 27834
       isexec: true
     - path: ./data/dev/in.tsv
-      md5: dafa7c488580f29a63431ce149d6416d
-      size: 239789657
+      md5: f7637f95a205dd394338f5bf682c426b
+      size: 140765243
       isexec: true
     - path: ./data/test/expected.tsv
-      md5: 91df714814cad93605ee6896113114cd
-      size: 181433
+      md5: 57c027755b2a56ef8d7a0ad954e0e315
+      size: 51063
       isexec: true
     - path: ./data/test/in.tsv
-      md5: 965f5c51903a86b4627d19a578eaa5b4
-      size: 388966317
+      md5: 9a39d2fbd682207ccdc83e90d3c92832
+      size: 233295321
       isexec: true
     - path: ./data/train/expected.tsv
-      md5: 16d9ea238addf0b5afed8fd7ec17200c
-      size: 1559312
+      md5: ffd1cdc52531dd3f0eca78f99e800c5b
+      size: 494681
       isexec: true
     - path: ./data/train/in.tsv
-      md5: a2d8dfd76ceed3e0278f714429cd1fd1
-      size: 2621612493
+      md5: f4fdedab603dfa2173a498a4687cabbb
+      size: 2591641620
       isexec: true
   rewrite_dataset_to_lm_texts:
     cmd: python ./src/rewrite_dataset.py
