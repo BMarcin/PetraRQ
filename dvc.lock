@@ -4,20 +4,20 @@ stages:
     cmd: python ./src/split_dataset.py
     deps:
     - path: ./data/in-header.tsv
-      md5: 7ace96be50d1121ab573e6274b0d345b
-      size: 12
+      md5: 691f892e65c64cefe6e4bfb1493a997a
+      size: 24
     - path: ./data/out-header.tsv
-      md5: 757889307369887028c89db5646b73de
-      size: 7
+      md5: dc6c1d3eecfe40d374314b5d56aa536d
+      size: 14
     - path: ./data/parsed-pdfs.json
       md5: e9b60861734ddc93be6318db98c155e2
       size: 3407420087
     - path: ./src/DatasetSplitter/DatasetSplitter.py
       md5: 74decfd061dccc1e8e9f604ede9ea119
-      size: 2315
+      size: 2254
     - path: ./src/split_dataset.py
-      md5: 23feb175f5dfb8fbb9d606608b14e4e2
-      size: 4295
+      md5: d8e77a6d76dcb4bc9a1afa79c1c93112
+      size: 4088
     params:
       params.yaml:
         datasetsplit.dev: 0.05
@@ -26,29 +26,23 @@ stages:
         datasetsplit.train: 0.85
     outs:
     - path: ./data/dev/expected.tsv
-      md5: ede893922b331adf870dad11b67be295
-      size: 94971
-      isexec: true
+      md5: dc4a2f2afd01b1ae6d8558e9203098ff
+      size: 27834
     - path: ./data/dev/in.tsv
-      md5: dafa7c488580f29a63431ce149d6416d
-      size: 239789657
-      isexec: true
+      md5: cf8988a50fb98773c4b35e83ce6c181d
+      size: 140765244
     - path: ./data/test/expected.tsv
-      md5: 91df714814cad93605ee6896113114cd
-      size: 181433
-      isexec: true
+      md5: 57c027755b2a56ef8d7a0ad954e0e315
+      size: 51063
     - path: ./data/test/in.tsv
-      md5: 965f5c51903a86b4627d19a578eaa5b4
-      size: 388966317
-      isexec: true
+      md5: 96ff97b1860898735276dfd5987c857c
+      size: 233295323
     - path: ./data/train/expected.tsv
-      md5: 16d9ea238addf0b5afed8fd7ec17200c
-      size: 1559312
-      isexec: true
+      md5: ffd1cdc52531dd3f0eca78f99e800c5b
+      size: 494681
     - path: ./data/train/in.tsv
-      md5: a2d8dfd76ceed3e0278f714429cd1fd1
-      size: 2621612493
-      isexec: true
+      md5: d3101db282e8db278f3ab90858ff547e
+      size: 2591641657
   rewrite_dataset_to_lm_texts:
     cmd: python ./src/rewrite_dataset.py
     deps:
@@ -96,32 +90,32 @@ stages:
     cmd: python ./src/train_fasttext.py
     deps:
     - path: ./data/dev/expected.tsv
-      md5: ede893922b331adf870dad11b67be295
-      size: 94971
-    - path: ./data/dev/processed.tsv
-      md5: 3ded16b3953922cceaa90923883a7147
-      size: 215738076
+      md5: dc4a2f2afd01b1ae6d8558e9203098ff
+      size: 27834
+    - path: ./data/dev/in.tsv
+      md5: cf8988a50fb98773c4b35e83ce6c181d
+      size: 140765244
     - path: ./data/labels.tsv
-      md5: e16bcdbc2b4c6c92d285156fd0cfd011
-      size: 272
+      md5: 450f79a3a1c0c777916a661ed07960ea
+      size: 351
     - path: ./data/test/expected.tsv
-      md5: 91df714814cad93605ee6896113114cd
-      size: 181433
-    - path: ./data/test/processed.tsv
-      md5: 61ed2915525aa2acd50189a964ddc46a
-      size: 348233057
+      md5: 57c027755b2a56ef8d7a0ad954e0e315
+      size: 51063
+    - path: ./data/test/in.tsv
+      md5: 96ff97b1860898735276dfd5987c857c
+      size: 233295323
     - path: ./data/train/expected.tsv
-      md5: 16d9ea238addf0b5afed8fd7ec17200c
-      size: 1559312
-    - path: ./data/train/processed.tsv
-      md5: 5928e0910854642a694527f5d062f636
-      size: 2391144197
+      md5: ffd1cdc52531dd3f0eca78f99e800c5b
+      size: 494681
+    - path: ./data/train/in.tsv
+      md5: d3101db282e8db278f3ab90858ff547e
+      size: 2591641657
     - path: ./src/SKLearnDS/SKLearnDS.py
       md5: aa57d27be0bb7e74d34bf309a8e7ebb9
-      size: 1328
+      size: 1290
     - path: ./src/train_fasttext.py
-      md5: a7cf47a5040ed7199801db666b9c5e69
-      size: 2802
+      md5: 17d313735c5eae08ab53565912709529
+      size: 2715
     params:
       params.yaml:
         fasttext.epochs: 25
@@ -131,35 +125,33 @@ stages:
         fasttext.seed: 42
     outs:
     - path: ./data/train/fasttext.txt
-      md5: 704bead006a24f452616b58a7a12a1e8
-      size: 2393995702
-      isexec: true
+      md5: 0888244bb7f629674a0e8ffa4d4189f9
+      size: 2592182610
     - path: ./models/fasttext/fasttext.bin
-      md5: a968e32f860277ee959a5c06238e39a5
-      size: 619170033
-      isexec: true
+      md5: dd4410736ff182ab091ba60673db0129
+      size: 5684756979
   eval_classifier:
     cmd: python ./src/eval.py
     deps:
     - path: ./data/labels.tsv
-      md5: e16bcdbc2b4c6c92d285156fd0cfd011
-      size: 272
+      md5: 450f79a3a1c0c777916a661ed07960ea
+      size: 351
     - path: ./models/fasttext/fasttext.bin
-      md5: a968e32f860277ee959a5c06238e39a5
-      size: 619170033
+      md5: dd4410736ff182ab091ba60673db0129
+      size: 5684756979
     - path: ./src/eval.py
-      md5: 61aa9105c743d09247742a1243546494
-      size: 7957
+      md5: 12d9f465dc3b241c736f6bd2865f8c04
+      size: 7735
     params:
       params.yaml:
         fasttext.epsilon: 0.0001
     outs:
     - path: ./data/dev/out.tsv
-      md5: 5690df4ffc74fcf5c476a80420c65543
-      size: 74881
+      md5: 81fb5fd75c62762f628817f78775ac4d
+      size: 15031
     - path: ./data/test/out.tsv
-      md5: e5e9efa6626864d75822a68963d48177
-      size: 4835313
+      md5: 24d55fe6f6857fd0fe708ea36f15b851
+      size: 1682160
     - path: scores_classification.json
-      md5: 7dede9d0e98e2cf824f5ba1c6717e8b7
-      size: 139
+      md5: a2f9560b7c71855b00b0db689589a7e5
+      size: 142
