@@ -4,20 +4,20 @@ stages:
     cmd: python ./src/split_dataset.py
     deps:
     - path: ./data/in-header.tsv
-      md5: 7ace96be50d1121ab573e6274b0d345b
-      size: 12
+      md5: 691f892e65c64cefe6e4bfb1493a997a
+      size: 24
     - path: ./data/out-header.tsv
-      md5: 757889307369887028c89db5646b73de
-      size: 7
+      md5: dc6c1d3eecfe40d374314b5d56aa536d
+      size: 14
     - path: ./data/parsed_books.json
       md5: 9576a6183ea8650d4532f5ecf609543d
       size: 3551043806
     - path: ./src/DatasetSplitter/DatasetSplitter.py
       md5: 74decfd061dccc1e8e9f604ede9ea119
-      size: 2315
+      size: 2254
     - path: ./src/split_dataset.py
-      md5: 2da1ebdeffb57acd413cd680b25ba3bc
-      size: 4200
+      md5: d8e77a6d76dcb4bc9a1afa79c1c93112
+      size: 4088
     params:
       params.yaml:
         datasetsplit.dev: 0.05
@@ -29,20 +29,20 @@ stages:
       md5: dc4a2f2afd01b1ae6d8558e9203098ff
       size: 27834
     - path: ./data/dev/in.tsv
-      md5: f7637f95a205dd394338f5bf682c426b
-      size: 140765243
+      md5: cf8988a50fb98773c4b35e83ce6c181d
+      size: 140765244
     - path: ./data/test/expected.tsv
       md5: 57c027755b2a56ef8d7a0ad954e0e315
       size: 51063
     - path: ./data/test/in.tsv
-      md5: 9a39d2fbd682207ccdc83e90d3c92832
-      size: 233295321
+      md5: 96ff97b1860898735276dfd5987c857c
+      size: 233295323
     - path: ./data/train/expected.tsv
       md5: ffd1cdc52531dd3f0eca78f99e800c5b
       size: 494681
     - path: ./data/train/in.tsv
-      md5: f4fdedab603dfa2173a498a4687cabbb
-      size: 2591641620
+      md5: d3101db282e8db278f3ab90858ff547e
+      size: 2591641657
   rewrite_dataset_to_lm_texts:
     cmd: python ./src/rewrite_dataset.py
     deps:
@@ -145,91 +145,71 @@ stages:
     cmd: python ./src/train_petrarq_classifier.py
     deps:
     - path: ./data/dev/expected.tsv
-      md5: ede893922b331adf870dad11b67be295
-      size: 94971
-    - path: ./data/dev/processed.tsv
-      md5: 3ded16b3953922cceaa90923883a7147
-      size: 215738076
+      md5: dc4a2f2afd01b1ae6d8558e9203098ff
+      size: 27834
+    - path: ./data/dev/in.tsv
+      md5: cf8988a50fb98773c4b35e83ce6c181d
+      size: 140765244
     - path: ./data/labels.tsv
-      md5: e16bcdbc2b4c6c92d285156fd0cfd011
-      size: 254
+      md5: 450f79a3a1c0c777916a661ed07960ea
+      size: 351
     - path: ./data/test/expected.tsv
-      md5: 91df714814cad93605ee6896113114cd
-      size: 181433
-    - path: ./data/test/processed.tsv
-      md5: 61ed2915525aa2acd50189a964ddc46a
-      size: 348233057
+      md5: 57c027755b2a56ef8d7a0ad954e0e315
+      size: 51063
+    - path: ./data/test/in.tsv
+      md5: 96ff97b1860898735276dfd5987c857c
+      size: 233295323
     - path: ./data/train/expected.tsv
-      md5: 16d9ea238addf0b5afed8fd7ec17200c
-      size: 1559312
-    - path: ./data/train/processed.tsv
-      md5: 5928e0910854642a694527f5d062f636
-      size: 2391144197
-    - path: ./models/roberta_lm/config.json
-      md5: fb932332aa81d1ad848d0889dabb64ec
-      size: 637
-    - path: ./models/roberta_lm/merges.txt
-      md5: cec421c01956b7d8ae22cc754331a35f
-      size: 145988
-    - path: ./models/roberta_lm/pytorch_model.bin
-      md5: f4e4219fa51a2ea7c3e199878ab9cb3d
-      size: 393462571
-    - path: ./models/roberta_lm/special_tokens_map.json
-      md5: 30d0b45671f60afbb09abb28d04fcfa4
-      size: 845
-    - path: ./models/roberta_lm/tokenizer.json
-      md5: 02a064b4f397df62600c55adeb4c0e81
-      size: 666006
-    - path: ./models/roberta_lm/tokenizer_config.json
-      md5: a22d94c14d5cc34c59e5b4ad42506208
-      size: 1155
-    - path: ./models/roberta_lm/vocab.json
-      md5: c089e0d5dd42b586b543d468552b5430
-      size: 247826
+      md5: ffd1cdc52531dd3f0eca78f99e800c5b
+      size: 494681
+    - path: ./data/train/in.tsv
+      md5: d3101db282e8db278f3ab90858ff547e
+      size: 2591641657
     - path: ./src/PetraRQ/ClassificationDataset.py
-      md5: 5636756e9d4eada3d19bf681d2167f31
-      size: 2628
+      md5: 090fd8efdb508f944e5de1f31300548f
+      size: 2667
     - path: ./src/PetraRQ/CollateFunction.py
-      md5: 4b138c0c731b736822e3f7446380c979
+      md5: 74d30a02ee37115bdc56633d9ab58f6d
       size: 927
     - path: ./src/PetraRQ/PetraRQ.py
-      md5: 8e514de63be0c2bd2896f454794f234e
-      size: 7867
+      md5: 784f8736822505ca6034ff5031c3a877
+      size: 7921
     - path: ./src/train_petrarq_classifier.py
-      md5: 0affbf4e5a74aed1336c2e653cc23b6e
-      size: 8686
+      md5: 183216c28804348ea4da4b7807e1d335
+      size: 8285
     params:
       params.yaml:
         classification_train.epochs: 2
+        classification_train.increase_each: 0.1
         classification_train.lr: 0.001
         classification_train.num_training_samples: -1
         classification_train.overlapping_part: 256
         classification_train.seed: 42
         classification_train.seq_length: 512
-        classification_train.train_batch_size: 32
+        classification_train.train_batch_size: 16
     outs:
-    - path: ./models/petrarq_classifier/pytorch_model.ckpt
-      md5: 5061ed6dbe98d4c65d1b6c6de1d72fe3
-      size: 438664717
+    - path: ./models/petrarq_classifier_books/pytorch_model.ckpt
+      md5: 3cc3c0b5e800bc44cb95ee21ab49d5a5
+      size: 1157684303
   evaluate_classifier:
     cmd: python ./src/eval.py
     deps:
-    - path: ./models/petrarq_classifier/pytorch_model.ckpt
-      md5: 5061ed6dbe98d4c65d1b6c6de1d72fe3
-      size: 438664717
+    - path: ./models/petrarq_classifier_books/pytorch_model.ckpt
+      md5: 3cc3c0b5e800bc44cb95ee21ab49d5a5
+      size: 1157684303
     - path: ./src/eval.py
-      md5: ab96d89a30bf6204a6ef1836a0fbef1e
-      size: 10194
+      md5: 2e977cb3f6ca3f28a76f73013e78eb9b
+      size: 9969
     params:
       params.yaml:
         classification_eval.epsilon: 0.01
     outs:
     - path: ./data/dev/out.tsv
-      md5: 5bfd15099001db043e2ae1de5a988daa
-      size: 2416449
+      md5: ebd6cf062bc5c573a153cd89b2ef8511
+      size: 855872
     - path: ./data/test/out.tsv
-      md5: 8ad9fa86a93cfab3cc229adba73f0838
-      size: 4835313
+      md5: 9ddd485c070deea436c4ac38b3adf61d
+      size: 1682160
     - path: scores_classification.json
-      md5: 3943b8779fb18d3afa7043ea8d17d45f
-      size: 139
+      md5: 56c4ef92ec0c03e511fd5683f751d598
+      size: 79
